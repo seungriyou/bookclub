@@ -1,5 +1,6 @@
 /* 로그인 화면 */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import { ProgressContext } from '../contexts';
 import styled from 'styled-components/native';
 import { TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { Image, Input, Button } from '../components';
@@ -29,6 +30,7 @@ const Container = styled.View`
 `;
 
 const Login = ({ navigation }) => {
+  const { spinner } = useContext(ProgressContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -55,10 +57,13 @@ const Login = ({ navigation }) => {
 
   const _handleLoginButtonPress = async () => {
     try {
+      spinner.start();
       const user = await login({ email, password });
       Alert.alert('로그인 성공', user.email);
     } catch (e) {
       Alert.alert('로그인 에러', e.message);
+    } finally {
+      spinner.stop();
     }
   };
 
