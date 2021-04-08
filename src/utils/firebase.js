@@ -28,7 +28,7 @@ const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 
   return await snapshot.ref.getDownloadURL();
 };
 
-export const login = async ({ email, password }) => { //파이어베이스로 로그인하는 함수  
+export const login = async ({ email, password }) => { //파이어베이스로 로그인하는 함수
   const {user} = await Auth.signInWithEmailAndPassword(email, password);
   return user;
 };
@@ -44,3 +44,7 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
   });
   return user;
 };
+
+export const logout = async () => {
+  return await Auth.signOut();
+}

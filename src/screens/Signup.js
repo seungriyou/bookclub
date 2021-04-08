@@ -1,6 +1,6 @@
 /* 회원가입 화면 */
 import React, { useState, useRef, useEffect, useContext }from 'react';
-import { ProgressContext } from '../contexts';
+import { ProgressContext, UserContext } from '../contexts';
 import styled from 'styled-components/native';
 import { Image, Input, Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -27,6 +27,7 @@ const ErrorText = styled.Text`
 `;
 
 const Signup = () => {
+  const { dispatch } = useContext(UserContext); //회원가입 성공 시 user정보를 context로 저장
   const { spinner } = useContext(ProgressContext);
   const [photoUrl, setPhotoUrl] = useState(images.account_photo);
   const [name, setName] = useState('');
@@ -74,7 +75,7 @@ const Signup = () => {
       spinner.start();
       const user = await signup({ email, password, name, photoUrl });
       console.log(user);
-      Alert.alert('회원가입 완료', user.email);
+      dispatch(user);
     } catch (e) {
       Alert.alert('회원가입 오류', e.message);
     } finally {
