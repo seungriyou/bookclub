@@ -1,18 +1,94 @@
-import React from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { Text, Button } from 'react-native';
+import { Alert } from 'react-native';
+import { Input, Button } from '../components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { ProgressContext } from '../contexts';
+import { createClub } from '../utils/firebase';
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+`;
+
+const ErrorText = styled.Text`
+  align-items: flex-start;
+  width: 100%
 `;
 
 const ClubCreation = ({ navigation }) => {
+  const { spinner } = useContext(ProgressContext);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const descriptionRef = useRef();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    setDisabled(!(title && !errorMessage));
+  }, [title, description, errorMessage]);
+
+  const _handelTitleChange = title => {
+    setTitle(title);
+    setErrorMessage(title.trim() ? '' : '클럽 이름을 입력해주세요');
+  };
+
+  const _handelCreateButtonPress = async () => {
+    try {
+      spinner.start();
+      const id = await createClub({ title, description });
+      navigation.replace('Club', { id, title });
+    } catch (e) {
+      Alert.alert('클럽 생성 오류', e.message);
+    } finally {
+      spinner.stop();
+    }
+  };
+
   return (
-    <Container>
-      <Text style={{ fontSize: 24 }}>Club Creation</Text>
-      <Button title="Club" onPress={() => navigation.navigate('Club')} />
-    </Container>
+    <KeyboardAwareScrollView
+      contentContainerStyle={{ flex: 1 }}
+      extraScrollHeight = {20}
+    >
+      <Container>
+        <Input
+          label="클럽 이름"
+          value={title}
+          onChangeText={_handelTitleChange}
+          onSubmitEditing={() => {
+            setTitle(title.trim());
+            descriptionRef.current.focus();
+          }}
+          onBlur={() => setTitle(title.trim())}
+          placeholder="클럽 이름"
+          returnKeyType="next"
+          maxLength={20}
+        />
+        <Input
+          ref={descriptionRef}
+          label="클럽 설명"
+          value={description}
+          onChangeText={text => setDescription(text)}
+          onSubmitEditing={() => {
+            setDescription(description.trim());
+            _handelCreateButtonPress();
+          }}
+          onBlur={() => setDescription(description.trim())}
+          placeholder="클럽 설명"
+          returnKeyType="done"
+          maxLength={40}
+        />
+        <ErrorText>{errorMessage}</ErrorText>
+        <Button
+          title="클럽 생성하기"
+          onPress={_handelCreateButtonPress}
+          disabled={disabled}
+        />
+      </Container>
+    </KeyboardAwareScrollView>
   );
 };
 

@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 import config from '../../firebase.json';
+import 'firebase/firestore';
 
 
 const app = firebase.initializeApp(config);
@@ -47,4 +48,34 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
 
 export const logout = async () => {
   return await Auth.signOut();
+}
+
+export const getCurrentUser = () => {
+  const { uid, displayName, email, photoURL } = Auth.currentUser;
+  console.log(app.auth().currentUser);
+  return { uid, name: displayName, email, photoUrl: photoURL };
+};
+
+export const updateUserPhoto = async photoURL => {
+  const user = Auth.currentUser;
+  const storageUrl = photoUrl.startsWith('https')
+    ? photoUrl
+    : await uploadImage(photoUrl);
+  await user.updateProfile({ photoURL: storageUrl });
+  return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
+};
+
+export const DB = firebase.firestore();
+
+export const createClub = async ({ title, description }) => {
+  const newClubRef = DB.collection('clubs').doc();
+  const id = newClubRef.id;
+  const newClub = {
+    id,
+    title,
+    description,
+    createAt: Date.now(),
+  };
+  await newClubRef.set(newClub);
+  return id;
 }
