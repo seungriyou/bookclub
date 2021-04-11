@@ -56,7 +56,7 @@ export const getCurrentUser = () => {
   return { uid, name: displayName, email, photoUrl: photoURL };
 };
 
-export const updateUserPhoto = async photoURL => {
+export const updateUserPhoto = async photoUrl => {
   const user = Auth.currentUser;
   const storageUrl = photoUrl.startsWith('https')
     ? photoUrl
