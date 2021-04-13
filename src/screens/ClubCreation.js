@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { Input, Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ProgressContext } from '../contexts';
-import { createClub } from '../utils/firebase';
+import { createClub, getCurrentUser } from '../utils/firebase';
 
 const Container = styled.View`
   flex: 1;
@@ -24,23 +24,36 @@ const ClubCreation = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const descriptionRef = useRef();
+  const [region, setRegion] = useState('');
+  const regionRef = useRef();
+  const [maxNumber, setMaxNumber] = useState('');
+  const maxNumberRef = useRef();
   const [errorMessage, setErrorMessage] = useState('');
   const [disabled, setDisabled] = useState(true);
 
+  const leader = getCurrentUser();
+
   useEffect(() => {
-    setDisabled(!(title && !errorMessage));
-  }, [title, description, errorMessage]);
+    setDisabled(!(title && region && !errorMessage));
+  }, [title, description, region, maxNumber, errorMessage]);
 
   const _handelTitleChange = title => {
     setTitle(title);
     setErrorMessage(title.trim() ? '' : '클럽 이름을 입력해주세요');
   };
 
+  const _maxNumberChanged = maxNumber => {
+    setMaxNumber(maxNumber);
+    if (maxNumber > 100 || maxNumber < 1) {
+      setErrorMessage('클럽의 최대 인원은 2 ~ 99사이로 입력해주세요');
+    }
+  }
+
   const _handelCreateButtonPress = async () => {
     try {
       spinner.start();
-      const id = await createClub({ title, description });
-      navigation.replace('Club', { id, title });
+      const id = await createClub({ title, description, leader, region, maxNumber });
+      navigation.replace('Club', { id, title,  });
     } catch (e) {
       Alert.alert('클럽 생성 오류', e.message);
     } finally {
@@ -74,12 +87,40 @@ const ClubCreation = ({ navigation }) => {
           onChangeText={text => setDescription(text)}
           onSubmitEditing={() => {
             setDescription(description.trim());
-            _handelCreateButtonPress();
+            regionRef.current.focus();
           }}
           onBlur={() => setDescription(description.trim())}
           placeholder="클럽 설명"
-          returnKeyType="done"
+          returnKeyType="next"
           maxLength={40}
+        />
+        <Input
+          ref={regionRef}
+          label="클럽 지역"
+          value={region}
+          onChangeText={text => setRegion(text)}
+          onSubmitEditing={() => {
+            setRegion(region.trim());
+            maxNumberRef.current.focus();
+          }}
+          onBlur={() => setRegion(region.trim())}
+          placeholder="클럽 지역"
+          returnKeyType="next"
+          maxLength={20}
+        />
+        <Input
+          ref={maxNumberRef}
+          label="클럽 최대 인원"
+          value={maxNumber}
+          onChangeText={_maxNumberChanged}
+          onSubmitEditing={() => {
+            _maxNumberChanged();
+            _handelCreateButtonPress();
+          }}
+          placeholder="클럽 최대 인원"
+          returnKeyType="done"
+          maxLength={5}
+          keyboardType="number-pad"
         />
         <ErrorText>{errorMessage}</ErrorText>
         <Button

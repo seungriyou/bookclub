@@ -67,15 +67,28 @@ export const updateUserPhoto = async photoUrl => {
 
 export const DB = firebase.firestore();
 
-export const createClub = async ({ title, description }) => {
+export const createClub = async ({ title, description, leader, region, maxNumber }) => {
   const newClubRef = DB.collection('clubs').doc();
   const id = newClubRef.id;
+  const member = {}
+  member[leader.uid] = "true"
   const newClub = {
     id,
     title,
     description,
+    leader,
+    region,
+    maxNumber,
+    member,
     createAt: Date.now(),
   };
   await newClubRef.set(newClub);
+
+  await newClubRef
+        .collection('bookCompleted');
+
+  await newClubRef
+        .collection('bookOngoing');
+
   return id;
 }
