@@ -52,9 +52,10 @@ export const logout = async () => {
 
 export const getCurrentUser = () => {
   const { uid, displayName, email, photoURL } = Auth.currentUser;
-  console.log(app.auth().currentUser);
   return { uid, name: displayName, email, photoUrl: photoURL };
 };
+
+
 
 export const updateUserPhoto = async photoUrl => {
   const user = Auth.currentUser;
@@ -70,8 +71,12 @@ export const DB = firebase.firestore();
 export const createClub = async ({ title, description, leader, region, maxNumber }) => {
   const newClubRef = DB.collection('clubs').doc();
   const id = newClubRef.id;
-  const member = {}
-  member[leader.uid] = "true"
+  const members = [];
+  const member = {
+    uid: leader.uid,
+    isWaiting: true,
+  };
+  members.push(member);
   const newClub = {
     id,
     title,
@@ -79,7 +84,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
     leader,
     region,
     maxNumber,
-    member,
+    members,
     createAt: Date.now(),
   };
   await newClubRef.set(newClub);
@@ -91,4 +96,10 @@ export const createClub = async ({ title, description, leader, region, maxNumber
         .collection('bookOngoing');
 
   return id;
+}
+
+export const getClubInfo = async (id) => {
+  const clubRef = await DB.collection('clubs').doc(id).get();
+  const data = clubRef.data();
+  return { title: data.title, leader: data.leader, members: data.members,region: data.region, maxNumber: data.maxNumber }
 }

@@ -75,8 +75,6 @@ const ClubList = ({ navigation }) => {
         setClubs(list);
 
       });
-    console.log('read');
-    console.log(clubs);
     return () => unsubscribe();
   }, []);
 
