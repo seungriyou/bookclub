@@ -8,6 +8,9 @@ import { theme } from './theme';
 import Navigation from './navigations';
 import { images } from './utils/images';
 import { ProgressProvider, UserProvider } from './contexts';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs(); //에러메세지 출력 끄기
 
 const cashImages = images => {
   return images.map(image => {

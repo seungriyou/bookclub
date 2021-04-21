@@ -34,6 +34,8 @@ export const login = async ({ email, password }) => { //파이어베이스로 �
   return user;
 };
 
+export const DB = firebase.firestore();
+
 export const signup = async ({ email, password, name, photoUrl }) => { //파이어베이스로 회원가입을 진행하는 함수
   const { user } = await Auth.createUserWithEmailAndPassword(email, password);
   const storageUrl = photoUrl.startsWith('https')
@@ -43,6 +45,18 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
     displayName: name,
     photoURL: storageUrl,
   });
+
+  newUserRef = DB.collection('users').doc();
+  newUser = {
+    uid: user.uid,
+    name: user.displayName,
+    email: user.email,
+    photoUrl: user.photoURL,
+    club: {}
+  }
+
+  await newUserRef.set(newUser);
+
   return user;
 };
 
@@ -55,8 +69,6 @@ export const getCurrentUser = () => {
   return { uid, name: displayName, email, photoUrl: photoURL };
 };
 
-
-
 export const updateUserPhoto = async photoUrl => {
   const user = Auth.currentUser;
   const storageUrl = photoUrl.startsWith('https')
@@ -66,7 +78,7 @@ export const updateUserPhoto = async photoUrl => {
   return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
 };
 
-export const DB = firebase.firestore();
+
 
 export const createClub = async ({ title, description, leader, region, maxNumber }) => {
   const newClubRef = DB.collection('clubs').doc();

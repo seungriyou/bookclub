@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import { Alert, FlatList, Text } from 'react-native';
 import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
+import { Button } from '../components';
 
 const Container = styled.View`
   flex: 1;
@@ -22,6 +23,8 @@ const Club = ({ route }) => {
   const [maxNumber, setMaxNumber] = useState(0);
   const [id, setId] = useState(0);
   const [isMember, setIsMember] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [waiting, setWaiting] = useState(false);
 
   const user = getCurrentUser();
 
@@ -33,34 +36,32 @@ const Club = ({ route }) => {
         name: clubData.leader.name,
         photoUrl: clubData.leader.photoUrl
       });
-      setMembers(clubData.members);
+      setMembers([...members, ...clubData.members]);
       setRegion(clubData.region);
       setMaxNumber(clubData.maxNumber);
     } catch (e) {
       Alert.alert('클럽 데이터 수신 오류', e.message);
     }
-  }
+  };
 
-  const getIsMember = (user) => {
-    console.log("getIsMember on");
-    console.log(members);
-    const index = members.findIndex( obj => obj.uid == user.uid );
-    if(index != -1) {setIsMember(true)}
-    console.log(isMember);
-  }
+  const isDisabled = (members) => {
+      members.forEach(member => {
+        if (member.uid == user.uid && member.isWaiting == false) {
+          setDisabled(true);
+        }
+      });
+  };
 
   useEffect(() => {
     getClub();
-    getIsMember(user);
   }, []);
 
-  const Item = ({ uid, isWaiting }) => {
-      console.log(uid);
-      console.log(isWaiting);
-      return (
-        <Text>uid: {uid} / isWaiting: {isWaiting}</Text>
-      );
-  };
+  useEffect(() => {
+    console.log(members);
+    isDisabled(members);
+  }, [members]);
+
+  const signUpClub = () => {};
 
   return (
     <Container>
@@ -70,10 +71,10 @@ const Club = ({ route }) => {
       <Text style={{ fontSize: 12 }}>{leader.name}</Text>
       <Text style={{ fontSize: 12 }}>{region}</Text>
       <Text style={{ fontSize: 12 }}>{maxNumber}</Text>
-      <FlatList
-        data={members}
-        renderItem={item => <Item uid={item.uid} isWaiting={item.isWaiting} />}
-        keyExtractor={item => item['uid'].toString()}
+      <Button
+        title="가입신청"
+        onPress={signUpClub}
+        disabled={disabled}
       />
     </Container>
   );
