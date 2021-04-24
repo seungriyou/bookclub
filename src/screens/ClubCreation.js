@@ -53,7 +53,7 @@ const ClubCreation = ({ navigation }) => {
     try {
       spinner.start();
       const id = await createClub({ title, description, leader, region, maxNumber });
-      navigation.replace('Club', { id, title,  });
+      navigation.replace('Club', { id, title, });
     } catch (e) {
       Alert.alert('클럽 생성 오류', e.message);
     } finally {

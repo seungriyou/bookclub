@@ -4,5 +4,6 @@ import Club from './Club';
 import ClubCreation from './ClubCreation';
 import ClubList from './ClubList';
 import Profile from './Profile';
+import MyClubList from './MyClubList';
 
-export { Login, Signup, Club, ClubCreation, ClubList, Profile };
+export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList };

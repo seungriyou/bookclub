@@ -5,6 +5,7 @@ import 'firebase/firestore';
 
 const app = firebase.initializeApp(config);
 
+
 const Auth = app.auth();
 
 const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 스토리지에 업로드 하는 함수
@@ -86,7 +87,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   const members = [];
   const member = {
     uid: leader.uid,
-    isWaiting: true,
+    isWaiting: false,
   };
   members.push(member);
   const newClub = {
@@ -114,4 +115,25 @@ export const getClubInfo = async (id) => {
   const clubRef = await DB.collection('clubs').doc(id).get();
   const data = clubRef.data();
   return { title: data.title, leader: data.leader, members: data.members,region: data.region, maxNumber: data.maxNumber }
+}
+
+export const clubSignUpWaiting = async (clubId) => {
+  const user = Auth.currentUser;
+  const clubDocRef = await DB.collection('clubs').doc(clubId).get();
+  const data = clubDocRef.data()
+  const members = data.members;
+  members.push({
+    uid: user.uid,
+    isWaiting: true,
+  });
+
+  console.log(members);
+
+  const clubRef = DB.collection('clubs').doc(clubId);
+
+  clubRef.update({members: members}).then(res => {
+    console.log(members);
+  });
+
+  return true;
 }

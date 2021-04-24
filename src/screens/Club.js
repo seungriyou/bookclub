@@ -1,8 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled from 'styled-components/native';
-import { Alert, FlatList, Text } from 'react-native';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
+import { Alert, FlatList, Text, Modal } from 'react-native';
+import { getClubInfo, DB, getCurrentUser, clubSignUpWaiting } from '../utils/firebase';
 import { Button } from '../components';
+import { ProgressContext } from '../contexts';
+import Toast, {DURATION} from 'react-native-easy-toast';
+
 
 const Container = styled.View`
   flex: 1;
@@ -12,7 +15,8 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const Club = ({ route }) => {
+const Club = ({ navigation, route }) => {
+  const { spinner } = useContext(ProgressContext);
   const [title, setTitle] = useState('');
   const [leader, setLeader] = useState({
     name: "",
@@ -31,6 +35,7 @@ const Club = ({ route }) => {
   const getClub = async () => {
     try {
       const clubData = await getClubInfo(route.params?.id);
+      setId(route.params?.id);
       setTitle(clubData.title);
       setLeader({
         name: clubData.leader.name,
@@ -46,7 +51,7 @@ const Club = ({ route }) => {
 
   const isDisabled = (members) => {
       members.forEach(member => {
-        if (member.uid == user.uid && member.isWaiting == false) {
+        if (member.uid == user.uid && member.isWaiting == true) {
           setDisabled(true);
         }
       });
@@ -61,7 +66,25 @@ const Club = ({ route }) => {
     isDisabled(members);
   }, [members]);
 
-  const signUpClub = () => {};
+  useEffect(() => {
+    isDisabled(members);
+  })
+
+  const signUpClub = async () => {
+    const id = route.params?.id
+    try {
+      spinner.start();
+      clubSignUpWaiting(id);
+    } catch (e) {
+      Alert.alert('클럽 가입신청 오류', e.message);
+    } finally {
+      spinner.stop();
+      this.toast.show('가입 신청 완료', 1000);
+
+    }
+
+    navigation.popToTop();
+  };
 
   return (
     <Container>
@@ -76,7 +99,12 @@ const Club = ({ route }) => {
         onPress={signUpClub}
         disabled={disabled}
       />
+      <Toast
+        ref={(toast) => this.toast = toast}
+        position='bottom'
+      />
     </Container>
+
   );
 };
 
