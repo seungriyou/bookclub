@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Profile, ClubList, MyClubList } from '../screens';
+import { MyClubMain } from '../screens';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components/native';
 
@@ -24,18 +24,10 @@ const MainTab = ({ navigation, route }) => {
     const titles = route.state?.routeNames || ['Clubs'];
     const index = route.state?.index || 0;
     navigation.setOptions({
-      headerTitle: titles[index],
-      headerRight: () =>
-        index === 0 && (
-          <MaterialIcons
-            name="add"
-            size={26}
-            style={{ margin: 10 }}
-            onPress={() => navigation.navigate('Club Creation')}
-          />
-        ),
+      headerTitle: titles[index]
     });
   }, [route]);
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -44,37 +36,14 @@ const MainTab = ({ navigation, route }) => {
       }}
     >
       <Tab.Screen
-        name="Clubs"
-        component={ClubList}
+        name="MyClubMain"
+        component={MyClubMain}
         options={{
           tabBarIcon: ({ focused }) =>
             TabBarIcon({
               focused,
               name: focused ? 'menu-book' : 'book',
             }),
-        }}
-      />
-      <Tab.Screen
-        name="MyClubList"
-        component={MyClubList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
-
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) =>
-          TabBarIcon({
-            focused,
-            name: focused ? 'person' : 'person-outline',
-          }),
         }}
       />
     </Tab.Navigator>
