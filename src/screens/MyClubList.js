@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { DB, getCurrentUser } from '../utils/firebase';
-import { FlatList } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
@@ -62,30 +62,58 @@ const Item = React.memo(
 );
 
 const MyClubList = ({ navigation }) => {
+  const [clubIds, setClubIds] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [doc, setDoc] = useState({});
 
   const user = getCurrentUser();
+  const getMyClubId = async () => {
+    try {
+      const userRef = DB.collection('users');
+      const snapshot = await userRef.where('uid', '==', user.uid).get();
+      snapshot.forEach(doc => {
+        console.log(doc.data());
+        setDoc(doc.data());
+      })
+      console.log("doc data test");
+    }
+    catch(e) {
+      Alert.alert('클럽 데이터 수신 오류', e.message);
+    }
+  };
+
+  const getMyClubList = async () => {
+    try {
+      const clubRef = DB.collection('clubs');
+      const list = [];
+      for(const clubId in clubIds){
+        const tempDoc = await clubRef.doc(clubId).get();
+        const tempData = tempDoc.data();
+        list.push(tempData);
+      }
+      setClubs(list);
+    }
+    catch (e) {
+      Alert.alert('클럽 list set error', e.message);
+    }
+  };
 
   useEffect(() => {
-    const unsubscribe = DB.collection('users')
-      .where('uid', '==', user.uid)
-      .onSnapshot(snapshot => {
-        const list = [];
-        snapshot.forEach(doc => {
-          list.push(doc.data());
-        });
-        console.log("list : ");
-        console.log(list);
-
-        setClubs(list);
-
-      });
-    return () => unsubscribe();
+    getMyClubId();
   }, []);
 
   useEffect(() => {
+    setClubIds(doc.club);
+  }, [doc]);
+
+  useEffect(() => {
+    getMyClubList();
+  }, [clubIds])
+
+  useEffect(() => {
     console.log(clubs);
-  }, [clubs])
+  }, [clubs]);
+
   const _handleItemPress = params => {
     navigation.navigate('Club', params);
   };
