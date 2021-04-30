@@ -50,11 +50,15 @@ const Club = ({ navigation, route }) => {
   };
 
   const isDisabled = (members) => {
+      let temp = false;
       members.forEach(member => {
-        if (member.uid == user.uid && member.isWaiting == true) {
-          setDisabled(true);
+        if (member.uid == user.uid) {
+          temp = true;
         }
       });
+      if(temp == true) {
+        setDisabled(true);
+      }
   };
 
   useEffect(() => {

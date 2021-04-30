@@ -47,7 +47,7 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
     photoURL: storageUrl,
   });
 
-  newUserRef = DB.collection('users').doc();
+  newUserRef = DB.collection('users').doc(user.uid);
   newUser = {
     uid: user.uid,
     name: user.displayName,
@@ -82,6 +82,7 @@ export const updateUserPhoto = async photoUrl => {
 
 
 export const createClub = async ({ title, description, leader, region, maxNumber }) => {
+  const user = Auth.currentUser;
   const newClubRef = DB.collection('clubs').doc();
   const id = newClubRef.id;
   const members = [];
@@ -108,6 +109,14 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   await newClubRef
         .collection('bookOngoing');
 
+  const userRef = DB.collection('users').doc(user.uid);
+  const userDoc = await userRef.get();
+  const userData = userDoc.data();
+  const club = userData.club;
+  club[id] = false
+
+  userRef.update({club: club});
+
   return id;
 }
 
@@ -120,7 +129,7 @@ export const getClubInfo = async (id) => {
 export const clubSignUpWaiting = async (clubId) => {
   const user = Auth.currentUser;
   const clubDocRef = await DB.collection('clubs').doc(clubId).get();
-  const data = clubDocRef.data()
+  const data = clubDocRef.data();
   const members = data.members;
   members.push({
     uid: user.uid,
@@ -135,5 +144,13 @@ export const clubSignUpWaiting = async (clubId) => {
     console.log(members);
   });
 
+  const userRef = DB.collection('users').doc(user.uid);
+  const userDoc = await userRef.get();
+  const userData = userDoc.data();
+  const club = userData.club;
+  club[clubId] = true;
+
+  userRef.update({club: club});
+  
   return true;
 }

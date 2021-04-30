@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyClubMain } from '../screens';
+import { MyClubMain, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
 import { MaterialIcons } from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components/native';
 
@@ -38,6 +38,50 @@ const MainTab = ({ navigation, route }) => {
       <Tab.Screen
         name="MyClubMain"
         component={MyClubMain}
+        options={{
+          tabBarIcon: ({ focused }) =>
+            TabBarIcon({
+              focused,
+              name: focused ? 'menu-book' : 'book',
+            }),
+        }}
+      />
+      <Tab.Screen
+        name="Board"
+        component={MyClubBoardList}
+        options={{
+          tabBarIcon: ({ focused }) =>
+            TabBarIcon({
+              focused,
+              name: focused ? 'menu-book' : 'book',
+            }),
+        }}
+      />
+      <Tab.Screen
+        name="Album"
+        component={MyClubAlbumList}
+        options={{
+          tabBarIcon: ({ focused }) =>
+            TabBarIcon({
+              focused,
+              name: focused ? 'menu-book' : 'book',
+            }),
+        }}
+      />
+      <Tab.Screen
+        name="Essay"
+        component={MyClubEssayList}
+        options={{
+          tabBarIcon: ({ focused }) =>
+            TabBarIcon({
+              focused,
+              name: focused ? 'menu-book' : 'book',
+            }),
+        }}
+      />
+      <Tab.Screen
+        name="Schedule"
+        component={MyClubScheduleList}
         options={{
           tabBarIcon: ({ focused }) =>
             TabBarIcon({
