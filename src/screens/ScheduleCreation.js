@@ -1,24 +1,16 @@
 // 일정 생성 화면
 // 제목, 장소, 메모는 text로 받고, 일정은 datetimepicker을 이용해 시간과 날짜를 따로 받도록 하였습니다.
-// 화면 기준이 ios이기 때문에 android로 다시 보고 확인해보도록 하겠습니다.
 // 일단은 firebase 연동하지 않고 console창에 useState들을 출력하는 방식으로 제작했습니다.
 // datetimepicker을 사용하기 위해 'npm instal @react-native-community/datetimepicker --save'로 관련 라이브러리를 설치해야합니다.
 
-// theme.js에 추가할 코드
-// scheduleBackground: colors.pastel_pink,
-// scheduleButtonBackground: colors.white, //버튼 색깔
-// scheduleButtonTitle: colors.pastel_pink,
-// scheduledButtonUnfilledTitle: colors.white,
+// theme.js에서 임의로 맞는 색상의 이름을 사용하였습니다.
 
 // 추가할 component
 // ScheduleInput: label이 가로에 위치하도록 기존 Input 수정
 // ScheduleButton: 버튼 색상 수정
 
-// 구성: App.js 에서 ScheStack을 통해 list 화면으로 넘어가고, 거기서 button 클릭 시 ScheduleInput화면으로 이동하도록 구성했습니다.
-// List 화면은 다른 분이 구성하신다 하셔서 임시로 만든 stack과 screens입니다.
 
-
-// 디자인 구성은 아직 완료하지 못했습니다.
+// 제가 개발 시 Stack Navigation을 따로 제작하여 만들었기 때문에, 오류가 있다면 바로 말씀해주시면 감사하겠습니다.
 
 
 import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
@@ -186,7 +178,7 @@ const ScheduleCreation = ({navigation}) => {
                         disabled={disabled}
                     />
                 </List>
-                { show && ( // DateTimePicker 띄우기 -> 디자인상 어디에 띄워야할지, 안드로이드에서는 어떨 지 아직 테스트해보지 않았습니다.
+                { show && (
                     <DateTimePicker
                         testID="dateTimePicker"
                         value={date}
