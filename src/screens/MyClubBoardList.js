@@ -13,11 +13,13 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const _handleBoardWriteButtonPressed = params => {
-  navigation.navigate('MyClubBoard', params);
-}
 
 const MyClubBoardList = ({navigation}) => {
+  
+  const _handleBoardWriteButtonPressed = params => {
+    navigation.navigate('BoardWrite', params);
+  }
+  
   return (
     <Container>
       <Button
