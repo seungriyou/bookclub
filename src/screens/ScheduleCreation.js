@@ -10,7 +10,7 @@
 // ScheduleButton: 버튼 색상 수정
 
 
-// 제가 개발 시 Stack Navigation을 따로 제작하여 만들었기 때문에, 오류가 있다면 바로 말씀해주시면 감사하겠습니다.
+// 제가 개발 시 Stack Navigation을 따로 제작하여 만들었기 때문에 존재하는 오류사항이 있다면 말씀해주시길 바랍니다. 감사합니다.
 
 
 import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
