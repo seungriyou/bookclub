@@ -13,11 +13,11 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const _handleScheduleWriteButtonPressed = params => {
-  navigation.navigate('MyClubSchedule', params);
-}
-
 const MyClubScheduleList = ({navigation}) => {
+  const _handleScheduleWriteButtonPressed = params => {
+    navigation.navigate('ScheduleCreation', params);
+  }
+  
   return (
     <Container>
       <Button
