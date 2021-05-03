@@ -15,9 +15,9 @@ const Container = styled.View`
 
 const MyClubScheduleList = ({navigation}) => {
   const _handleScheduleWriteButtonPressed = params => {
-    navigation.navigate('ScheduleCreation', params);
+    navigation.navigate('MyClub', {screen: 'MyClubSchedule', params});
   }
-  
+
   return (
     <Container>
       <Button

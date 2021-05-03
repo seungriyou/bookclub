@@ -6,11 +6,13 @@ import ClubList from './ClubList';
 import Profile from './Profile';
 import MyClubList from './MyClubList';
 import MyClubMain from './MyClubMain';
+import MyClubBoard from './MyClubBoard';
 import MyClubBoardList from './MyClubBoardList';
 import MyClubAlbumList from './MyClubAlbumList';
 import MyClubEssayList from './MyClubEssayList';
+import MyClubSchedule from './MyClubSchedule';
 import MyClubScheduleList from './MyClubScheduleList';
 
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList, MyClubMain,
-  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList
+  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule,
  };

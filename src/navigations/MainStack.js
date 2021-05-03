@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Club, ClubCreation } from '../screens';
+import { Club, ClubCreation, MyClubBoard, MyClubSchedule } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -22,6 +22,10 @@ const MyClub = () => {
       headerMode="none"
     >
       <Stack.Screen name="MyClubMain" component={MyClubTab} />
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
+
+
+      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
     </Stack.Navigator>
   );
 };

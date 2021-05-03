@@ -15,11 +15,11 @@ const Container = styled.View`
 
 
 const MyClubBoardList = ({navigation}) => {
-  
+
   const _handleBoardWriteButtonPressed = params => {
-    navigation.navigate('BoardWrite', params);
+    navigation.navigate('MyClubBoard', params);
   }
-  
+
   return (
     <Container>
       <Button
