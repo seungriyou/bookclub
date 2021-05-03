@@ -7,6 +7,38 @@ import MyClubTab from './MyClubTab';
 
 const Stack = createStackNavigator();
 
+const MyClubScheduleNav = () => {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="MyClubScheduleNav"
+      screenOptions={{
+        headerTitleAlign: 'center',
+      }}
+      headerMode="screen"
+    >
+      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
+    </Stack.Navigator>
+  );
+};
+
+const MyClubBoardNav = () => {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="MyClubBoardNav"
+      screenOptions={{
+        headerTitleAlign: 'center',
+      }}
+      headerMode="screen"
+    >
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard}/>
+    </Stack.Navigator>
+  );
+};
+
 const MyClub = () => {
   const theme = useContext(ThemeContext);
 
@@ -19,13 +51,13 @@ const MyClub = () => {
         cardStyle: { backgroundColor: theme.backgroundColor },
         headerBackTitleVisible: false,
       }}
-      headerMode="none"
+      headerMode="screen"
     >
       <Stack.Screen name="MyClubMain" component={MyClubTab} />
-      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
+      <Stack.Screen name="MyClubBoardNav" component={MyClubBoardNav} options={{headerShown: false}}/>
 
 
-      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
+      <Stack.Screen name="MyClubScheduleNav" component={MyClubScheduleNav} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 };
@@ -42,11 +74,12 @@ const MainStack = () => {
         cardStyle: { backgroundColor: theme.backgroundColor },
         headerBackTitleVisible: false,
       }}
+      headerMode="float"
     >
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Club Creation" component={ClubCreation} />
       <Stack.Screen name="Club" component={Club} />
-      <Stack.Screen name="MyClub" component={MyClub}/>
+      <Stack.Screen name="MyClub" component={MyClub} options={{headerShown: false}}/>
     </Stack.Navigator>
   );
 };

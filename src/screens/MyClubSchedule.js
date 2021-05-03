@@ -133,7 +133,7 @@ const ScheduleCreation = ({navigation}) => {
         console.log(site);
         console.log(memo);
         Alert.alert('등록이 완료되었습니다.');
-        navigation.replace('MyClubScheduleList');
+        navigation.navigate('MyClubScheduleList');
     };
 
     return (

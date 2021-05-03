@@ -14,10 +14,10 @@ const Container = styled.View`
 `;
 
 
-const MyClubBoardList = ({navigation}) => {
+const MyClubBoardList = ({navigation, params}) => {
 
   const _handleBoardWriteButtonPressed = params => {
-    navigation.navigate('MyClubBoard', params);
+    navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard'});
   }
 
   return (

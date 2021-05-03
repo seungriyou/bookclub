@@ -13,11 +13,12 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const _handleEssayWriteButtonPressed = params => {
-  navigation.navigate('MyClubEssay', params);
-}
-
 const MyClubEssayList = ({navigation}) => {
+
+  const _handleEssayWriteButtonPressed = params => {
+    navigation.navigate('MyClubEssay', params);
+  }
+
   return (
     <Container>
       <Button
