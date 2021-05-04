@@ -8,11 +8,13 @@ import MyClubList from './MyClubList';
 import MyClubMain from './MyClubMain';
 import MyClubBoard from './MyClubBoard';
 import MyClubBoardList from './MyClubBoardList';
+import MyClubAlbum from './MyClubAlbum';
+import MyClubAlbumSelectPhoto from './MyClubAlbumSelectPhoto';
 import MyClubAlbumList from './MyClubAlbumList';
 import MyClubEssayList from './MyClubEssayList';
 import MyClubSchedule from './MyClubSchedule';
 import MyClubScheduleList from './MyClubScheduleList';
 
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList, MyClubMain,
-  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule,
+  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto
  };

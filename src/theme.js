@@ -37,4 +37,9 @@ export const theme = {
   listTime: colors.grey_1,
   listDescription: colors.grey_1,
   listIcon: colors.black,
+
+  // MyClubAlbum 관련 추가
+  appBackground: colors.pastel_pink,
+  inputBackground: colors.white,
+  buttonIcon: colors.grey_2,
 };

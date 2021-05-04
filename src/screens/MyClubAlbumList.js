@@ -13,11 +13,13 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const _handleAlbumWriteButtonPressed = params => {
-  navigation.navigate('MyClubAlbum', params);
-}
+
 
 const MyClubAlbumList = ({navigation}) => {
+  const _handleAlbumWriteButtonPressed = params => {
+    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum'});
+  }
+  
   return (
     <Container>
       <Button

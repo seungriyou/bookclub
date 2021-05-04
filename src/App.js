@@ -43,7 +43,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <UserProvider>
         <ProgressProvider>
-          <StatusBar barStyle="dark-content" />
+          <StatusBar barStyle="light-content" />
           <Navigation />
         </ProgressProvider>
       </UserProvider>
