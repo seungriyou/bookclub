@@ -152,26 +152,3 @@ export const clubSignUpWaiting = async (clubId) => {
 
   return true;
 }
-
-export const myClubBoardWrite = async({ id, title, content }) => {
-  const user = Auth.currentUser;
-  const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
-
-  console.log("firebase file");
-  console.log(id, title, content);
-
-  const newBoard = {
-    title,
-    user,
-    content,
-    createAt: Date.now(),
-    comments: [],
-    comment_cnt: 0,
-  }
-
-  await boardRef.set(newBoard);
-
-  console.log("upload complete")
-
-  return true;
-}

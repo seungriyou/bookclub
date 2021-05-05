@@ -13,13 +13,15 @@
 // 제가 개발 시 Stack Navigation을 따로 제작하여 만들었기 때문에 존재하는 오류사항이 있다면 말씀해주시길 바랍니다. 감사합니다.
 
 
-import React, { useLayoutEffect, useState, useRef, useEffect } from 'react';
+import React, { useLayoutEffect, useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import ScheduleInput from '../components/ScheduleInput';
 import ScheduleButton from '../components/ScheduleButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Alert, Platform, Dimensions } from 'react-native';
+import { DB, getCurrentUser } from '../utils/firebase';
+import { ProgressContext } from '../contexts';
 
 const Container = styled.View`
     flex: 1;
@@ -65,8 +67,10 @@ const DateButtonText = styled.Text`
     align-items: center;
 `;
 
-const ScheduleCreation = ({navigation}) => {
+const ScheduleCreation = ({navigation, route}) => {
+    const { spinner } = useContext(ProgressContext);
     const [title, setTitle] = useState('');
+    const [id, setId] = useState(0);
     const today = new Date();
     const [date, setDate] = useState(new Date(today)); // datetimepicker 이용해 시간 입력받기
     const [mode, setMode] = useState('date'); // datetimepicker 관련
@@ -87,6 +91,19 @@ const ScheduleCreation = ({navigation}) => {
         setDate(currentDate);
     };
 
+    const _handleTitleChange = text => {
+        setTitle(text);
+    }
+
+    const _handleSiteChange = text => {
+        setSite(text);
+    }
+
+    const _handleMemoChange = text => {
+        setMemo(text);
+    }
+
+
     // show mode 변경하기
     const showMode = (currentMode) => {
         setShow(true);
@@ -102,6 +119,10 @@ const ScheduleCreation = ({navigation}) => {
     const showTimepicker = () => {
         showMode('time');
     };
+
+    useEffect(() => {
+      setId(route.params?.id);
+    }, []);
 
     // 일정명이나 장소가 비었을 때 error 메시지 송출
     useEffect(() => {
@@ -126,14 +147,45 @@ const ScheduleCreation = ({navigation}) => {
         );
     }, [title, date, site, errorMessage]);
 
+    const myClubScheduleWrite = async() => {
+      const user = getCurrentUser();
+      const scheduleRef = DB.collection('clubs').doc(id).collection('schedule').doc();
+
+      const newSchedule = {
+        title,
+        author: user,
+        site: site,
+        date: date,
+        memo: memo,
+        createAt: Date.now(),
+      };
+
+      await scheduleRef.set(newSchedule);
+
+      console.log("upload complete");
+
+      return true
+    }
+
     // firebase 연동할 부분, 이전에는 콘솔 로그로 출력하게 두었습니다.
-    const _handleCreationButtonPress = ({ navigate, route }) => {
+    const _handleCreationButtonPress = async() => {
         console.log(title);
-        console.log(date.toLocaleString());
+        console.log(date);
         console.log(site);
         console.log(memo);
-        Alert.alert('등록이 완료되었습니다.');
-        navigation.navigate('MyClubScheduleList');
+        try {
+          spinner.start();
+          await myClubScheduleWrite();
+          navigation.navigate('MyClubTab', {screen: 'MyClubScheduleList'});
+          Alert.alert('등록이 완료되었습니다.');
+        }
+        catch(e) {
+          Alert.alert('글 업로드 오류', e.message);
+        }
+        finally {
+          spinner.stop();
+
+        }
     };
 
     return (
@@ -145,7 +197,7 @@ const ScheduleCreation = ({navigation}) => {
                 <List width={width}>
                     <ScheduleInput // 일정명 입력 받기
                         value={title}
-                        onChangeText={text => setTitle(text)}
+                        onChangeText={_handleTitleChange}
                         onSubmitEditing={() => {}}
                         placeholder="일정명"
                         returnKeyType="next"
@@ -159,15 +211,13 @@ const ScheduleCreation = ({navigation}) => {
                     <DateText>선택 시간{"\n"}{date.toLocaleString()}</DateText>
                     <ScheduleInput // 장소 입력 받기
                         value={site}
-                        onChangeText={text => setSite(text)}
-                        onSubmitEditing={() => {}}
+                        onChangeText={_handleSiteChange}
                         placeholder="장소(모임형태)"
                         returnKeyType="next"
                     />
                     <ScheduleInput // 메모 입력 받기
                         value={memo}
-                        onChangeText={text => setMemo(text)}
-                        onSubmitEditing={_handleCreationButtonPress}
+                        onChangeText={_handleMemoChange}
                         placeholder="메모"
                         returnKeyType="done"
                     />
