@@ -7,12 +7,13 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
 `;
 
-const MyClubMain = () => {
+const MyClubMain = ({ navigate, route }) => {
   const theme = useContext(ThemeContext);
 
   return (
     <Container>
       <Text>Test Main Screen</Text>
+      <Text style={{ fontSize: 24 }}>ID: {route.params?.id}</Text>
     </Container>
   );
 };

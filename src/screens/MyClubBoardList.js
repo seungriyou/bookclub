@@ -14,10 +14,12 @@ const Container = styled.View`
 `;
 
 
-const MyClubBoardList = ({navigation, params}) => {
+const MyClubBoardList = ({navigation, route}) => {
+  const id = route.params?.id;
+  const title = route.params?.title;
 
   const _handleBoardWriteButtonPressed = params => {
-    navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard'});
+    navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard', params: {id: id, title: title},});
   }
 
   return (

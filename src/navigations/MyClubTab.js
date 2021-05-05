@@ -29,68 +29,73 @@ const MainTab = ({ navigation, route }) => {
   }, [route]);
 
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: theme.tabActiveColor,
-        tabInactiveColor: theme.tabInactiveColor,
-      }}
-    >
-      <Tab.Screen
-        name="MyClubMain"
-        component={MyClubMain}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: theme.tabActiveColor,
+          tabInactiveColor: theme.tabInactiveColor,
         }}
-      />
-      <Tab.Screen
-        name="Board"
-        component={MyClubBoardList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
-      <Tab.Screen
-        name="Album"
-        component={MyClubAlbumList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
-      <Tab.Screen
-        name="Essay"
-        component={MyClubEssayList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
-      <Tab.Screen
-        name="Schedule"
-        component={MyClubScheduleList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
-    </Tab.Navigator>
+      >
+        <Tab.Screen
+          name="MyClubMain"
+          component={MyClubMain}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+          initialParams={route.params}
+        />
+        <Tab.Screen
+          name="Board"
+          component={MyClubBoardList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+          initialParams={route.params}
+        />
+        <Tab.Screen
+          name="Album"
+          component={MyClubAlbumList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+          initialParams={route.params}
+        />
+        <Tab.Screen
+          name="Essay"
+          component={MyClubEssayList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+          initialParams={route.params}
+        />
+        <Tab.Screen
+          name="Schedule"
+          component={MyClubScheduleList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+          initialParams={route.params}
+        />
+      </Tab.Navigator>
   );
 };
 

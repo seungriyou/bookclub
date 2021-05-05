@@ -115,7 +115,17 @@ const MyClubList = ({ navigation }) => {
   }, [clubs]);
 
   const _handleItemPress = params => {
-    navigation.navigate('MyClub', {screen : 'MyClubMain', params});
+    const id = params.id;
+    const title = params.title;
+
+    console.log(id);
+    console.log(title);
+    navigation.navigate('MyClub',
+    {
+      screen : 'MyClubTab',
+      params: {id: id, title: title},
+    }
+    );
   };
 
   return (

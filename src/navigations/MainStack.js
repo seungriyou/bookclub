@@ -34,15 +34,16 @@ const MyClubBoardNav = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubBoard" component={MyClubBoard}/>
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
     </Stack.Navigator>
   );
 };
+
 const MyClubAlbumNav = () => {
   const theme = useContext(ThemeContext);
     return (
       <Stack.Navigator
-        initialRouteName="AlbumWrite"
+        initialRouteName="MyClubAlbumNav"
         screenOptions={{
             headerTitleAlign: 'center',
             cardStyle: { backgroundColor: theme.background },
@@ -54,8 +55,14 @@ const MyClubAlbumNav = () => {
       </Stack.Navigator>
     );
 };
-const MyClub = () => {
+const MyClub = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
+  const id = route.params.id;
+  const title = route.params.title;
+  const currentClub = {
+    id: id,
+    title: title,
+  };
 
   return (
     <Stack.Navigator
@@ -68,7 +75,7 @@ const MyClub = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubMain" component={MyClubTab} />
+      <Stack.Screen name="MyClubTab" component={MyClubTab}  />
       <Stack.Screen name="MyClubBoardNav" component={MyClubBoardNav} options={{headerShown: false}}/>
       <Stack.Screen name="MyClubAlbumNav" component={MyClubAlbumNav} options={{ headerShown: false }} />
 

@@ -17,9 +17,9 @@ const Container = styled.View`
 
 const MyClubAlbumList = ({navigation}) => {
   const _handleAlbumWriteButtonPressed = params => {
-    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum'});
+    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params});
   }
-  
+
   return (
     <Container>
       <Button

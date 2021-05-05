@@ -79,8 +79,6 @@ export const updateUserPhoto = async photoUrl => {
   return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
 };
 
-
-
 export const createClub = async ({ title, description, leader, region, maxNumber }) => {
   const user = Auth.currentUser;
   const newClubRef = DB.collection('clubs').doc();
@@ -151,6 +149,29 @@ export const clubSignUpWaiting = async (clubId) => {
   club[clubId] = true;
 
   userRef.update({club: club});
-  
+
+  return true;
+}
+
+export const myClubBoardWrite = async({ id, title, content }) => {
+  const user = Auth.currentUser;
+  const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
+
+  console.log("firebase file");
+  console.log(id, title, content);
+
+  const newBoard = {
+    title,
+    user,
+    content,
+    createAt: Date.now(),
+    comments: [],
+    comment_cnt: 0,
+  }
+
+  await boardRef.set(newBoard);
+
+  console.log("upload complete")
+
   return true;
 }

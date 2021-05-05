@@ -37,47 +37,48 @@ const MainTab = ({ navigation, route }) => {
     });
   }, [route]);
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: theme.tabActiveColor,
-        tabInactiveColor: theme.tabInactiveColor,
-      }}
-    >
-      <Tab.Screen
-        name="Clubs"
-        component={ClubList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
+      <Tab.Navigator
+        tabBarOptions={{
+          activeTintColor: theme.tabActiveColor,
+          tabInactiveColor: theme.tabInactiveColor,
         }}
-      />
-      <Tab.Screen
-        name="MyClubList"
-        component={MyClubList}
-        options={{
-          tabBarIcon: ({ focused }) =>
-            TabBarIcon({
-              focused,
-              name: focused ? 'menu-book' : 'book',
-            }),
-        }}
-      />
+      >
+        <Tab.Screen
+          name="Clubs"
+          component={ClubList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+        />
+        <Tab.Screen
+          name="MyClubList"
+          component={MyClubList}
+          options={{
+            tabBarIcon: ({ focused }) =>
+              TabBarIcon({
+                focused,
+                name: focused ? 'menu-book' : 'book',
+              }),
+          }}
+        />
 
-      <Tab.Screen
-        name="Profile"
-        component={Profile}
-        options={{
-          tabBarIcon: ({ focused }) =>
-          TabBarIcon({
-            focused,
-            name: focused ? 'person' : 'person-outline',
-          }),
-        }}
-      />
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ focused }) =>
+            TabBarIcon({
+              focused,
+              name: focused ? 'person' : 'person-outline',
+            }),
+          }}
+        />
     </Tab.Navigator>
+
   );
 };
 

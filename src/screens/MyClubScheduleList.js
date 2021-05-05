@@ -13,9 +13,12 @@ const Container = styled.View`
   padding: 0 20px;
 `;
 
-const MyClubScheduleList = ({navigation}) => {
+const MyClubScheduleList = ({navigation, route}) => {
+  const id = route.params?.id;
+  const title = route.params?.title;
+
   const _handleScheduleWriteButtonPressed = params => {
-    navigation.navigate('MyClubScheduleNav', {screen: 'MyClubSchedule'});
+    navigation.navigate('MyClubScheduleNav', {screen: 'MyClubSchedule', params: {id: id, title: title},});
   }
 
   return (

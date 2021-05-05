@@ -1,10 +1,12 @@
-import React, {useLayoutEffect, useState, useRef} from 'react';
-import {Dimensions} from 'react-native';
+import React, {useLayoutEffect, useEffect, useState, useRef, useContext} from 'react';
+import {Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import TitleInput from '../components/TitleInput';
 import ContentInput from '../components/ContentInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import { ProgressContext } from '../contexts';
+import { DB, getCurrentUser } from '../utils/firebase';
 
 const Container=styled.View`
     flex: 1;
@@ -18,27 +20,59 @@ const List=styled.ScrollView`
 `;
 
 
-const BoardWrite=({ navigation })=>{
+const MyClubBoard=({ navigation, route })=>{
+    const { spinner } = useContext(ProgressContext);
 
     const width= Dimensions.get('window').width;
 
     const refTitle=useRef();
     const refContent=useRef();
 
-    const [newTitle, setNewTitle]=useState('');
-    const [newContent, setNewContent]=useState('');
+    const [title, setTitle]=useState('');
+    const [content, setContent]=useState('');
+    const [id, setId] = useState('');
 
     const _handleTitleChange = text => {
-        setNewTitle(text);
+        setTitle(text);
     }
     const _handleContentChange = text => {
-        setNewContent(text);
+        setContent(text);
+    }
+
+    const myClubBoardWrite = async() => {
+      const user = getCurrentUser();
+      const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
+
+      const newBoard = {
+        title,
+        author: user,
+        content,
+        createAt: Date.now(),
+        comments: [],
+        comment_cnt: 0,
+      }
+
+      await boardRef.set(newBoard);
+
+      console.log("upload complete");
+
+      return true;
+
     }
 
     const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
-        alert(`check console`)
-        console.log("연동 함수 필요");
-    }
+        try {
+          spinner.start();
+          await myClubBoardWrite();
+          navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
+        }
+        catch(e) {
+          Alert.alert('글 업로드 오류', e.message);
+        }
+        finally {
+          spinner.stop();
+        }
+    };
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -65,10 +99,8 @@ const BoardWrite=({ navigation })=>{
                 />
             ),
         });
-      console.log(navigation);
+      setId(route.params?.id);
     }, []);
-
-
 
     return(
         <KeyboardAwareScrollView
@@ -80,14 +112,14 @@ const BoardWrite=({ navigation })=>{
                 <TitleInput
                     ref={refTitle}
                     placeholder="제목"
-                    value={newTitle}
+                    value={title}
                     onChangeText={_handleTitleChange}
                     onSubmitEditing={()=>refContent.current.focus()}
                 />
                 <ContentInput
                     ref={refContent}
                     placeholder="내용"
-                    value={newContent}
+                    value={content}
                     onChangeText={_handleContentChange}
                 />
             </List>
@@ -96,4 +128,4 @@ const BoardWrite=({ navigation })=>{
     );
 };
 
-export default BoardWrite;
+export default MyClubBoard;

@@ -127,7 +127,7 @@ const ScheduleCreation = ({navigation}) => {
     }, [title, date, site, errorMessage]);
 
     // firebase 연동할 부분, 이전에는 콘솔 로그로 출력하게 두었습니다.
-    const _handleCreationButtonPress = () => {
+    const _handleCreationButtonPress = ({ navigate, route }) => {
         console.log(title);
         console.log(date.toLocaleString());
         console.log(site);
