@@ -39,8 +39,9 @@ const MyClubBoardNav = () => {
   );
 };
 
-const MyClubAlbumNav = () => {
+const MyClubAlbumNav = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
+
     return (
       <Stack.Navigator
         initialRouteName="MyClubAlbumNav"
