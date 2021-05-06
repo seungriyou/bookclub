@@ -10,7 +10,7 @@ import { DB, getCurrentUser } from '../utils/firebase';
 
 const Container=styled.View`
     flex: 1;
-    background-color: ${({theme})=>theme.buttonBackground};
+    background-color: ${({theme})=>theme.appBackground};
     align-items: center;
 `;
 
@@ -95,7 +95,7 @@ const MyClubBoard=({ navigation, route })=>{
                 <MaterialCommunityIcons
                     name="check"
                     size={30}
-                    style={{marginLeft:11}}
+                    style={{marginRight:11}}
                     color={tintColor}
                     onPress={_handelCompleteButtonPress} //글 등록 버튼 함수(이벤트 추가 필요)
                 />
