@@ -1,4 +1,4 @@
-//게시판 제목 INPUT Component
+//변경사항 -> theme.js에 따른 컬러 변경 + 오타 수정
 
 import React, {forwardRef} from 'react';
 import styled from 'styled-components/native';
@@ -12,9 +12,8 @@ const StyledInput=styled.TextInput.attrs(({theme})=>({
     height: 50px;
     margin: 20px 0;
     padding: 10px 10px;
-    border-radius: 10x;
     border-radius: 10px;
-    background-color: ${({theme})=>theme.buttonTitle};
+    background-color: ${({theme})=>theme.inputBackground};
     font-size: 20px;
     color: ${({theme})=>theme.text};
     textAlignVertical="top";
