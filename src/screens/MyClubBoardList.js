@@ -21,12 +21,20 @@ const MyClubBoardList = ({navigation, route}) => {
   const _handleBoardWriteButtonPressed = params => {
     navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard', params: {id: id, title: title}});
   }
-
+  
+  const _handleBoardViewButtonPressed = params => {
+    navigation.navigate('MyClubBoardView', params);
+  }
+  
   return (
     <Container>
       <Button
         title="글 작성하기"
         onPress={_handleBoardWriteButtonPressed}
+      />
+      <Button
+        title="View 화면 확인"
+        onPress={_handleBoardViewButtonPressed}
       />
     </Container>
   );
