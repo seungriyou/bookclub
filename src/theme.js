@@ -42,4 +42,7 @@ export const theme = {
   appBackground: colors.pastel_pink,
   inputBackground: colors.white,
   buttonIcon: colors.grey_2,
+  
+  // MyClubBoardView 작성 중 추가 
+  line: colors.grey_0,
 };
