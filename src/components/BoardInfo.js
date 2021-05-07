@@ -12,6 +12,8 @@ const Containerforinfo=styled.View`
     height: 40px;
     margin: 0 0 0 0;
     padding: 5px 10px;
+    align-items: center;
+    justify-content: flex-start;
     border-radius: 0;
     flex-direction: row;
     background-color: ${({theme})=>theme.inputBackground};
@@ -24,6 +26,7 @@ const Containerfortitle=styled.View`
     min-height: 50px;
     padding: 10px;
     border-radius: 0;
+    justify-content: flex-start;
     multi-line: {true};
     flex-direction: column;
     background-color: ${({theme})=>theme.inputBackground};
