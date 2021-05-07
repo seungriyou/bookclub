@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
   multiline: true,
-  maxHeight: 230,
+  maxHeight: 260,
 }))`
   width: ${({ width }) => width - 60}px;
   margin: 0px 0;

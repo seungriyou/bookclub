@@ -10,7 +10,7 @@ import { theme } from '../theme';
 // 탭바 때문에 height는 임의로 470px으로 지정함
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
-  height: 470px;
+  height: 500px;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;

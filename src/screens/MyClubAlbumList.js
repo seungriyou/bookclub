@@ -21,13 +21,20 @@ const MyClubAlbumList = ({navigation, route}) => {
 
   const _handleAlbumWriteButtonPressed = params => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id, title: title}});
-  }
+  };
+  const _handleAlbumViewButtonPressed = params => {
+    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbumView'});
+  };
 
   return (
     <Container>
       <Button
         title="사진 올리기"
         onPress={_handleAlbumWriteButtonPressed}
+      />
+      <Button
+          title="게시글 보기"
+          onPress={_handleAlbumViewButtonPressed}
       />
     </Container>
   );

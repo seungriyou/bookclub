@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Club, ClubCreation, MyClubBoard, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto } from '../screens';
+import { Club, ClubCreation, MyClubBoard, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -53,6 +53,7 @@ const MyClubAlbumNav = ({navigate, route}) => {
     >
       <Stack.Screen name="MyClubAlbum" component={MyClubAlbum} initialParams={[]} />
       <Stack.Screen name="MyClubAlbumSelectPhoto" component={MyClubAlbumSelectPhoto} />
+      <Stack.Screen name="MyClubAlbumView" component={MyClubAlbumView} />
     </Stack.Navigator>
   );
 };
