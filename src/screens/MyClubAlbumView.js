@@ -77,7 +77,7 @@ const tempData = {
     },
     {
       "name": "07.jpg",
-      "url": "https://firebasestorage.googleapis.com/v0/b/book-club-app-6ceae.appspot.com/o/images%2F07.jpg?alt=media&token=5b70b5ec-330f-4cc5-82d6-bc10784cb841",
+      "url": "https://firebasestorage.googleapis.com/v0/b/book-club-app-6ceae.appspot.com/o/images%2F07.jpg?alt=media&token=73290ff8-02b5-4beb-ad56-5c80fb1e9c56",
     },
     {
       "name": "08.jpg",
