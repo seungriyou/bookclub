@@ -42,20 +42,21 @@ const MyClubBoardNav = () => {
 const MyClubAlbumNav = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
 
-    return (
-      <Stack.Navigator
-        initialRouteName="MyClubAlbumNav"
-        screenOptions={{
-            headerTitleAlign: 'center',
-            cardStyle: { backgroundColor: theme.background },
-        }}
-        headerMode="screen"
-      >
-        <Stack.Screen name="MyClubAlbum" component={MyClubAlbum} initialParams={[]} />
-        <Stack.Screen name="MyClubAlbumSelectPhoto" component={MyClubAlbumSelectPhoto} />
-      </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator
+      initialRouteName="MyClubAlbumNav"
+      screenOptions={{
+          headerTitleAlign: 'center',
+          cardStyle: { backgroundColor: theme.background },
+      }}
+      headerMode="screen"
+    >
+      <Stack.Screen name="MyClubAlbum" component={MyClubAlbum} initialParams={[]} />
+      <Stack.Screen name="MyClubAlbumSelectPhoto" component={MyClubAlbumSelectPhoto} />
+    </Stack.Navigator>
+  );
 };
+
 const MyClub = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
   const id = route.params.id;
