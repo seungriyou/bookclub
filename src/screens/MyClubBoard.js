@@ -31,50 +31,14 @@ const MyClubBoard=({ navigation, route })=>{
     const [title, setTitle]=useState('');
     const [content, setContent]=useState('');
     const [id, setId] = useState('');
+    const [update, setUpdate] = useState(0);
 
     const _handleTitleChange = text => {
-        setTitle(text);
+      setTitle(text);
     }
     const _handleContentChange = text => {
-        setContent(text);
+      setContent(text);
     }
-
-    const myClubBoardWrite = async() => {
-      const user = getCurrentUser();
-      const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
-
-      const newBoard = {
-        title,
-        author: user,
-        content,
-        createAt: Date.now(),
-        comments: [],
-        comment_cnt: 0,
-      };
-
-      await boardRef.set(newBoard);
-
-      console.log("upload complete");
-
-      return true;
-
-    }
-
-    const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
-        try {
-          spinner.start();
-          await myClubBoardWrite();
-          navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
-          Alert.alert('등록이 완료되었습니다.');
-        }
-        catch(e) {
-          Alert.alert('글 업로드 오류', e.message);
-        }
-        finally {
-          spinner.stop();
-
-        }
-    };
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -101,8 +65,61 @@ const MyClubBoard=({ navigation, route })=>{
                 />
             ),
         });
+    }, [title, content]);
+
+    useEffect(() => {
       setId(route.params?.id);
     }, []);
+
+    const myClubBoardWrite = async() => {
+
+      const user = getCurrentUser();
+      const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
+      const boardId = boardRef.id;
+
+      console.log(boardRef);
+      console.log(boardId);
+
+      const newBoard = {
+        id: boardId,
+        title,
+        author: user,
+        content,
+        createAt: Date.now(),
+        comments: [],
+        comment_cnt: 0,
+      };
+
+      await boardRef.set(newBoard);
+
+      console.log("upload complete");
+
+      return true;
+
+    }
+
+    const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
+      console.log("title:" ,title, "content:", content);
+      console.log(id, "id");
+      if (title == '' || content == '') {
+        alert(`제목 또는 글 내용이 없습니다.`);
+      }
+      else{
+        try {
+          spinner.start();
+          await myClubBoardWrite();
+          navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
+          Alert.alert('등록이 완료되었습니다.');
+        }
+        catch(e) {
+          Alert.alert('글 업로드 오류', e.message);
+        }
+        finally {
+          spinner.stop();
+        }
+      }
+
+    };
 
     return(
         <KeyboardAwareScrollView
@@ -112,7 +129,6 @@ const MyClubBoard=({ navigation, route })=>{
         <Container>
             <List width={width}>
                 <TitleInput
-                    ref={refTitle}
                     placeholder="제목"
                     value={title}
                     onChangeText={_handleTitleChange}

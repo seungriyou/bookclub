@@ -156,7 +156,7 @@ const MyClubBoardView=({ navigation })=>{
                 <BoardContent
                     content="공지의 내용입니다."
                 />
-                <CommentList postInfo={tempData}></CommentList>
+                <BoardCommentList postInfo={tempData}></BoardCommentList>
             </List>
 
 

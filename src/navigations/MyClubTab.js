@@ -27,14 +27,25 @@ const MainTab = ({ navigation, route }) => {
     navigation.setOptions({
       headerTitle: titles[index],
       headerRight: () =>
-        index === 2 && (
-          <MaterialIcons
-            name="edit"
-            size={26}
-            style={{ margin: 10 }}
-            onPress={() => navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}})}
-          />
-        ),
+        { if (index === 1)
+            return (
+              <MaterialIcons
+                name="edit"
+                size={26}
+                style={{ margin: 10 }}
+                onPress={() => navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard', params: {id: id}})}
+              />
+            );
+          else if (index === 2)
+            return (
+              <MaterialIcons
+                name="edit"
+                size={26}
+                style={{ margin: 10 }}
+                onPress={() => navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}})}
+              />
+            );
+        },
     });
   }, [route]);
 

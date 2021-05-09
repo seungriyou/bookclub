@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Alert, FlatList, Text, Modal } from 'react-native';
 import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
 import { Button } from '../components';
@@ -76,24 +76,6 @@ const MyClubAlbumList = ({navigation, route}) => {
   const _handleAlbumWriteButtonPressed = params => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}});
   };
-
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackTitleVisible: false,
-      headerTintColor: '#000000',
-      headerRight: ({ tintColor }) => (
-        <MaterialIcons
-          name="edit"
-          size={30}
-          style={{ marginRight: 13 }}
-          color={tintColor}
-          onPress={_handleAlbumWriteButtonPressed} //글 등록 버튼 함수(이벤트 추가 필요)
-        />
-      ),
-    });
-    //console.log(navigation);
-  }, []);
 
   useEffect(() => {
     const unsubscribe = DB.collection('clubs').doc(id).collection('album')

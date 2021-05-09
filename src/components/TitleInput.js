@@ -21,15 +21,15 @@ const StyledInput=styled.TextInput.attrs(({theme})=>({
 
 const TitleInput= forwardRef(({placeholder, value, onChangeText, onSubmitEditing},ref)=>{
     const width = Dimensions.get('window').width;
-    
-    return <StyledInput 
-        width={width} 
-        placeholder={placeholder} 
+
+    return <StyledInput
+        width={width}
+        placeholder={placeholder}
         maxLength={30}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType= "next"
-        
+
         ref={ref}
         value={value}
         onChangeText={onChangeText}

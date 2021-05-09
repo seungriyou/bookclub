@@ -216,7 +216,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
           const newCommentCnt = oldCommentCnt + 1;
 
           oldComment.push(tempComment)
-          
+
           const newComment = oldComment;
 
           console.log("newComment : ", newComment);
@@ -241,7 +241,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
 
   useEffect(() => {
     getAlbum();
-  }, [update])
+  }, [update]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

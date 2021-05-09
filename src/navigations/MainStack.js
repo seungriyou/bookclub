@@ -34,7 +34,7 @@ const MyClubBoardNav = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubBoard" component={MyClubBoard} initialParmas={[]} />
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
       <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} />
     </Stack.Navigator>
   );

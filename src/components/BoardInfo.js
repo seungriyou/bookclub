@@ -67,7 +67,7 @@ const Title=styled.Text`
     flex: 1;
     font-size: 20px;
     color: ${({theme})=>theme.text};
-    
+
 `;
 
 const Content=styled.Text`
@@ -97,15 +97,15 @@ const BoardContent=({content})=>{
     );
 };
 
-const BoardInfo=({writer, writedate,reply})=>{
+const BoardInfo=({writer, writedate, reply})=>{
     const width= Dimensions.get('window').width;
-    
+
     return(
         <Containerforinfo width={width}>
             <Writer>{writer}</Writer>
             <WriteDate>{writedate}</WriteDate>
             <Reply>{reply}</Reply>
-            
+
         </Containerforinfo>
     );
 };
