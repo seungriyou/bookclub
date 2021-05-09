@@ -76,9 +76,7 @@ const MyClubAlbumList = ({navigation, route}) => {
   const _handleAlbumWriteButtonPressed = params => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}});
   };
-  const _handleAlbumViewButtonPressed = params => {
-    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbumView'});
-  };
+
 
   useLayoutEffect(() => {
     navigation.setOptions({

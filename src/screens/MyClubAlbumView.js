@@ -116,6 +116,8 @@ const MyClubAlbumView = ({ navigation, route }) => {
   const albumId = route.params.id;
   const clubId = route.params.clubId;
   const author = route.params.author;
+  const user = getCurrentUser();
+  const [update, setUpdate] = useState(0); //새로고침을 위한 변수
   const [comment, setComment] = useState('');
   const [albumData, setAlbumData] = useState({
     title: '',
@@ -172,20 +174,74 @@ const MyClubAlbumView = ({ navigation, route }) => {
     return moment(ts).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
   };
 
-  const _addReply = () => {
+
+  const _addReply = async () => {
     if (!comment) {
       alert("댓글을 입력해주세요.");
     }
     else {
       alert(`댓글을 입력하였습니다. 댓글 내용:\n${comment}`);
       console.log(`Comment: ${comment}`);
-      setComment('');
+      try{
+        const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
+        await DB.runTransaction(async (t) => {
+          const doc = await t.get(albumRef);
+          const data = doc.data();
+
+          console.log(data);
+
+          const oldComment = data.comment;
+          const oldCommentCnt = data.comment_cnt;
+
+          console.log("oldComment : ",oldComment, "cnt : ",oldCommentCnt);
+
+          let newCommentIdx = 0;
+
+          if (oldCommentCnt == 0) {
+            newCommentIdx = 0;
+          }
+          else {
+            newCommentIdx = oldComment[oldCommentCnt - 1].id + 1;
+          }
+
+          const tempComment = {
+            id: newCommentIdx,
+            writer: user,
+            content: comment,
+            upload_date: Date.now(),
+          }
+
+          console.log("tempComment : ", tempComment);
+
+          const newCommentCnt = oldCommentCnt + 1;
+
+          oldComment.push(tempComment)
+          
+          const newComment = oldComment;
+
+          console.log("newComment : ", newComment);
+
+          t.update(albumRef, {comment: newComment, comment_cnt: newCommentCnt});
+        });
+        setComment('');
+      }
+      catch (e) {
+        Alert.alert('댓글 작성 오류', e.message);
+      }
+      finally{
+        spinner.stop();
+        setUpdate(update => update + 1);
+      }
     }
   };
 
   useEffect(() => {
     getAlbum();
   }, []);
+
+  useEffect(() => {
+    getAlbum();
+  }, [update])
 
   useLayoutEffect(() => {
     navigation.setOptions({
