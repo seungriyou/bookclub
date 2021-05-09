@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Club, ClubCreation, MyClubBoard, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView } from '../screens';
+import { Club, ClubCreation, MyClubBoard, MyClubBoardView, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -34,7 +34,8 @@ const MyClubBoardNav = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard} initialParmas={[]} />
+      <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} />
     </Stack.Navigator>
   );
 };
