@@ -121,13 +121,13 @@ const MyClubBoardView=({ navigation })=>{
                     />
                 );
             },
-            headerRight: ({tintColor})=>(
+            headerRight: ({onPress, tintColor})=>(
                 <MaterialCommunityIcons
                     name="pencil"
                     size={30}
                     style={{marginRight:13}}
                     color={tintColor}
-                    onPress={()=>navigation.navigate('test')} //글 등록 버튼 함수(이벤트 추가 필요)
+                    onPress={onPress} //글 등록 버튼 함수(이벤트 추가 필요)
                 />
             ),
         });
