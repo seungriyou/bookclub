@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { View, Image, ScrollView, useWindowDimensions, Text, StyleSheet, Modal, TouchableWithoutFeedback } from 'react-native';
 import { theme } from '../theme';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import moment from 'moment';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -55,6 +56,13 @@ const AlbumViewPost = ({ postInfo }) => {
     );
   };
 
+  const getDate = ts => {
+    const now = moment().startOf('day');
+    const target = moment(ts).startOf('day');
+    return moment(ts).format('MM/DD');
+  };
+
+
   return (
     <Container width={width}>
       <PostInfo width={width}>
@@ -64,7 +72,7 @@ const AlbumViewPost = ({ postInfo }) => {
       <PostInfo width={width}>
         <Text style={styles.infoText}>작성자: {postInfo.writer_name}</Text>
         <PostInfo2>
-          <Text style={styles.infoText}>{postInfo.upload_date}</Text>
+          <Text style={styles.infoText}>{getDate(postInfo.upload_date)}</Text>
           <Text style={styles.infoText}>   댓글 {postInfo.comment_cnt}</Text>
         </PostInfo2>
 

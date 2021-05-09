@@ -19,7 +19,7 @@ const Container=styled.View`
 const Containerforreply=styled.View`
     flex: 1;
     position: absolute;
-    bottom: 0;     
+    bottom: 0;
     background-color: ${({theme})=>theme.background};
     align-items: center;
 `;
@@ -91,14 +91,14 @@ const MyClubBoardView=({ navigation })=>{
 
     const width= Dimensions.get('window').width;
 
-    const [NewReply, setNewReply] = useState('');
+    const [newReply, setnewReply] = useState('');
 
     const _handleReplyChange = text => {
         setNewReply(text);
     }
 
     const _addReply = ()=>{
-        if(!NewReply){
+        if(!newReply){
             alert("댓글을 입력해주세요");
         }
         else {alert("댓글을 입력하였습니다.");
@@ -142,30 +142,29 @@ const MyClubBoardView=({ navigation })=>{
             extraScrollHeight={20}
         >
         <Container>
-        
             <List width={width}>
-                <BoardTitle 
-                    title="[공지]4/12 오프라인 모임 안내" 
-                /> 
+                <BoardTitle
+                    title="[공지]4/12 오프라인 모임 안내"
+                />
                 <Line />
-                <BoardInfo 
-                    writer="작성자: 김뫄뫄" 
-                    writedate="04/06" 
+                <BoardInfo
+                    writer="작성자: 김뫄뫄"
+                    writedate="04/06"
                     reply="댓 4"
                 />
                 <Line />
-                <BoardContent 
-                    content="공지의 내용입니다." 
-                />    
-                <BoardCommentList postInfo={tempData}></BoardCommentList>
+                <BoardContent
+                    content="공지의 내용입니다."
+                />
+                <CommentList postInfo={tempData}></CommentList>
             </List>
-        
+
 
         <Containerforreply>
             <Listforreply width={width}>
-                <ReplyInput 
+                <ReplyInput
                     placeholder="댓글을 입력하세요"
-                    value={NewReply}
+                    value={newReply}
                     onChangeText={_handleReplyChange}
                     onSubmitEditing={()=>{}}
                     onPress={_addReply}

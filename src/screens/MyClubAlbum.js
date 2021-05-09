@@ -75,7 +75,7 @@ const MyClubAlbum = ({ navigation, route }) => {
       xhr.open('GET', uri, true);
       xhr.send(null);
     });
-    const ref = Storage.ref(`/clubs/${id}/${albumId}/${name}.jpg`);
+    const ref = Storage.ref(`/clubs/${id}/albums/${albumId}/${name}.jpg`);
     const snapshot = await ref.put(blob, { contentType: 'image/jpg' });
 
     blob.close();
@@ -98,12 +98,15 @@ const MyClubAlbum = ({ navigation, route }) => {
     }
 
     const newBoard = {
+      id: albumId,
       title,
       author: user,
       content,
       createAt: Date.now(),
       photoUrls: tempUrls,
       content,
+      comment_cnt: 0,
+      comment: [],
     };
 
     await albumRef.set(newBoard);

@@ -22,9 +22,19 @@ const MainTab = ({ navigation, route }) => {
 
   useEffect(() => {
     const titles = route.state?.routeNames || ['Clubs'];
+    const id = route.params?.id;
     const index = route.state?.index || 0;
     navigation.setOptions({
-      headerTitle: titles[index]
+      headerTitle: titles[index],
+      headerRight: () =>
+        index === 2 && (
+          <MaterialIcons
+            name="edit"
+            size={26}
+            style={{ margin: 10 }}
+            onPress={() => navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}})}
+          />
+        ),
     });
   }, [route]);
 

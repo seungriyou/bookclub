@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import AlbumViewPost from '../components/AlbumViewPost';
 import CommentList from '../components/CommentList';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ReplyInput from '../components/ReplyInput';
+import { ProgressContext } from '../contexts';
+import { DB, getCurrentUser} from '../utils/firebase';
+import moment from 'moment';
 
 const tempData = {
   "title": "05월 정기모임",
@@ -103,15 +106,70 @@ const Container = styled.View`
 `;
 const CommentForm = styled.View`
   position: absolute;
-  bottom: 0;     
+  bottom: 0;
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
 
-const MyClubAlbumView = ({ navigation }) => {
+const MyClubAlbumView = ({ navigation, route }) => {
+  const { spinner } = useContext(ProgressContext);
+  const albumId = route.params.id;
+  const clubId = route.params.clubId;
+  const author = route.params.author;
   const [comment, setComment] = useState('');
+  const [albumData, setAlbumData] = useState({
+    title: '',
+    writer_name: '',
+    upload_date: '',
+    content: '',
+    comment: [],
+    comment_cnt: 0,
+    photos: [],
+  });
+
   const _handleReplyChange = text => {
     setComment(text);
+  };
+
+  const getAlbum = async() => {
+    try{
+      spinner.start();
+      const albumRef = await DB.collection('clubs').doc(clubId).collection('album').doc(albumId).get();
+      const data = albumRef.data();
+
+      const tempPhotos = [];
+
+      let index = 0;
+
+      for (let url of data.photoUrls) {
+        tempPhotos.push({name: `${index}.jpg`, url: url});
+        index = index + 1;
+      }
+
+      const tempData = {
+        title: data.title,
+        writer_name: data.author.name,
+        upload_date: data.createAt,
+        content: data.content,
+        comment: data.comment,
+        comment_cnt: data.comment_cnt,
+        photos: tempPhotos,
+      }
+      console.log(tempData);
+      setAlbumData(tempData);
+    }
+    catch (e) {
+      Alert.alert('앨범 데이터 수신 오류', e.message);
+    }
+    finally{
+      spinner.stop();
+    }
+  }
+
+  const getDateOrTime = ts => {
+    const now = moment().startOf('day');
+    const target = moment(ts).startOf('day');
+    return moment(ts).format(now.diff(target, 'days') > 0 ? 'MM/DD' : 'HH:mm');
   };
 
   const _addReply = () => {
@@ -124,6 +182,10 @@ const MyClubAlbumView = ({ navigation }) => {
       setComment('');
     }
   };
+
+  useEffect(() => {
+    getAlbum();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -153,12 +215,16 @@ const MyClubAlbumView = ({ navigation }) => {
     //console.log(navigation);
   }, []);
 
+  useEffect(() => {
+    console.log(albumData);
+  }, [albumData])
+
   return (
     <View style={{ flex: 1 }}>
       <KeyboardAwareScrollView>
         <Container>
-          <AlbumViewPost postInfo={tempData}></AlbumViewPost>
-          {!tempData.comment_cnt || <CommentList postInfo={tempData}></CommentList>}
+          <AlbumViewPost postInfo={albumData}></AlbumViewPost>
+          {!albumData.comment_cnt || <CommentList postInfo={albumData}></CommentList>}
         </Container>
       </KeyboardAwareScrollView>
       <CommentForm>
@@ -166,7 +232,7 @@ const MyClubAlbumView = ({ navigation }) => {
           placeholder="댓글을 입력하세요."
           value={comment}
           onChangeText={_handleReplyChange}
-          onSubmitEditing={() => { }}
+          onSubmitEditing={() => {}}
           onPress={_addReply}
         />
       </CommentForm>
