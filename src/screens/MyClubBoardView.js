@@ -1,11 +1,14 @@
-import React, {useLayoutEffect, useState} from 'react';
-import {Dimensions, FlatList} from 'react-native';
+import React, {useLayoutEffect, useState, useContext, useEffect} from 'react';
+import {Dimensions, FlatList, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import ReplyInput from '../components/ReplyInput';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import {BoardTitle, BoardContent, BoardInfo} from '../components/BoardInfo';
 import BoardCommentList from '../components/BoardCommentList';
+import { ProgressContext } from '../contexts';
+import { DB, getCurrentUser} from '../utils/firebase';
+import moment from 'moment';
 
 const Container=styled.View`
     flex: 1;
@@ -40,71 +43,124 @@ const Line=styled.View`
     background-color: ${({theme})=>theme.line};
 `;
 
-const tempData = {
-    "title": "05월 정기모임",
-    "writer_name": "관리자",
-    "upload_date": "2021/05/05",
-    "comment_cnt": 6,
-    "comment": [
-      {
-        "id": 1,
-        "writer_name": "멤버A",
-        "content": "재미있었어요!",
-        "upload_date": "2021/05/05",
-      },
-      {
-        "id": 2,
-        "writer_name": "멤버B",
-        "content": "사진 공유 감사합니다 :)",
-        "upload_date": "2021/05/05",
-      },
-      {
-        "id": 3,
-        "writer_name": "멤버C",
-        "content": "확인했습니다~",
-        "upload_date": "2021/05/05",
-      },
-      {
-        "id": 4,
-        "writer_name": "멤버D",
-        "content": "감사합니당!",
-        "upload_date": "2021/05/05",
-      },
-      {
-        "id": 5,
-        "writer_name": "멤버E",
-        "content": "확인했어요! 좋은 주말 되세요~",
-        "upload_date": "2021/05/05",
-      },
-      {
-        "id": 6,
-        "writer_name": "멤버F",
-        "content": "다음 모임에서 뵙겠습니다!",
-        "upload_date": "2021/05/06",
-      }
-    ]
-}
-
-
-
-const MyClubBoardView=({ navigation })=>{
+const MyClubBoardView=({ navigation, route })=>{
+    const { spinner } = useContext(ProgressContext);
+    const boardId = route.params.id;
+    const clubId = route.params.clubId;
+    const author = route.params.author;
+    const user = getCurrentUser();
 
     const width= Dimensions.get('window').width;
 
-    const [newReply, setnewReply] = useState('');
+    const [update, setUpdate] = useState(0); //새로고침을 위한 변수
+    const [comment, setComment] = useState('');
+    const [commentCntTxt, setCommentCntTxt] = useState('');
+    const [boardData, setBoardData] = useState({
+      title: '',
+      writer_name: '',
+      upload_date: '',
+      content: '',
+      comment: [],
+      comment_cnt: 0,
+    });
 
     const _handleReplyChange = text => {
-        setNewReply(text);
+        setComment(text);
     }
 
-    const _addReply = ()=>{
-        if(!newReply){
-            alert("댓글을 입력해주세요");
+    const getDate = ts => {
+      const now = moment().startOf('day');
+      const target = moment(ts).startOf('day');
+      return moment(ts).format('MM/DD');
+    };
+
+    const getBoard = async() => {
+      try{
+        spinner.start();
+        const boardRef = await DB.collection('clubs').doc(clubId).collection('board').doc(boardId).get();
+        const data = boardRef.data();
+
+        const tempData = {
+          title: data.title,
+          writer_name: data.author.name,
+          upload_date: data.createAt,
+          content: data.content,
+          comment: data.comment,
+          comment_cnt: data.comment_cnt,
         }
-        else {alert("댓글을 입력하였습니다.");
-        setNewReply('');}
+        console.log(tempData);
+        setBoardData(tempData)
+        setCommentCntTxt(`댓 ${data.comment_cnt}`);
+      }
+      catch(e) {
+        Alert.alert('게시판 데이터 수신 오류', e.message);
+      }
+      finally {
+        spinner.stop();
+      }
     }
 
+    const _addReply = async () => {
+      if (!comment) {
+        alert("댓글을 입력해주세요.");
+      }
+      else {
+        alert(`댓글을 입력하였습니다. 댓글 내용:\n${comment}`);
+        console.log(`Comment: ${comment}`);
+        try{
+          const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
+          await DB.runTransaction(async (t) => {
+            const doc = await t.get(boardRef);
+            const data = doc.data();
+
+            console.log(data);
+
+            const oldComment = data.comment;
+            const oldCommentCnt = data.comment_cnt;
+
+            console.log("oldComment : ",oldComment, "cnt : ",oldCommentCnt);
+
+            let newCommentIdx = 0;
+
+            if (oldCommentCnt == 0) {
+              newCommentIdx = 0;
+            }
+            else {
+              newCommentIdx = oldComment[oldCommentCnt - 1].id + 1;
+            }
+
+            const tempComment = {
+              id: newCommentIdx,
+              writer: user,
+              content: comment,
+              upload_date: Date.now(),
+            }
+
+            console.log("tempComment : ", tempComment);
+
+            const newCommentCnt = oldCommentCnt + 1;
+
+            oldComment.push(tempComment)
+
+            const newComment = oldComment;
+
+            console.log("newComment : ", newComment);
+
+            t.update(boardRef, {comment: newComment, comment_cnt: newCommentCnt});
+            setCommentCntTxt(`댓 ${newCommentCnt}`);
+          });
+          setComment('');
+
+        }
+        catch (e) {
+          Alert.alert('댓글 작성 오류', e.message);
+        }
+        finally{
+          spinner.stop();
+          setUpdate(update => update + 1);
+        }
+      }
+    };
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -131,9 +187,16 @@ const MyClubBoardView=({ navigation })=>{
                 />
             ),
         });
-      console.log(navigation);
+      getBoard();
     }, []);
 
+    // useEffect(() => {
+    //
+    // }, []);
+
+    useEffect(() => {
+      getBoard();
+    }, [update]);
 
 
     return(
@@ -144,19 +207,19 @@ const MyClubBoardView=({ navigation })=>{
         <Container>
             <List width={width}>
                 <BoardTitle
-                    title="[공지]4/12 오프라인 모임 안내"
+                    title={boardData.title}
                 />
                 <Line />
                 <BoardInfo
-                    writer="작성자: 김뫄뫄"
-                    writedate="04/06"
-                    reply="댓 4"
+                    writer={boardData.writer_name}
+                    writedate={getDate(boardData.upload_date)}
+                    reply={commentCntTxt}
                 />
                 <Line />
                 <BoardContent
-                    content="공지의 내용입니다."
+                    content={boardData.content}
                 />
-                <BoardCommentList postInfo={tempData}></BoardCommentList>
+                <BoardCommentList postInfo={boardData}></BoardCommentList>
             </List>
 
 
@@ -164,7 +227,7 @@ const MyClubBoardView=({ navigation })=>{
             <Listforreply width={width}>
                 <ReplyInput
                     placeholder="댓글을 입력하세요"
-                    value={newReply}
+                    value={comment}
                     onChangeText={_handleReplyChange}
                     onSubmitEditing={()=>{}}
                     onPress={_addReply}

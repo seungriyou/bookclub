@@ -73,14 +73,6 @@ const MyClubBoardList = ({navigation, route}) => {
   const id = route.params?.id;
   const title = route.params?.title;
 
-  const _handleBoardWriteButtonPressed = params => {
-    navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoard', params: {id: id, title: title}});
-  }
-
-  const _handleBoardViewButtonPressed = params => {
-    navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardView', params: {id: id}});
-  }
-
   useEffect(() => {
     const unsubscribe = DB.collection('clubs').doc(id).collection('board')
       .orderBy('createAt', 'desc')

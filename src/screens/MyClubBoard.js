@@ -86,7 +86,7 @@ const MyClubBoard=({ navigation, route })=>{
         author: user,
         content,
         createAt: Date.now(),
-        comments: [],
+        comment: [],
         comment_cnt: 0,
       };
 

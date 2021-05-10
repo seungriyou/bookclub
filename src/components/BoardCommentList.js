@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, useWindowDimensions, Text, StyleSheet, FlatList } from 'react-native';
 import { theme } from '../theme';
+import moment from 'moment';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -31,12 +32,18 @@ const BoardCommentList = ({ postInfo }) => {
   const comments = postInfo.comment;
   /*console.log(comments)*/
 
+  const getDate = ts => {
+    const now = moment().startOf('day');
+    const target = moment(ts).startOf('day');
+    return moment(ts).format('MM/DD');
+  };
+
   const renderItem = ({ item }) => {
     return (
       <CommentArea width={width}>
         <CommentInfo>
-          <Text style={styles.writerText}>{item.writer_name}</Text>
-          <Text style={styles.infoText}>{item.upload_date}</Text>
+          <Text style={styles.writerText}>{item.writer.name}</Text>
+          <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
         </CommentInfo>
         <Text style={styles.contentText}>{item.content}</Text>
       </CommentArea>
