@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     paddingBottom: 10,
+    lineHeight: 25,
   },
   separator: {
     borderBottomColor: theme.separator,

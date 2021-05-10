@@ -16,12 +16,12 @@ const Container = styled.View`
   border-radius: 10px;
 `;
 const CommentInfo = styled.View`
+  width: ${({ width }) => width - 75}px;
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
 `;
 const CommentArea = styled.View`
-  width: ${({ width }) => (width - 40) * 0.92}px;
   flex-direction: column;
   justify-content: flex-start;
   margin: 7px;
@@ -42,11 +42,13 @@ const CommentList = ({ postInfo }) => {
   const renderItem = ({ item }) => {
     return (
       <CommentArea width={width}>
-        <CommentInfo>
+        <CommentInfo width={width}>
           <Text style={styles.writerText}>{item.writer.name}</Text>
           <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
         </CommentInfo>
-        <Text style={styles.contentText}>{item.content}</Text>
+        <View style={{ width: width-75 }}>
+          <Text style={styles.contentText}>{item.content}</Text>
+        </View>
       </CommentArea>
     );
   };
@@ -84,6 +86,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     paddingTop: 7,
     paddingBottom: 7,
+    color: theme.text,
+    lineHeight: 22,
   },
   separator: {
     height: 0.8,
