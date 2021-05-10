@@ -9,6 +9,7 @@ import ReplyInput from '../components/ReplyInput';
 import { ProgressContext } from '../contexts';
 import { DB, getCurrentUser} from '../utils/firebase';
 import moment from 'moment';
+import { theme } from '../theme';
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.appBackground};
@@ -181,8 +182,8 @@ const MyClubAlbumView = ({ navigation, route }) => {
   }, [albumData])
 
   return (
-    <View style={{ flex: 1 }}>
-      <KeyboardAwareScrollView>
+    <View style={{ flex: 1, backgroundColor: theme.appBackground }}>
+      <KeyboardAwareScrollView extraScrollHeight={20}>
         <Container>
           <AlbumViewPost postInfo={albumData}></AlbumViewPost>
           {!albumData.comment_cnt || <CommentList postInfo={albumData}></CommentList>}

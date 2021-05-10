@@ -42,7 +42,7 @@ export const theme = {
   appBackground: colors.pastel_pink,
   inputBackground: colors.white,
   buttonIcon: colors.grey_2,
-  seperator: colors.grey_0,
+  separator: colors.grey_0,
   infoText: colors.grey_2,
   infoTextComment: colors.grey_1,
   

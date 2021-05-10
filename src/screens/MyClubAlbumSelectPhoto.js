@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   },
   emptyStay: {
     textAlign: 'center',
+    justifyContent: 'center',
   },
   countBadge: {
     paddingHorizontal: 8.6,
