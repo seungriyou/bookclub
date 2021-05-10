@@ -21,7 +21,7 @@ const PostInfo = styled.View`
   flex-direction: row;
   justify-content: space-between;
   border-bottom-width: 0.9px;
-  border-color: ${({ theme }) => theme.seperator};
+  border-color: ${({ theme }) => theme.separator};
   padding-top: 6px;
   padding-bottom: 2px;
   margin: 0px;
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   separator: {
-    borderBottomColor: theme.seperator,
+    borderBottomColor: theme.separator,
   }
 });
 

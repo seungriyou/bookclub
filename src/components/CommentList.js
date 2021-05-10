@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 0.8,
-    backgroundColor: theme.seperator,
+    backgroundColor: theme.separator,
   }
 });
 
