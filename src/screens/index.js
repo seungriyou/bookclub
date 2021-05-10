@@ -13,11 +13,14 @@ import MyClubAlbum from './MyClubAlbum';
 import MyClubAlbumSelectPhoto from './MyClubAlbumSelectPhoto';
 import MyClubAlbumList from './MyClubAlbumList';
 import MyClubAlbumView from './MyClubAlbumView';
+import MyClubEssay from './MyClubEssay';
+import MyClubEssayView from './MyClubEssayView';
 import MyClubEssayList from './MyClubEssayList';
 import MyClubSchedule from './MyClubSchedule';
 import MyClubScheduleList from './MyClubScheduleList';
 
+
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList, MyClubMain,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
-  MyClubBoardView,
+  MyClubBoardView, MyClubEssay, MyClubEssayView
  };

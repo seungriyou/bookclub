@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Club, ClubCreation, MyClubBoard, MyClubBoardView, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView } from '../screens';
+import { Club, ClubCreation, MyClubBoard, MyClubBoardView, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay, MyClubEssayView } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -59,6 +59,24 @@ const MyClubAlbumNav = ({navigate, route}) => {
   );
 };
 
+const MyClubEssayNav = ({navigate, route}) => {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="MyClubEssayNav"
+      screenOptions={{
+          headerTitleAlign: 'center',
+          cardStyle: { backgroundColor: theme.background },
+      }}
+      headerMode="screen"
+    >
+      <Stack.Screen name="MyClubEssay" component={MyClubEssay} initialParams={[]} />
+      <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} />
+    </Stack.Navigator>
+  );
+};
+
 const MyClub = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
   const id = route.params.id;
@@ -82,7 +100,7 @@ const MyClub = ({navigate, route}) => {
       <Stack.Screen name="MyClubTab" component={MyClubTab}  />
       <Stack.Screen name="MyClubBoardNav" component={MyClubBoardNav} options={{headerShown: false}}/>
       <Stack.Screen name="MyClubAlbumNav" component={MyClubAlbumNav} options={{ headerShown: false }} />
-
+      <Stack.Screen name="MyClubEssayNav" component={MyClubEssayNav} options={{ headerShown: false }} />
       <Stack.Screen name="MyClubScheduleNav" component={MyClubScheduleNav} options={{headerShown: false}}/>
     </Stack.Navigator>
   );

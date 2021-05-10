@@ -14,16 +14,22 @@ const Container = styled.View`
 `;
 
 const MyClubEssayList = ({navigation}) => {
-
   const _handleEssayWriteButtonPressed = params => {
-    navigation.navigate('MyClubEssay', params);
-  }
+    navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssay'});
+  };
+  const _handleEssayViewButtonPressed = params => {
+    navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayView'});
+  };
 
   return (
     <Container>
       <Button
         title="에세이 올리기"
         onPress={_handleEssayWriteButtonPressed}
+      />
+      <Button
+        title="게시글 보기"
+        onPress={_handleEssayViewButtonPressed}
       />
     </Container>
   );
