@@ -69,24 +69,34 @@ const Item = React.memo(
 
 const MyClubBoardList = ({navigation, route}) => {
   const [boards, setBoards] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const id = route.params?.id;
   const title = route.params?.title;
 
-  useEffect(() => {
-    const unsubscribe = DB.collection('clubs').doc(id).collection('board')
-      .orderBy('createAt', 'desc')
-      .onSnapshot(snapshot => {
-        const list = [];
-        snapshot.forEach(doc => {
-          const data = doc.data()
-          data['clubId'] = id;
-          list.push(data);
-        });
-        setBoards(list);
-      });
+  const getMyClubBoardList = async() => {
+    try{
+      setRefreshing(true);
+      const boardRef = DB.collection('clubs').doc(id).collection('board');
+      const boardDoc = await boardRef.orderBy('createAt', 'desc').get();
+      const list = [];
+      boardDoc.forEach(doc => {
+        const data = doc.data();
+        data['clubId'] = id;
+        list.push(data);
+      })
+      setBoards(list);
 
-      return () => unsubscribe();
+      setRefreshing(false);
+    }
+    catch(e){
+      Alert.alert('게시판 list set error', e.message);
+      setRefreshing(false);
+    }
+  }
+
+  useEffect(() => {
+    getMyClubBoardList();
   }, []);
 
   useEffect(() => {
@@ -94,6 +104,13 @@ const MyClubBoardList = ({navigation, route}) => {
       console.log(doc);
     })
   }, [boards]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMyClubBoardList();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const _handleItemPress = params => {
     console.log(params);
@@ -108,6 +125,8 @@ const MyClubBoardList = ({navigation, route}) => {
         renderItem={({ item }) => (
           <Item item={item} onPress={_handleItemPress} />
         )}
+        refreshing={refreshing}
+        onRefresh={getMyClubBoardList}
         windowSize={3}
       />
 

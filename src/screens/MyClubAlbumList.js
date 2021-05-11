@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
 import { Alert, FlatList, Text, Modal } from 'react-native';
 import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
 import { Button } from '../components';
@@ -69,6 +69,7 @@ const Item = React.memo(
 
 const MyClubAlbumList = ({navigation, route}) => {
   const [albums, setAlbums] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const id = route.params?.id;
   const title = route.params?.title;
@@ -77,20 +78,46 @@ const MyClubAlbumList = ({navigation, route}) => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}});
   };
 
-  useEffect(() => {
-    const unsubscribe = DB.collection('clubs').doc(id).collection('album')
-      .orderBy('createAt', 'desc')
-      .onSnapshot(snapshot => {
-        const list = [];
-        snapshot.forEach(doc => {
-          const data = doc.data()
-          data['clubId'] = id;
-          list.push(data);
-        });
-        setAlbums(list);
-      });
+  const getMyClubAlbumList = async() => {
+    try{
+      setRefreshing(true);
+      const albumRef = DB.collection('clubs').doc(id).collection('album');
+      const albumDoc = await albumRef.orderBy('createAt', 'desc').get();
+      const list = [];
+      albumDoc.forEach(doc => {
+        const data = doc.data();
+        data['clubId'] = id;
+        list.push(data);
+      })
+      setAlbums(list);
 
-      return () => unsubscribe();
+      setRefreshing(false);
+    }
+    catch(e){
+      Alert.alert('앨범 list set error', e.message);
+      setRefreshing(false);
+    }
+  }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerBackTitleVisible: false,
+      headerTintColor: '#000000',
+      headerRight: ({ tintColor }) => (
+        <MaterialIcons
+          name="edit"
+          size={30}
+          style={{ marginRight: 13 }}
+          color={tintColor}
+          onPress={_handleAlbumWriteButtonPressed} //글 등록 버튼 함수(이벤트 추가 필요)
+        />
+      ),
+    });
+    //console.log(navigation);
+  }, []);
+
+  useEffect(() => {
+    getMyClubAlbumList();
   }, []);
 
   useEffect(() => {
@@ -98,6 +125,13 @@ const MyClubAlbumList = ({navigation, route}) => {
       console.log(doc);
     })
   }, [albums]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMyClubAlbumList();
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   const _handleItemPress = params => {
     console.log(params);
@@ -112,6 +146,8 @@ const MyClubAlbumList = ({navigation, route}) => {
         renderItem={({ item }) => (
           <Item item={item} onPress={_handleItemPress} />
         )}
+        refreshing={refreshing}
+        onRefresh={getMyClubAlbumList}
         windowSize={3}
       />
 

@@ -172,7 +172,7 @@ const MyClubMainInfo=({ navigation, route })=>{
 
     const getMainData= async() => {
       try{
-        spinner.start();
+
         const clubRef = DB.collection('clubs').doc(id);
         const clubDoc = await clubRef.get();
         const clubData = clubDoc.data();
@@ -217,9 +217,6 @@ const MyClubMainInfo=({ navigation, route })=>{
       catch(e) {
         Alert.alert('메인 페이지 데이터 수신 에러', e.message);
       }
-      finally {
-        spinner.stop();
-      }
     };
 
     useEffect(()=> {
@@ -235,8 +232,7 @@ const MyClubMainInfo=({ navigation, route })=>{
         getMainData();
       });
       return unsubscribe;
-    }, navigation)
-
+    }, [navigation]);
 
     useLayoutEffect(()=>{
         navigation.setOptions({
