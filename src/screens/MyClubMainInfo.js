@@ -111,7 +111,7 @@ const MainHeader= ({clubname, movetoInfo1, movetoInfo2})=>{
     )
 };
 
-const MainProcess=({booktitle, goalpage, page})=>{
+const MainProcess=({booktitle, goalpage, cover, page})=>{
     const width = Dimensions.get('window').width;
 
     return(
@@ -119,9 +119,7 @@ const MainProcess=({booktitle, goalpage, page})=>{
         <ProcessBook>
             <Image
                 style={styles.bookimg}
-                source={{
-                uri: 'http://drive.google.com/uc?export=view&id=1hOSJNzP8gFXMqfeu-7Suo4mTgiQcLrIp',
-                }}
+                source={{uri: cover}}
             />
         </ProcessBook>
         <ProcessText>
@@ -139,15 +137,12 @@ const MainProcess=({booktitle, goalpage, page})=>{
     )
 }
 
-
-
 const MyClubMainInfo=({ navigation, route })=>{
     const { spinner } = useContext(ProgressContext);
-
+    const id = route.params?.id;
     const user = getCurrentUser();
 
-    const id = route.params?.id;
-    const width= Dimensions.get('window').width;
+    const width = Dimensions.get('window').width;
 
     const [mainData, setMainData] = useState({
       clubname: "",
@@ -157,8 +152,9 @@ const MyClubMainInfo=({ navigation, route })=>{
       userlist: []
     });
 
-    const [leader, setLeader] = useState({});
-
+    const [leader, setLeader] = useState({
+      uid: 0
+    });
     const [userPage, setUserPage] = useState(0);
 
     const movetoInfo2=()=>{
@@ -193,7 +189,7 @@ const MyClubMainInfo=({ navigation, route })=>{
         tempData.goal = clubData.book_now.goal;
         tempData.bookcover = clubData.book_now.cover;
         const tempuserlist = [];
-        let index = 1;
+        let index = 0;
         for (let member of clubData.members) {
           const user_rate = member.now_page / tempData.goal;
           user_rate = user_rate.toFixed(1);
@@ -203,7 +199,7 @@ const MyClubMainInfo=({ navigation, route })=>{
           if (user_rate > 1.0) {
             user_rate = 1.0;
           }
-
+          index = index + 1;
           const tempuser = {
             id: index,
             user_name: member.name,
@@ -219,12 +215,11 @@ const MyClubMainInfo=({ navigation, route })=>{
         setLeader(clubData.leader);
       }
       catch(e) {
-        Alert.alert('메인 페이지 데이터 수, 에러', e.message);
+        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
       }
       finally {
         spinner.stop();
       }
-
     };
 
     useEffect(()=> {
@@ -234,6 +229,13 @@ const MyClubMainInfo=({ navigation, route })=>{
     useEffect(()=>{
       console.log(mainData);
     }, [mainData]);
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getMainData();
+      });
+      return unsubscribe;
+    }, navigation)
 
 
     useLayoutEffect(()=>{
@@ -298,6 +300,7 @@ const MyClubMainInfo=({ navigation, route })=>{
                 booktitle={mainData.booktitle}
                 goalpage={mainData.goal}
                 page={userPage}
+                cover={mainData.bookcover}
             ></MainProcess>
 
             <List width={width}>

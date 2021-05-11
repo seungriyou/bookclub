@@ -1,15 +1,15 @@
 //개인이 개인의 진행중인 페이지를 수정하는 화면
 //조작 부분 외 다른 부분의 클릭을 막는 방법 필요
 
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text, Image, Button, TextInput} from 'react-native';
+import React, {useLayoutEffect, useState, useEffect, useRef, useContext} from 'react';
+import {StyleSheet, Dimensions, Text, Image, Button, TextInput, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
-
-
+import { DB, getCurrentUser} from '../utils/firebase';
+import { ProgressContext } from '../contexts';
 
 const Container=styled.View`
     flex: 1;
@@ -123,7 +123,7 @@ const MainHeader= ({clubname, onPress})=>{
     )
 };
 
-const MainProcess=({booktitle, goalpage, page, _handlepageChange})=>{
+const MainProcess=({booktitle, goalpage, cover, page, _handlepageChange})=>{
     const width = Dimensions.get('window').width;
 
     return(
@@ -158,87 +158,119 @@ const MainProcess=({booktitle, goalpage, page, _handlepageChange})=>{
 }
 
 
-const tempData = {
-    "clubname": "SEORAP",
-    "booktitle": "보노보노, 오늘 하루는 어땠어?",
-    "goal": 226,
-    "userlist": [
-      {
-        "id": 1,
-        "user_name": "멤버A",
-        "img_url": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-        "user_rate": 1,
-      },
-      {
-        "id": 2,
-        "user_name": "멤버B",
-        "img_url": "http://drive.google.com/uc?export=view&id=1psgmqUpSA_Mgrxw-5RY2cMSpDI_TKmuM",
-        "user_rate": 0.3,
-
-      },
-      {
-        "id": 3,
-        "user_name": "멤버C",
-        "img_url": "http://drive.google.com/uc?export=view&id=1Z-kttQHMB-kMHQ_3cyKqroT3paw_PJ1k",
-        "user_rate": 0.5,
-
-      },
-      {
-        "id": 4,
-        "user_name": "멤버D",
-        "img_url": "http://drive.google.com/uc?export=view&id=1n1zQxO4FfO_Q4LUYcWR6tuXoI8UepvDJ",
-        "user_rate": 0.7,
-
-      },
-      {
-        "id": 5,
-        "user_name": "멤버E",
-        "img_url": "http://drive.google.com/uc?export=view&id=1877gatJkVEbpzp9TL897--_Fj1oYrOZ2",
-        "user_rate": 0.1,
-
-      },
-      {
-        "id": 6,
-        "user_name": "멤버F",
-        "img_url": "http://drive.google.com/uc?export=view&id=1VDKn12Lw17MQ4tEmL8kMhDtL7kqTjwkS",
-        "user_rate": 0.45,
-
-      },
-      {
-        "id": 7,
-        "user_name": "멤버G",
-        "img_url": "http://drive.google.com/uc?export=view&id=1_TNsKJatqW3PYWwByqDW_RDQ2qvMfrhY",
-        "user_rate": 0.1,
-
-      },
-      {
-        "id": 8,
-        "user_name": "멤버H",
-        "img_url": "http://drive.google.com/uc?export=view&id=1nuoptwRc_kqQdm_xqPzPkaPK-tG0u_08",
-        "user_rate": 0.1,
-
-      },
-
-    ]
-}
-
-
-
 const MyClubMainInfo_2=({ navigation, route })=>{
+    const { spinner } = useContext(ProgressContext);
     const id = route.params?.id;
     const width= Dimensions.get('window').width;
+    const user = getCurrentUser();
 
-    const [page, setpage] = useState('');
+    const [userPage, setUserPage] = useState('');
+    const [mainData, setMainData] = useState({});
+    const [errorMessage, setErrorMessage] = useState('');
 
     const _handlepageChange = text => {
-        setpage(text);
+      const regex = /^[0-9]/;
+      if (regex.test(text)) {
+        setUserPage(parseInt(text));
+        setErrorMessage('');
+        console.log(text);
+      }
+      else {
+        setErrorMessage('숫자를 입력해주세요');
+      }
     }
 
-    const _alertfinish=()=>{
-        alert('수정을 완료했습니다.')
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+    const _alertfinish= async () => {
+      if (errorMessage == '' || (!userPage)) {
+        try {
+          spinner.start();
+          const clubRef = DB.collection('clubs').doc(id);
+          await DB.runTransaction(async (t) => {
+            const doc = await t.get(clubRef);
+            const data = doc.data();
+
+            console.log(data);
+
+            const oldMembers = data.members;
+
+            for(let i = 0; i < oldMembers.length; i++) {
+              if (oldMembers[i].uid == user.uid) {
+                oldMembers[i].now_page = userPage;
+              }
+            }
+
+            t.update(clubRef, {members: oldMembers});
+          });
+        }
+        catch(e) {
+          Alert.alert('Page 갱신 오류', e.message);
+        }
+        finally{
+          spinner.stop();
+        }
+        alert('수정을 완료했습니다.');
+        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id, reload: true}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+      }
+      else {
+        Alert.alert('Page값 에러', errorMessage);
+      }
     }
 
+    const getMainData= async() => {
+      try{
+        spinner.start();
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+        const tempData = {
+          clubname: "",
+          booktitle: "",
+          bookcover: "",
+          goal: 0,
+          userlist: []
+        }
+
+        tempData.clubname = clubData.title;
+        tempData.booktitle = clubData.book_now.title;
+        tempData.goal = clubData.book_now.goal;
+        tempData.bookcover = clubData.book_now.cover;
+        const tempuserlist = [];
+        let index = 1;
+        for (let member of clubData.members) {
+          const user_rate = member.now_page / tempData.goal;
+          user_rate = user_rate.toFixed(1);
+          if (member.uid === user.uid) {
+            setUserPage(member.now_page);
+          }
+          if (user_rate > 1.0) {
+            user_rate = 1.0;
+          }
+
+          const tempuser = {
+            id: index,
+            user_name: member.name,
+            img_url: member.photoUrl,
+            user_rate: user_rate,
+          }
+
+          tempData.userlist.push(tempuser);
+        }
+
+        console.log("tempData", tempData);
+        setMainData(tempData);
+
+      }
+      catch(e) {
+        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
+      }
+      finally {
+        spinner.stop();
+      }
+    };
+
+    useEffect(() => {
+      console.log(mainData);
+    }, [mainData]);
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -287,8 +319,8 @@ const MyClubMainInfo_2=({ navigation, route })=>{
             },
         });
       console.log(navigation);
+      getMainData();
     }, []);
-
 
     return(
         <KeyboardAwareScrollView
@@ -297,14 +329,15 @@ const MyClubMainInfo_2=({ navigation, route })=>{
         >
         <Container>
             <MainHeader
-                clubname={tempData.clubname}
+                clubname={mainData.clubname}
                 onPress={_alertfinish}
             ></MainHeader>
 
             <MainProcess
-                booktitle={tempData.booktitle}
-                goalpage={tempData.goal}
-                page={page}
+                booktitle={mainData.booktitle}
+                goalpage={mainData.goal}
+                page={userPage}
+                cover={mainData.bookcover}
                 _handlepageChange={_handlepageChange}
             ></MainProcess>
 
