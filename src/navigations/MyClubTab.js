@@ -1,8 +1,16 @@
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyClubMain, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
+import { MyClubMainInfo, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
 import { MaterialIcons } from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components/native';
+import styled from 'styled-components/native';
+
+const Layout=styled.View`
+    background-color: ${({theme})=>theme.background};
+    align-items: center;
+    flex-direction: row;
+`;
 
 const Tab = createBottomTabNavigator();
 
@@ -21,13 +29,67 @@ const MainTab = ({ navigation, route }) => {
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    const titles = route.state?.routeNames || ['Clubs'];
+    const titles = route.state?.routeNames || ['MainInfo'];
     const id = route.params?.id;
     const index = route.state?.index || 0;
     navigation.setOptions({
       headerTitle: titles[index],
+      headerLeft: () => {
+        if (index === 0)
+        return(
+          <Layout>
+            <MaterialCommunityIcons
+                name="keyboard-backspace"
+                size={30}
+                style={{marginLeft:13}}
+
+                onPress={()=>navigation.navigate('MyClubList')}   //뒤로가기
+            />
+            <MaterialCommunityIcons
+                name="alert-circle"
+                size={30}
+                style={{marginLeft:10}}
+
+                onPress={()=>{console.log("navigate to manage screen", id)}}   //클럽 정보를 관리하는 MyClubMainManage로 이동
+                //navigation.navigate('MyClubMainInfoNav', {screen: 'MyClubMainManage', params: {id: id}})
+            />
+          </Layout>
+        )
+        else {
+          return(
+            <MaterialCommunityIcons
+                name="keyboard-backspace"
+                size={30}
+                style={{marginLeft:13}}
+
+                onPress={()=>navigation.navigate('MyClubList')}   //뒤로가기
+            />
+          )
+        }
+      },
       headerRight: () =>
-        { if (index === 1)
+        { if (index === 0)
+            {
+              return (
+              <Layout>
+              <MaterialCommunityIcons
+                  name="format-list-bulleted"
+                  size={30}
+                  style={{marginRight:10}}
+
+                  onPress={()=>{console.log("navigate to complete book list")}}   //수정필요-진행완료된 책 화면으로 이동
+
+              />
+              <MaterialCommunityIcons
+                  name="magnify"
+                  size={30}
+                  style={{marginRight:10}}
+
+                  onPress={()=>{console.log("navigate to book recommend page")}}  //수정필요-책 추천화면 이동
+              />
+              </Layout>
+            )}
+          if (index === 1)
             return (
               <MaterialIcons
                 name="edit"
@@ -57,8 +119,8 @@ const MainTab = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="MyClubMain"
-          component={MyClubMain}
+          name="Maininfo"
+          component={MyClubMainInfo}
           options={{
             tabBarIcon: ({ focused }) =>
               TabBarIcon({

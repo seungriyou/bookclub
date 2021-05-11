@@ -126,25 +126,26 @@ export const getClubInfo = async (id) => {
 
 export const clubSignUpWaiting = async (clubId) => {
   const user = Auth.currentUser;
-  const clubDocRef = await DB.collection('clubs').doc(clubId).get();
-  const data = clubDocRef.data();
-  const members = data.members;
-  members.push({
-    uid: user.uid,
-    isWaiting: true,
-  });
-
-  console.log(members);
-
   const clubRef = DB.collection('clubs').doc(clubId);
+  const clubDoc = await clubRef.get();
+  const clubData = clubDoc.data();
+
+  const userRef = DB.collection('users').doc(user.uid);
+  const userDoc = await userRef.get();
+  const userData = userDoc.data();
+
+  const members = clubData.members;
+  members.push({
+    name: userData.name,
+    photoUrl: userData.photoUrl,
+    uid: userData.uid,
+    now_page: 0,
+  });
 
   clubRef.update({members: members}).then(res => {
     console.log(members);
   });
 
-  const userRef = DB.collection('users').doc(user.uid);
-  const userDoc = await userRef.get();
-  const userData = userDoc.data();
   const club = userData.club;
   club[clubId] = true;
 

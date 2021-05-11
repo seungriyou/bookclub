@@ -5,7 +5,9 @@ import ClubCreation from './ClubCreation';
 import ClubList from './ClubList';
 import Profile from './Profile';
 import MyClubList from './MyClubList';
-import MyClubMain from './MyClubMain';
+import MyClubMainInfo from './MyClubMainInfo';
+import MyClubMainInfo_1 from './MyClubMainInfo_1';
+import MyClubMainInfo_2 from './MyClubMainInfo_2';
 import MyClubBoard from './MyClubBoard';
 import MyClubBoardView from './MyClubBoardView';
 import MyClubBoardList from './MyClubBoardList';
@@ -20,7 +22,7 @@ import MyClubSchedule from './MyClubSchedule';
 import MyClubScheduleList from './MyClubScheduleList';
 
 
-export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList, MyClubMain,
+export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
-  MyClubBoardView, MyClubEssay, MyClubEssayView
+  MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2
  };

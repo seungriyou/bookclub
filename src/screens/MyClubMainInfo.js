@@ -1,14 +1,14 @@
 //클럽 내 각자의 진행상황을 표시하는 메인 화면
 
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text, Image, Button} from 'react-native';
+import React, {useLayoutEffect, useState, useEffect, useRef, useContext} from 'react';
+import {StyleSheet, Dimensions, Text, Image, Button, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
-
-
+import { DB, getCurrentUser } from '../utils/firebase';
+import { ProgressContext } from '../contexts';
 
 const Container=styled.View`
     flex: 1;
@@ -17,16 +17,16 @@ const Container=styled.View`
     align-items: center;
 `;
 
-const Layout=styled.View` 
+const Layout=styled.View`
     background-color: ${({theme})=>theme.background};
     align-items: center;
     flex-direction: row;
 `;
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 80px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
       color: theme.text,
       padding: 0,
       marginLeft: 10,
-      marginVertical: 7, 
+      marginVertical: 7,
       backgroundColor: theme.background,
     },
     bookimg: {
@@ -98,7 +98,7 @@ const MainHeader= ({clubname, movetoInfo1, movetoInfo2})=>{
         <Header width={width}>
          <Button                    //개인이 개인의 진행 상황(게이지 바)를 수정하는 화면으로 이동
             title="목표 수정"
-            onPress={movetoInfo1} 
+            onPress={movetoInfo1}
             color= '#fac8af'
         />
         <Text style={styles.clubname}>{clubname}</Text>
@@ -140,83 +140,100 @@ const MainProcess=({booktitle, goalpage, page})=>{
 }
 
 
-const tempData = {
-    "clubname": "SEORAP",
-    "booktitle": "보노보노, 오늘 하루는 어땠어?",
-    "goal": 226,
-    "userlist": [
-      {
-        "id": 1,
-        "user_name": "멤버A",
-        "img_url": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-        "user_rate": 1,
-      },
-      {
-        "id": 2,
-        "user_name": "멤버B",
-        "img_url": "http://drive.google.com/uc?export=view&id=1psgmqUpSA_Mgrxw-5RY2cMSpDI_TKmuM",
-        "user_rate": 0.3,
 
-      },
-      {
-        "id": 3,
-        "user_name": "멤버C",
-        "img_url": "http://drive.google.com/uc?export=view&id=1Z-kttQHMB-kMHQ_3cyKqroT3paw_PJ1k",
-        "user_rate": 0.5,
-       
-      },
-      {
-        "id": 4,
-        "user_name": "멤버D",
-        "img_url": "http://drive.google.com/uc?export=view&id=1n1zQxO4FfO_Q4LUYcWR6tuXoI8UepvDJ",
-        "user_rate": 0.7,
-        
-      },
-      {
-        "id": 5,
-        "user_name": "멤버E",
-        "img_url": "http://drive.google.com/uc?export=view&id=1877gatJkVEbpzp9TL897--_Fj1oYrOZ2",
-        "user_rate": 0.1,
-       
-      },
-      {
-        "id": 6,
-        "user_name": "멤버F",
-        "img_url": "http://drive.google.com/uc?export=view&id=1VDKn12Lw17MQ4tEmL8kMhDtL7kqTjwkS",
-        "user_rate": 0.45,
-       
-      },
-      {
-        "id": 7,
-        "user_name": "멤버G",
-        "img_url": "http://drive.google.com/uc?export=view&id=1_TNsKJatqW3PYWwByqDW_RDQ2qvMfrhY",
-        "user_rate": 0.1,
-       
-      },
-      {
-        "id": 8,
-        "user_name": "멤버H",
-        "img_url": "http://drive.google.com/uc?export=view&id=1nuoptwRc_kqQdm_xqPzPkaPK-tG0u_08",
-        "user_rate": 0.1,
-       
-      },
-      
-    ]
-}
+const MyClubMainInfo=({ navigation, route })=>{
+    const { spinner } = useContext(ProgressContext);
 
+    const user = getCurrentUser();
 
-
-const MyClubMainInfo=({ navigation })=>{
-
+    const id = route.params?.id;
     const width= Dimensions.get('window').width;
 
+    const [mainData, setMainData] = useState({
+      clubname: "",
+      booktitle: "",
+      bookcover: "",
+      goal: 0,
+      userlist: []
+    });
+
+    const [leader, setLeader] = useState({});
+
+    const [userPage, setUserPage] = useState(0);
+
     const movetoInfo2=()=>{
-        navigation.navigate("MyClubMainInfo_2")
+        navigation.navigate('MyClubMainInfoNav', {screen: 'MyClubMainInfo_2', params: {id: id, user: user}});
     }
 
     const movetoInfo1=()=>{
-        navigation.navigate("MyClubMainInfo_1")
+        if (leader.uid == user.uid) {
+            navigation.navigate('MyClubMainInfoNav', {screen: 'MyClubMainInfo_1', params: {id: id, user: user}});
+        }
+        else {
+          Alert.alert('권한 오류', '클럽 리더만이 목표를 설정할 수 있습니다.');
+        }
     }
+
+    const getMainData= async() => {
+      try{
+        spinner.start();
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+        const tempData = {
+          clubname: "",
+          booktitle: "",
+          bookcover: "",
+          goal: 0,
+          userlist: []
+        }
+
+        tempData.clubname = clubData.title;
+        tempData.booktitle = clubData.book_now.title;
+        tempData.goal = clubData.book_now.goal;
+        tempData.bookcover = clubData.book_now.cover;
+        const tempuserlist = [];
+        let index = 1;
+        for (let member of clubData.members) {
+          const user_rate = member.now_page / tempData.goal;
+          user_rate = user_rate.toFixed(1);
+          if (member.uid === user.uid) {
+            setUserPage(member.now_page);
+          }
+          if (user_rate > 1.0) {
+            user_rate = 1.0;
+          }
+
+          const tempuser = {
+            id: index,
+            user_name: member.name,
+            img_url: member.photoUrl,
+            user_rate: user_rate,
+          }
+
+          tempData.userlist.push(tempuser);
+        }
+
+        console.log("tempData", tempData);
+        setMainData(tempData);
+        setLeader(clubData.leader);
+      }
+      catch(e) {
+        Alert.alert('메인 페이지 데이터 수, 에러', e.message);
+      }
+      finally {
+        spinner.stop();
+      }
+
+    };
+
+    useEffect(()=> {
+      getMainData();
+    }, [])
+
+    useEffect(()=>{
+      console.log(mainData);
+    }, [mainData]);
 
 
     useLayoutEffect(()=>{
@@ -268,25 +285,25 @@ const MyClubMainInfo=({ navigation })=>{
       console.log(navigation);
     }, []);
 
-    
+
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
         <Container>
-            <MainHeader clubname={tempData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2}></MainHeader>
-          
+            <MainHeader clubname={mainData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2}></MainHeader>
+
             <MainProcess
-                booktitle={tempData.booktitle}
-                goalpage={tempData.goal}
-                page={226}
+                booktitle={mainData.booktitle}
+                goalpage={mainData.goal}
+                page={userPage}
             ></MainProcess>
 
             <List width={width}>
-            <UserProcessList userInfo={tempData}></UserProcessList>
+            <UserProcessList userInfo={mainData}></UserProcessList>
             </List>
-            
+
         </Container>
         </KeyboardAwareScrollView>
 

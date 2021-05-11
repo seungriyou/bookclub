@@ -4,7 +4,6 @@ import { Alert, FlatList, Text, Modal } from 'react-native';
 import { getClubInfo, DB, getCurrentUser, clubSignUpWaiting } from '../utils/firebase';
 import { Button } from '../components';
 import { ProgressContext } from '../contexts';
-import Toast, {DURATION} from 'react-native-easy-toast';
 
 
 const Container = styled.View`
@@ -83,7 +82,7 @@ const Club = ({ navigation, route }) => {
       Alert.alert('클럽 가입신청 오류', e.message);
     } finally {
       spinner.stop();
-      this.toast.show('가입 신청 완료', 1000);
+      Alert.alert('가입신청 완료');
 
     }
 
@@ -102,10 +101,6 @@ const Club = ({ navigation, route }) => {
         title="가입신청"
         onPress={signUpClub}
         disabled={disabled}
-      />
-      <Toast
-        ref={(toast) => this.toast = toast}
-        position='bottom'
       />
     </Container>
 

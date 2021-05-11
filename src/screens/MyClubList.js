@@ -65,10 +65,12 @@ const MyClubList = ({ navigation }) => {
   const [clubIds, setClubIds] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [doc, setDoc] = useState({});
+  const [refreshing, setRefreshing] = useState(false);
 
   const user = getCurrentUser();
   const getMyClubId = async () => {
     try {
+      setRefreshing(true);
       const userRef = DB.collection('users');
       const snapshot = await userRef.where('uid', '==', user.uid).get();
       snapshot.forEach(doc => {
@@ -79,6 +81,7 @@ const MyClubList = ({ navigation }) => {
     }
     catch(e) {
       Alert.alert('클럽 데이터 수신 오류', e.message);
+      setRefreshing(false);
     }
   };
 
@@ -92,9 +95,11 @@ const MyClubList = ({ navigation }) => {
         list.push(tempData);
       }
       setClubs(list);
+      setRefreshing(false);
     }
     catch (e) {
       Alert.alert('클럽 list set error', e.message);
+      setRefreshing(false);
     }
   };
 
@@ -136,7 +141,11 @@ const MyClubList = ({ navigation }) => {
         renderItem={({ item }) => (
           <Item item={item} onPress={_handleItemPress} />
         )}
+        refreshing={refreshing}
+        onRefresh={getMyClubId}
         windowSize={3}
+
+
       />
     </Container>
   );
