@@ -41,6 +41,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
     comment_cnt: 0,
     photos: [],
   });
+  const [isAuthor, setIsAuthor] = useState(false);
 
   const _handleReplyChange = text => {
     setComment(text);
@@ -72,6 +73,11 @@ const MyClubAlbumView = ({ navigation, route }) => {
       }
       console.log(tempData);
       setAlbumData(tempData);
+
+      if (data.author.uid === user.uid) {
+        setIsAuthor(true);
+        console.log("isAuthor true");
+      }
     }
     catch (e) {
       Alert.alert('앨범 데이터 수신 오류', e.message);
@@ -150,6 +156,11 @@ const MyClubAlbumView = ({ navigation, route }) => {
   }, [update]);
 
   useLayoutEffect(() => {
+
+    //console.log(navigation);
+  }, []);
+
+  useEffect(() => {
     navigation.setOptions({
       headerBackTitleVisible: false,
       headerTintColor: '#000000',
@@ -165,6 +176,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
         );
       },
       headerRight: ({ tintColor }) => (
+        isAuthor && (
         <MaterialIcons
           name="edit"
           size={30}
@@ -172,13 +184,9 @@ const MyClubAlbumView = ({ navigation, route }) => {
           color={tintColor}
           onPress={() => { alert("글을 수정합니다.") }} //글 등록 버튼 함수(이벤트 추가 필요)
         />
+        )
       ),
     });
-    //console.log(navigation);
-  }, []);
-
-  useEffect(() => {
-    console.log(albumData);
   }, [albumData])
 
   return (

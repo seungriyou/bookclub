@@ -63,6 +63,7 @@ const MyClubBoardView=({ navigation, route })=>{
       comment: [],
       comment_cnt: 0,
     });
+    const [isAuthor, setIsAuthor] = useState(false);
 
     const _handleReplyChange = text => {
         setComment(text);
@@ -79,6 +80,10 @@ const MyClubBoardView=({ navigation, route })=>{
         spinner.start();
         const boardRef = await DB.collection('clubs').doc(clubId).collection('board').doc(boardId).get();
         const data = boardRef.data();
+
+        if (data.author.uid === user.uid) {
+          setIsAuthor(true);
+        }
 
         const tempData = {
           title: data.title,
@@ -163,30 +168,6 @@ const MyClubBoardView=({ navigation, route })=>{
     };
 
     useLayoutEffect(()=>{
-        navigation.setOptions({
-            headerBackTitleVisible: false,
-            headerTintColor: '#000000',
-            headerLeft: ({onPress, tintColor})=>{
-                return(
-                    <MaterialCommunityIcons
-                        name="keyboard-backspace"
-                        size={30}
-                        style={{marginLeft:13}}
-                        color={tintColor}
-                        onPress={onPress}
-                    />
-                );
-            },
-            headerRight: ({onPress, tintColor})=>(
-                <MaterialCommunityIcons
-                    name="pencil"
-                    size={30}
-                    style={{marginRight:13}}
-                    color={tintColor}
-                    onPress={onPress} //글 등록 버튼 함수(이벤트 추가 필요)
-                />
-            ),
-        });
       getBoard();
     }, []);
 
@@ -198,6 +179,34 @@ const MyClubBoardView=({ navigation, route })=>{
       getBoard();
     }, [update]);
 
+    useEffect(() => {
+      navigation.setOptions({
+          headerBackTitleVisible: false,
+          headerTintColor: '#000000',
+          headerLeft: ({onPress, tintColor})=>{
+              return(
+                  <MaterialCommunityIcons
+                      name="keyboard-backspace"
+                      size={30}
+                      style={{marginLeft:13}}
+                      color={tintColor}
+                      onPress={onPress}
+                  />
+              );
+          },
+          headerRight: ({onPress, tintColor})=>(
+            isAuthor && (
+              <MaterialCommunityIcons
+                  name="pencil"
+                  size={30}
+                  style={{marginRight:13}}
+                  color={tintColor}
+                  onPress={onPress} //글 등록 버튼 함수(이벤트 추가 필요)
+              />
+            )
+          ),
+      });
+    }, [boardData])
 
     return(
         <KeyboardAwareScrollView
