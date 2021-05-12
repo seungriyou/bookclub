@@ -1,23 +1,14 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { View, Image, ScrollView, useWindowDimensions,  
-  ActivityIndicator,
-	Button,
-	Clipboard,
-	FlatList,
-	Share,
-	StyleSheet,
-	Text } from 'react-native';
+import { View, Image, useWindowDimensions, ActivityIndicator,	StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EssayTextContentInput from './EssayTextContentInput';
 import { theme } from '../theme';
-//import * as Permissions from 'expo-permissions';
-//import uuid from 'react-native-uuid';
-//import {GOOGLE_CLOUD_VISION_API_KEY} from "../../secret.js";
+import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-
+import {GOOGLE_CLOUD_VISION_API_KEY} from "../../secret.js";
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -42,11 +33,11 @@ const ButtonContainer = styled.TouchableOpacity`
 `;
 const PhotoButtonIcon = () => {
   return (
-      <MaterialIcons
-          name="camera-alt"
-          size={25}
-          color={theme.buttonIcon}
-      />
+    <MaterialIcons
+      name="camera-alt"
+      size={25}
+      color={theme.buttonIcon}
+    />
   );
 };
 const PhotoButton = ({ onPress }) => {
@@ -58,11 +49,11 @@ const PhotoButton = ({ onPress }) => {
 };
 const AlbumButtonIcon = () => {
   return (
-      <MaterialIcons
-          name="collections"
-          size={25}
-          color={theme.buttonIcon}
-      />
+    <MaterialIcons
+      name="collections"
+      size={25}
+      color={theme.buttonIcon}
+    />
   );
 };
 const AlbumButton = ({ onPress }) => {
@@ -72,61 +63,146 @@ const AlbumButton = ({ onPress }) => {
     </ButtonContainer>
   );
 };
+const ConvertButtonIcon = () => {
+  return (
+    <MaterialCommunityIcons
+      name="ocr"
+      size={30}
+      color={theme.buttonIcon}
+    />
+  );
+};
+const ConvertButton = ({ onPress }) => {
+  return (
+    <ButtonContainer onPress={onPress}>
+      <ConvertButtonIcon />
+    </ButtonContainer>
+  );
+};
 
-
-const EssayContentInput = ({ onPress, photos, text, onChangeText }) => {
+const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeContentText }) => {
   const width = useWindowDimensions().width;
   const [image, setImage] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [googleResponse, setGoogleResponse] = useState(null);
+  const [googleResponse, setGoogleResponse] = useState("");
+  const [isImageSelected, setIsImageSelected] = useState(false);
   
-  /* Google Cloud Vision API 및 카메라 & 앨범 Image Picker 동작 */
+  useEffect(() => {
+    onChangeOCRText(googleResponse);
+  }, [googleResponse]);
+
   const _takePhoto = async () => {
 		let pickerResult = await ImagePicker.launchCameraAsync({
 			allowsEditing: true,
       saveToPhotos: true,
+      base64: true,
 		});
-    console.log(`_takePhoto:\n${pickerResult.uri}`);    
-		//_handleImagePicked(pickerResult);
-    //submitToGoogle();
+    if (!pickerResult.cancelled) {
+      setImage(pickerResult.base64);
+      setIsImageSelected(true);
+    }
 	};
   const _pickImage = async () => {
 		let pickerResult = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
+      base64: true,
 		});
-    console.log(`_pickImage:\n${pickerResult.uri}`);
-		//_handleImagePicked(pickerResult);
-    //submitToGoogle();
+    if (!pickerResult.cancelled) {
+      setImage(pickerResult.base64);
+      setIsImageSelected(true);
+    }
 	};
+  const submitToGoogle = async () => {
+		try {
+			setUploading(true);
+			let body = JSON.stringify({
+				requests: [
+					{
+            image: {
+							content: image,
+						},
+						features: [
+							{ type: 'TEXT_DETECTION' },
+						]
+					}
+				]
+			});
+			await fetch(
+				'https://vision.googleapis.com/v1/images:annotate?key=' +
+					GOOGLE_CLOUD_VISION_API_KEY,
+				{
+					headers: {
+						Accept: 'application/json',
+						'Content-Type': 'application/json'
+					},
+					method: 'POST',
+					body: body
+				}).then((response) => {
+          return response.json()
+        }).then((responseJson) => {
+          //console.log(responseJson.responses[0].fullTextAnnotation.text);
+          setGoogleResponse(responseJson.responses[0].fullTextAnnotation.text);
+        }).then(() => {
+          setUploading(false);
+          setIsImageSelected(false);
+        });
+		} catch (error) {
+			console.log(error);
+      alert('다시 시도해주세요.');
+		}
+	};
+  const _maybeRenderUploadingOverlay = () => {
+    if (uploading) {
+      return (
+        <View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							backgroundColor: 'rgba(0,0,0,0.4)',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}
+					]}
+				>
+					<ActivityIndicator color="#fff" animating size="large" />
+				</View>
+      );
+    }
+  };
 
   return (
     <KeyboardAwareScrollView>
       <Container width={width}>
+        {!image || <Image 
+          resizeMode="contain"
+          style={{ width: width-60, height: 280 }} 
+          source={{ uri: 'data:image/jpg;base64,'+image }} />}
         <ImageContainer width={width}>
           <PhotoButton onPress={_takePhoto} />
           <AlbumButton onPress={_pickImage} />
+          {!isImageSelected || <ConvertButton onPress={submitToGoogle} />}
+          {_maybeRenderUploadingOverlay()}
         </ImageContainer>
         <EssayTextContentInput
           placeholder="OCR 추출 내용"
-          value={text}
-          onChangeText={() => {}}
+          value={OCRValue}
+          onChangeText={onChangeOCRText}
         />
         <EssayTextContentInput
           placeholder="내용 입력도 가능합니다."
-          value={text}
-          onChangeText={() => {}}
+          value={contentValue}
+          onChangeText={onChangeContentText}
         />
       </Container>
     </KeyboardAwareScrollView>
   );
+};
 
-};
-/*
 EssayContentInput.propTypes = {
-  onPress: PropTypes.func.isRequired,
-  photos: PropTypes.array.isRequired,
-  text: PropTypes.string,
-  onChangeText: PropTypes.func.isRequired,
+  OCRValue: PropTypes.string.isRequired,
+  onChangeOCRText: PropTypes.func.isRequired,
+  contentValue: PropTypes.string,
+  onChangeContentText: PropTypes.func.isRequired,
 };
-*/
+
 export default EssayContentInput;

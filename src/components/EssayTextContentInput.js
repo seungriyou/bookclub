@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components/native';
 import { useWindowDimensions } from 'react-native';
 import PropTypes from 'prop-types';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const TextContainer = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -48,11 +47,11 @@ const EssayTextContentInput = ({ placeholder, value, onChangeText }) => {
     </TextContainer>   
   );
 };
-/*
+
 EssayTextContentInput.propTypes = {
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
   onChangeText: PropTypes.func.isRequired,
 };
-*/
+
 export default EssayTextContentInput;

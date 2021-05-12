@@ -43,7 +43,7 @@ const EssayViewPost = ({ postInfo }) => {
   Font.loadAsync({
     RIDIBatang: require('../../assets/fonts/RIDIBatang.ttf'),
   });
-  /*console.log(postInfo.photos);*/
+
   return (
     <Container width={width}>
       <PostInfo width={width}>
