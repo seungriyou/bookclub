@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { useWindowDimensions, Text, StyleSheet } from 'react-native';
 import { theme } from '../theme';
+import * as Font from 'expo-font';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -39,6 +40,9 @@ const OCRText = styled.View`
 
 const EssayViewPost = ({ postInfo }) => {
   const width = useWindowDimensions().width;
+  Font.loadAsync({
+    RIDIBatang: require('../../assets/fonts/RIDIBatang.ttf'),
+  });
   /*console.log(postInfo.photos);*/
   return (
     <Container width={width}>
@@ -74,9 +78,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   ocrText: {
-    fontSize: 14.5,
+    fontSize: 14,
     padding: 13,
-    lineHeight: 22,
+    lineHeight: 23,
+    fontFamily: 'RIDIBatang',
   },
   contentText: {
     fontSize: 15,

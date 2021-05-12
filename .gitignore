@@ -14,3 +14,4 @@ web-build/
 
 # firebase
 firebase.json
+secret.js
