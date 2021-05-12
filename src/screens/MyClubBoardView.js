@@ -80,6 +80,33 @@ const MyClubBoardView=({ navigation, route })=>{
       return moment(ts).format('MM/DD');
     };
 
+    const _handelEditButtonPress = () => {
+      navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardEdit', params: {clubId: clubId, boardId: boardId}});
+    };
+
+    const _handelDeleteButtonPress = () => {
+      Alert.alert("경고", "글을 삭제하시겠습니까?",
+      [
+        {
+          text: "아니요",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: async () => {
+            try {
+              const boardRef = await DB.collection('clubs').doc(clubId).collection('board').doc(boardId).delete();
+              navigation.navigate("MyClubTab", {screen: "MyClubBoardList", params: {id: clubId}});
+              Alert.alert("글 삭제 완료");
+            }
+            catch(e) {
+              Alert.alert("글 삭제 오류", e.message);
+            }
+          }
+        }
+      ]);
+    };
+
     const getBoard = async() => {
       try{
         spinner.start();
@@ -112,10 +139,10 @@ const MyClubBoardView=({ navigation, route })=>{
 
     const _addReply = async () => {
       if (!comment) {
-        alert("댓글을 입력해주세요.");
+        Alert.alert("댓글을 입력해주세요.");
       }
       else {
-        alert(`댓글을 입력하였습니다. 댓글 내용:\n${comment}`);
+        Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
         console.log(`Comment: ${comment}`);
         try{
           const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
@@ -207,14 +234,14 @@ const MyClubBoardView=({ navigation, route })=>{
                     size={30}
                     style={{marginRight:13}}
                     color={tintColor}
-                    onPress={onPress}
+                    onPress={_handelEditButtonPress}
                 />
                 <MaterialCommunityIcons
                     name="trash-can"
                     size={30}
                     style={{marginRight:13}}
                     color={tintColor}
-                    onPress={onPress}
+                    onPress={_handelDeleteButtonPress}
                 />
               </Layout>
             )

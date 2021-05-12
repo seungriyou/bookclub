@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { View, ScrollView, Alert } from 'react-native';
 import AlbumViewPost from '../components/AlbumViewPost';
 import CommentList from '../components/CommentList';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ReplyInput from '../components/ReplyInput';
 import { ProgressContext } from '../contexts';
-import { DB, getCurrentUser} from '../utils/firebase';
+import { DB, Storage, getCurrentUser} from '../utils/firebase';
 import moment from 'moment';
 import { theme } from '../theme';
 
@@ -22,6 +22,12 @@ const CommentForm = styled.View`
   bottom: 0;
   background-color: ${({ theme }) => theme.background};
   align-items: center;
+`;
+
+const Layout=styled.View`
+    background-color: ${({theme})=>theme.background};
+    align-items: center;
+    flex-direction: row;
 `;
 
 const MyClubAlbumView = ({ navigation, route }) => {
@@ -46,6 +52,45 @@ const MyClubAlbumView = ({ navigation, route }) => {
   const _handleReplyChange = text => {
     setComment(text);
   };
+
+  const _handelEditButtonPress = () => {
+    Alert.alert("글을 수정합니다");
+  }
+
+  const _handelDeleteButtonPress = async () => {
+    Alert.alert("경고", "글을 삭제하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            const albumRef = await DB.collection('clubs').doc(clubId).collection('album').doc(albumId).delete();
+            const storageRef = Storage.ref();
+            console.log(`clubs/${clubId}/albums/${albumId}`);
+            const storageAlbumRef = storageRef.child(`clubs/${clubId}/albums/${albumId}`);
+            storageAlbumRef.listAll().then(res => {
+              res.items.forEach( itemRef => {
+                console.log(itemRef);
+                itemRef.delete().then(() => {})
+                .catch(e => {console.log(e.message)});
+              });
+            });
+            navigation.navigate("MyClubTab", {screen: "MyClubAlbumList", params: {id: clubId}});
+            Alert.alert("앨범 삭제 완료");
+          }
+          catch(e) {
+            Alert.alert("앨범 삭제 오류", e.message);
+          }
+        }
+      }
+    ]);
+  }
+
+
 
   const getAlbum = async() => {
     try{
@@ -89,10 +134,10 @@ const MyClubAlbumView = ({ navigation, route }) => {
 
   const _addReply = async () => {
     if (!comment) {
-      alert("댓글을 입력해주세요.");
+      Alert.alert("댓글을 입력해주세요.");
     }
     else {
-      alert(`댓글을 입력하였습니다. 댓글 내용:\n${comment}`);
+      Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용: ${comment}`);
       console.log(`Comment: ${comment}`);
       try{
         const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
@@ -177,13 +222,22 @@ const MyClubAlbumView = ({ navigation, route }) => {
       },
       headerRight: ({ tintColor }) => (
         isAuthor && (
-        <MaterialIcons
-          name="edit"
-          size={30}
-          style={{ marginRight: 13 }}
-          color={tintColor}
-          onPress={() => { alert("글을 수정합니다.") }} //글 등록 버튼 함수(이벤트 추가 필요)
-        />
+          <Layout>
+            <MaterialCommunityIcons
+                name="pencil"
+                size={30}
+                style={{marginRight:13}}
+                color={tintColor}
+                onPress={_handelEditButtonPress}
+            />
+            <MaterialCommunityIcons
+                name="trash-can"
+                size={30}
+                style={{marginRight:13}}
+                color={tintColor}
+                onPress={_handelDeleteButtonPress}
+            />
+          </Layout>
         )
       ),
     });

@@ -114,17 +114,8 @@ const MyClubAlbumList = ({navigation, route}) => {
       ),
     });
     //console.log(navigation);
-  }, []);
-
-  useEffect(() => {
     getMyClubAlbumList();
   }, []);
-
-  useEffect(() => {
-    albums.forEach(doc => {
-      console.log(doc);
-    })
-  }, [albums]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

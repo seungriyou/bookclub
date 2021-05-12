@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { Club, ClubCreation, MyClubBoard,
+import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubBoardView, MyClubSchedule, MyClubAlbum,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
   MyClubEssayView, MyClubMainInfo_1,
@@ -41,6 +41,7 @@ const MyClubBoardNav = () => {
     >
       <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
       <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} />
+      <Stack.Screen name="MyClubBoardEdit" component={MyClubBoardEdit} />
     </Stack.Navigator>
   );
 };

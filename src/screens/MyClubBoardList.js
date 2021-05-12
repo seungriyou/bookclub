@@ -100,12 +100,6 @@ const MyClubBoardList = ({navigation, route}) => {
   }, []);
 
   useEffect(() => {
-    boards.forEach(doc => {
-      console.log(doc);
-    })
-  }, [boards]);
-
-  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       getMyClubBoardList();
     });

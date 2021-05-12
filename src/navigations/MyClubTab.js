@@ -128,7 +128,7 @@ const MainTab = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="Maininfo"
+          name="Books"
           component={MyClubMainInfo}
           options={{
             tabBarIcon: ({ focused }) =>
