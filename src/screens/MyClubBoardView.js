@@ -37,10 +37,15 @@ const Listforreply=styled.ScrollView`
     width: ${({width})=>width}px;
 `;
 
-
 const Line=styled.View`
     height:2px;
     background-color: ${({theme})=>theme.line};
+`;
+
+const Layout=styled.View`
+    background-color: ${({theme})=>theme.background};
+    align-items: center;
+    flex-direction: row;
 `;
 
 const MyClubBoardView=({ navigation, route })=>{
@@ -196,13 +201,22 @@ const MyClubBoardView=({ navigation, route })=>{
           },
           headerRight: ({onPress, tintColor})=>(
             isAuthor && (
-              <MaterialCommunityIcons
-                  name="pencil"
-                  size={30}
-                  style={{marginRight:13}}
-                  color={tintColor}
-                  onPress={onPress} //글 등록 버튼 함수(이벤트 추가 필요)
-              />
+              <Layout>
+                <MaterialCommunityIcons
+                    name="pencil"
+                    size={30}
+                    style={{marginRight:13}}
+                    color={tintColor}
+                    onPress={onPress}
+                />
+                <MaterialCommunityIcons
+                    name="trash-can"
+                    size={30}
+                    style={{marginRight:13}}
+                    color={tintColor}
+                    onPress={onPress}
+                />
+              </Layout>
             )
           ),
       });

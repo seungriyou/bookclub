@@ -28,22 +28,6 @@ const MyClubMainInfoNav = () => {
   );
 };
 
-const MyClubScheduleNav = () => {
-  const theme = useContext(ThemeContext);
-
-  return (
-    <Stack.Navigator
-      initialRouteName="MyClubScheduleNav"
-      screenOptions={{
-        headerTitleAlign: 'center',
-      }}
-      headerMode="screen"
-    >
-      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
-    </Stack.Navigator>
-  );
-};
-
 const MyClubBoardNav = () => {
   const theme = useContext(ThemeContext);
 
@@ -94,6 +78,22 @@ const MyClubEssayNav = ({navigate, route}) => {
     >
       <Stack.Screen name="MyClubEssay" component={MyClubEssay} initialParams={[]} />
       <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} />
+    </Stack.Navigator>
+  );
+};
+
+const MyClubScheduleNav = () => {
+  const theme = useContext(ThemeContext);
+
+  return (
+    <Stack.Navigator
+      initialRouteName="MyClubScheduleNav"
+      screenOptions={{
+        headerTitleAlign: 'center',
+      }}
+      headerMode="screen"
+    >
+      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
     </Stack.Navigator>
   );
 };

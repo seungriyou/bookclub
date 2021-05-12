@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MyClubMainInfo, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
+import { MyClubMainInfo, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleListT } from '../screens';
 import { MaterialIcons } from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components/native';
@@ -107,6 +107,15 @@ const MainTab = ({ navigation, route }) => {
                 onPress={() => navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}})}
               />
             );
+          else if (index === 4)
+            return (
+              <MaterialIcons
+                name="edit"
+                size={26}
+                style={{ margin: 10 }}
+                onPress={() => navigation.navigate('MyClubScheduleNav', {screen: 'MyClubSchedule', params: {id: id}})}
+              />
+            );
         },
     });
   }, [route]);
@@ -168,7 +177,7 @@ const MainTab = ({ navigation, route }) => {
         />
         <Tab.Screen
           name="Schedule"
-          component={MyClubScheduleList}
+          component={MyClubScheduleListT}
           options={{
             tabBarIcon: ({ focused }) =>
               TabBarIcon({

@@ -1,4 +1,4 @@
-//MyClubScheduleListT.js 에서 사용하는 스케줄 목록 컴포넌트 
+//MyClubScheduleListT.js 에서 사용하는 스케줄 목록 컴포넌트
 
 import React from 'react';
 import styled from 'styled-components/native';
@@ -25,12 +25,12 @@ width: ${({ width }) => width}px;
 `;
 
 const Date = styled.View`
-  width: ${({ width }) => (width)*0.2}px;  
+  width: ${({ width }) => (width)*0.2}px;
   min-height: 90px;
   justify-content: center;
   align-items: center;
   borderRight-Width: 0.8px;
-  borderRight-Color: ${({ theme }) => theme.seperator};
+  borderRight-Color: ${({ theme }) => theme.separator};
 `;
 
 const ExtInfo = styled.View`
@@ -42,19 +42,19 @@ const ExtInfo = styled.View`
 `;
 
 const Icon=styled.View`
-  width: ${({ width }) => (width)*0.15}px;  
+  width: ${({ width }) => (width)*0.15}px;
   min-height: 90px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   borderLeft-Width: 0.8px;
-  borderLeft-Color: ${({ theme }) => theme.seperator};
+  borderLeft-Color: ${({ theme }) => theme.separator};
 `;
 
 
 //scheduleInfo는 렌더링할 아이템(tempData), selectedYear과 selectedMonth는 각각 picker로 선택된 연도와 월입니다.
 //선택된 연도와 월을 이용해 db에서 특정 schedule만 select하여 가져오는 방법 쪽을 구상하고 만들었습니다.
-const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {    
+const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
     const width = Dimensions.get('window').width;
     const user = scheduleInfo.schedule;
 
@@ -65,9 +65,9 @@ const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
                 <Text style={styles.date}>{item.date}일</Text>
             </Date>
             <ExtInfo width={width}>
-                <Text style={styles.text}>시간: {item.time}</Text>  
-                <Text style={styles.text}>장소: {item.place}</Text>  
-                <Text style={styles.text}>메모: {item.memo}</Text>  
+                <Text style={styles.text}>시간: {item.time}</Text>
+                <Text style={styles.text}>장소: {item.place}</Text>
+                <Text style={styles.text}>메모: {item.memo}</Text>
             </ExtInfo>
             <Icon width={width}>
             <MaterialCommunityIcons
@@ -83,11 +83,11 @@ const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
                 style={{marginTop:10}}
                 color='#000000'
                 onPress={()=>{}}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
-            />        
+            />
             </Icon>
             </ContainerRow>
         );
-        
+
     };
     return (
         <Container width={width}>

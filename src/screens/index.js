@@ -19,10 +19,10 @@ import MyClubEssay from './MyClubEssay';
 import MyClubEssayView from './MyClubEssayView';
 import MyClubEssayList from './MyClubEssayList';
 import MyClubSchedule from './MyClubSchedule';
-import MyClubScheduleList from './MyClubScheduleList';
+import MyClubScheduleListT from './MyClubScheduleListT';
 
 
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList,
-  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard ,MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
+  MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleListT, MyClubBoard ,MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
   MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2
  };

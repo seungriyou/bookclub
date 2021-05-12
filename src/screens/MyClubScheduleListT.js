@@ -25,7 +25,7 @@ const ContainerRow=styled.View`
     align-items: center;
     justify-content: center;
     borderBottom-Width: 1px;
-    borderBottom-Color: ${({theme})=>theme.seperator};
+    borderBottom-Color: ${({theme})=>theme.separator};
 `;
 
 const List=styled.ScrollView`
@@ -33,10 +33,10 @@ const List=styled.ScrollView`
     width: ${({width})=>width}px;
 `;
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 80px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -57,18 +57,18 @@ const styles = StyleSheet.create({
 
 const MainHeader= ({clubname})=>{
     const width = Dimensions.get('window').width;
-  
+
     return (
         <Header width={width}>
-         
+
         <Text style={styles.clubname}>{clubname}</Text>
-        
+
         </Header>
     )
 };
 
 
-//더미데이터에서는 일정에 대한 구분을 월/일 로 해두었습니다. 
+//더미데이터에서는 일정에 대한 구분을 월/일 로 해두었습니다.
 //picker을 통해 연도를 설정할 수 있기 때문에 실제로는 연/월/일로 구분하는게 옳다고 생각하나,
 //firebase db에 미숙하기 때문에 확언이 어렵습니다... 사용이 용이한 쪽으로 변형해주시면 될 것 같습니다.
 const tempData = {
@@ -137,11 +137,11 @@ const tempData = {
 
 
 
-const MyClubScheduleListT=({ navigation })=>{
-
+const MyClubScheduleListT=({ navigation, route })=>{
+    const id = route.params?.id;
     const width= Dimensions.get('window').width;
-    const [selectedMonth, setSelectedMonth] = useState("May");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....? 
-    const [selectedYear, setSelectedYear] = useState("2021");  //이부분을 현재 app을 가동한 시간의 year을 통해 월 값을 가져올 수 있을지....? 
+    const [selectedMonth, setSelectedMonth] = useState("May");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....?
+    const [selectedYear, setSelectedYear] = useState("2021");  //이부분을 현재 app을 가동한 시간의 year을 통해 월 값을 가져올 수 있을지....?
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -149,7 +149,7 @@ const MyClubScheduleListT=({ navigation })=>{
             headerTintColor: '#000000',
             headerLeft: ({onPress, tintColor})=>{
                 return(
-                    
+
                     <MaterialCommunityIcons
                         name="keyboard-backspace"
                         size={30}
@@ -161,7 +161,7 @@ const MyClubScheduleListT=({ navigation })=>{
             },
             headerRight: ({tintColor})=>{
                 return(
-                    
+
                     <MaterialCommunityIcons
                         name="pencil"
                         size={30}
@@ -175,7 +175,7 @@ const MyClubScheduleListT=({ navigation })=>{
       console.log(navigation);
     }, []);
 
-    
+
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
@@ -184,7 +184,7 @@ const MyClubScheduleListT=({ navigation })=>{
         <Container>
             <MainHeader clubname={tempData.clubname}></MainHeader>
             <ContainerRow width={width}>
-            
+
             <Picker
                 selectedValue={selectedYear}
                 style={{ height: 50, width: 110, margin: 10 }}
@@ -212,7 +212,7 @@ const MyClubScheduleListT=({ navigation })=>{
                 <Picker.Item label="Nov." value="Nov" />
                 <Picker.Item label="Dec." value="Dec" />
             </Picker>
-            
+
             </ContainerRow>
             <List width={width}>
             <ScheduleList scheduleInfo={tempData} selectedYear={selectedYear} selectedMonth={selectedMonth}></ScheduleList>
