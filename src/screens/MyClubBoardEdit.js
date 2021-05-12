@@ -91,16 +91,18 @@ const MyClubBoard=({ navigation, route })=>{
       console.log("title:" ,title, "content:", content);
       console.log(id, "id");
       if (title == '' || content == '') {
-        alert(`제목 또는 글 내용이 없습니다.`);
+        Alert.alert('글 수정 오류', `제목 또는 글 내용이 없습니다.`);
       }
       else{
         try {
           spinner.start();
           const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
-          boardRef.update({title: title, content: content}).then(res => {
-            console.log(members);
-          });
+          const update = async() => {
+            boardRef.update({title: title, content: content});
+          }
           
+          update();
+
           navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
           Alert.alert('수정이 완료되었습니다.');
         }
