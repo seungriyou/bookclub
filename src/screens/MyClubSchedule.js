@@ -127,11 +127,14 @@ const ScheduleCreation = ({navigation, route}) => {
     // 일정명이나 장소가 비었을 때 error 메시지 송출
     useEffect(() => {
         if (didMountRef.current) {
+            const tempTime = new Date();
             let _errorMessage = '';
             if (!title) {
                 _errorMessage = '일정명을 입력하세요.';
             }  else if (!site) {
                 _errorMessage = '장소(모임형태)를 입력하세요.';
+            } else if (date <= tempTime) {
+                _errorMessage = '일정 시간을 확인해주세요.';
             } else {
                 _errorMessage = '';
             }
@@ -139,7 +142,7 @@ const ScheduleCreation = ({navigation, route}) => {
         } else {
             didMountRef.current = true;
         }
-    }, [title, site]);
+    }, [title, site, date]);
 
     useEffect(() => {
         setDisabled(
@@ -152,6 +155,7 @@ const ScheduleCreation = ({navigation, route}) => {
       const scheduleRef = DB.collection('clubs').doc(id).collection('schedule').doc();
 
       const newSchedule = {
+        id: scheduleRef.id,
         title,
         author: user,
         site: site,

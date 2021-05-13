@@ -4,6 +4,7 @@ import { Alert, FlatList, Text, Modal } from 'react-native';
 import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
 import { Button } from '../components';
 import { ProgressContext } from '../contexts';
+import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
 
 const Container = styled.View`
   flex: 1;

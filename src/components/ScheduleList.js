@@ -3,9 +3,10 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { View, Dimensions, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
+import { DB, Storage, getCurrentUser} from '../utils/firebase';
 
 
 const Container = styled.View`
@@ -59,12 +60,38 @@ const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
     const user = scheduleInfo.schedule;
 
     const renderItem = ({ item }) => {
+        const _handleEditButtonPressed = () => {
+          console.log(item);
+        }
+
+        const _handleDeleteButtonPressed = () => {
+          Alert.alert("경고", "일정을 삭제하시겠습니까?",
+          [
+            {
+              text: "아니요",
+              style: "cancel"
+            },
+            {
+              text: "예",
+              onPress: async () => {
+                try {
+                  const scheduleRef = await DB.collection('clubs').doc(item.clubId).collection('schedule').doc(item.id).delete();
+                  Alert.alert("일정 삭제 완료");
+                }
+                catch(e) {
+                  Alert.alert("일정 삭제 오류", e.message);
+                }
+              }
+            }
+          ]);
+        }
         return (
             <ContainerRow width={width}>
             <Date width={width}>
                 <Text style={styles.date}>{item.date}일</Text>
             </Date>
             <ExtInfo width={width}>
+                <Text style={styles.text}>{item.title}</Text>
                 <Text style={styles.text}>시간: {item.time}</Text>
                 <Text style={styles.text}>장소: {item.place}</Text>
                 <Text style={styles.text}>메모: {item.memo}</Text>
@@ -75,14 +102,14 @@ const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
                 size={25}
                 style={{marginBottom: 10}}
                 color='#000000'
-                onPress={()=>{}}        //일정 수정 view로 이동하는 함수 필요
+                onPress={_handleEditButtonPressed}        //일정 수정 view로 이동하는 함수 필요
             />
             <MaterialCommunityIcons
                 name="delete"
                 size={25}
                 style={{marginTop:10}}
                 color='#000000'
-                onPress={()=>{}}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
+                onPress={_handleDeleteButtonPressed}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
             />
             </Icon>
             </ContainerRow>
