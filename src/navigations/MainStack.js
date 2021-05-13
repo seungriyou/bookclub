@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
-  MyClubBoardView, MyClubSchedule, MyClubAlbum,
+  MyClubBoardView, MyClubSchedule, MyClubScheduleEdit, MyClubAlbum,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
   MyClubEssayView, MyClubMainInfo_1,
   MyClubMainInfo_2 } from '../screens';
@@ -77,13 +77,13 @@ const MyClubEssayNav = ({navigate, route}) => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubEssay" component={MyClubEssay} initialParams={[]} />
+      <Stack.Screen name="MyClubEssay" component={MyClubEssay} />
       <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} />
     </Stack.Navigator>
   );
 };
 
-const MyClubScheduleNav = () => {
+const MyClubScheduleNav = ({navigate, route}) => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -95,6 +95,7 @@ const MyClubScheduleNav = () => {
       headerMode="screen"
     >
       <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
+      <Stack.Screen name="MyClubScheduleEdit" component={MyClubScheduleEdit} />
     </Stack.Navigator>
   );
 };

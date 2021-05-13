@@ -55,13 +55,13 @@ const Icon=styled.View`
 
 //scheduleInfo는 렌더링할 아이템(tempData), selectedYear과 selectedMonth는 각각 picker로 선택된 연도와 월입니다.
 //선택된 연도와 월을 이용해 db에서 특정 schedule만 select하여 가져오는 방법 쪽을 구상하고 만들었습니다.
-const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
+const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth}) => {
     const width = Dimensions.get('window').width;
     const user = scheduleInfo.schedule;
 
     const renderItem = ({ item }) => {
         const _handleEditButtonPressed = () => {
-          console.log(item);
+          navigation.navigate('MyClubScheduleNav', {screen: 'MyClubScheduleEdit', params: item});
         }
 
         const _handleDeleteButtonPressed = () => {
@@ -97,13 +97,7 @@ const ScheduleList = ({scheduleInfo, selectedYear, selectedMonth}) => {
                 <Text style={styles.text}>메모: {item.memo}</Text>
             </ExtInfo>
             <Icon width={width}>
-            <MaterialCommunityIcons
-                name="pencil"
-                size={25}
-                style={{marginBottom: 10}}
-                color='#000000'
-                onPress={_handleEditButtonPressed}        //일정 수정 view로 이동하는 함수 필요
-            />
+
             <MaterialCommunityIcons
                 name="delete"
                 size={25}
@@ -157,3 +151,11 @@ ScheduleList.propTypes = {
 };
 
 export default ScheduleList;
+// 
+// <MaterialCommunityIcons
+//     name="pencil"
+//     size={25}
+//     style={{marginBottom: 10}}
+//     color='#000000'
+//     onPress={_handleEditButtonPressed}        //일정 수정 view로 이동하는 함수 필요
+// />

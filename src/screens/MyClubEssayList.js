@@ -15,7 +15,7 @@ const Container = styled.View`
 
 const MyClubEssayList = ({navigation}) => {
   const _handleEssayWriteButtonPressed = params => {
-    navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssay'});
+    navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssay', params});
   };
   const _handleEssayViewButtonPressed = params => {
     navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayView'});
