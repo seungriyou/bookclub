@@ -1,42 +1,36 @@
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
-import { Alert, FlatList, Text, Modal } from 'react-native';
+import { Alert, FlatList, Text, Modal, Image, StyleSheet, useWindowDimensions } from 'react-native';
 import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
 import { Button } from '../components';
 import { ProgressContext } from '../contexts';
 import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
+import { theme } from '../theme';
+
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+  align-items: center;
 `;
 
 const ItemContainer = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  border-bottom-width: 1px;
-  border-color: ${({ theme }) => theme.listBorder};
-  padding: 15px 20px;
+  flex-direction: column;
+  width: ${({ width }) => (width - 40) / 2}px;
+  align-items: flex-start;
+  padding: 10px 10px;
+  margin: 10px 5px;
 `;
 const ItemTextContainer = styled.View`
-  flex: 1;
-  flex-direction: column;
+  width: ${({ width }) => (width - 40) / 2 - 20}px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: baseline;
 `;
-const ItemTitle = styled.Text`
-  font-size: 20px;
-  font-weight: 600;
-`;
-
-const ItemTime = styled.Text`
-  font-size: 12px;
-  color: ${({ theme }) => theme.listTime};
-`;
-
-const ItemAuthor = styled.Text`
-  font-size: 12px;
-  margin-top: 5px;
-  color: ${({ theme }) => theme.listTime};
+const ItemTitle = styled.View`
+  justify-content: center;
+  margin-top: 10px;
 `;
 
 const getDateOrTime = ts => {
@@ -46,28 +40,31 @@ const getDateOrTime = ts => {
 };
 
 const Item = React.memo(
-  ({ item: { clubId, id, author, title, createAt }, onPress }) => {
+  ({ item: { clubId, id, author, title, createAt, photoUrls }, onPress, width }) => {
     const theme = useContext(ThemeContext);
     const name = author.name;
 
     return (
-      <ItemContainer onPress={() => onPress({ clubId, id, title, author })}>
-        <ItemTextContainer>
-          <ItemTitle>{title}</ItemTitle>
-          <ItemAuthor>{name}</ItemAuthor>
-        </ItemTextContainer>
-        <ItemTime>{getDateOrTime(createAt)}</ItemTime>
-        <MaterialIcons
-          name="keyboard-arrow-right"
-          size={24}
-          color={theme.listIcon}
+      <ItemContainer width={width} onPress={() => onPress({ clubId, id, title, author })}>
+        <Image 
+          style={{ height: (width-40)/2-20, width: (width-40)/2-20, borderRadius: 10 }}
+          source={{ uri: photoUrls[0] }}
+          key={id}
+          resizeMethod="resize"
         />
+        <ItemTitle><Text numberOfLines={1} style={styles.itemTitle}>{title}</Text></ItemTitle>
+        <ItemTextContainer width={width}>
+          <Text style={styles.ItemAuthor}>{name}</Text>
+          <Text style={styles.itemTime}>{getDateOrTime(createAt)}</Text>
+        </ItemTextContainer>
       </ItemContainer>
     );
   }
 );
 
 const MyClubAlbumList = ({navigation, route}) => {
+  const width = useWindowDimensions().width;
+
   const [albums, setAlbums] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -114,18 +111,34 @@ const MyClubAlbumList = ({navigation, route}) => {
   return (
     <Container>
       <FlatList
-        keyExtractor={item => item['id']}
+        keyExtractor={item => item['id'].toString()}
         data={albums}
         renderItem={({ item }) => (
-          <Item item={item} onPress={_handleItemPress} />
+          <Item item={item} onPress={_handleItemPress} width={width} />
         )}
         refreshing={refreshing}
         onRefresh={getMyClubAlbumList}
         windowSize={3}
+        numColumns={2}
       />
-
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  itemTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  itemTime: {
+    fontSize: 13,
+    color: theme.listTime,
+  },
+  ItemAuthor: {
+    fontSize: 13,
+    marginTop: 5,
+    color: theme.listTime,
+  },
+});
 
 export default MyClubAlbumList;
