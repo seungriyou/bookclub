@@ -28,6 +28,9 @@ const cacheFonts = fonts => {
 
 const App = () => {
   const [isReady, setIsReady] = useState(false);
+  const [fontLoaded] = Font.useFonts({
+    RIDIBatang: require('../assets/fonts/RIDIBatang.ttf'),
+  });
 
   const _loadAssets = async () => {
     const imageAssets = cacheImages([
@@ -39,7 +42,7 @@ const App = () => {
     await Promise.all([...imageAssets, ...fontAssets]);
   };
 
-  return isReady ? (
+  return isReady && fontLoaded ? (
     <ThemeProvider theme={theme}>
       <UserProvider>
         <ProgressProvider>
