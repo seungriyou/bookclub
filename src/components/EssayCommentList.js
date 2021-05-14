@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, useWindowDimensions, Text, StyleSheet, FlatList } from 'react-native';
 import { theme } from '../theme';
+import moment from 'moment';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -27,6 +28,12 @@ const CommentArea = styled.View`
   padding: 5px 5px;
 `;
 
+const getDate = ts => {
+  const now = moment().startOf('day');
+  const target = moment(ts).startOf('day');
+  return moment(ts).format('MM/DD');
+};
+
 const EssayCommentList = ({ postInfo }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
@@ -36,8 +43,8 @@ const EssayCommentList = ({ postInfo }) => {
     return (
       <CommentArea>
         <CommentInfo width={width} >
-          <Text style={styles.writerText}>{item.writer_name}</Text>
-          <Text style={styles.infoText}>{item.upload_date}</Text>
+          <Text style={styles.writerText}>{item.writer.name}</Text>
+          <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
         </CommentInfo>
         <View style={{ width: width-75 }}>
           <Text style={styles.contentText}>{item.content}</Text>

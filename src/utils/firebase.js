@@ -121,7 +121,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
 export const getClubInfo = async (id) => {
   const clubRef = await DB.collection('clubs').doc(id).get();
   const data = clubRef.data();
-  return { title: data.title, leader: data.leader, members: data.members,region: data.region, maxNumber: data.maxNumber }
+  return { title: data.title, leader: data.leader, members: data.members,region: data.region, maxNumber: data.maxNumber, description: data.description }
 }
 
 export const clubSignUpWaiting = async (clubId) => {

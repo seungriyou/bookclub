@@ -92,6 +92,8 @@ const Club = ({ navigation, route }) => {
   const [isMember, setIsMember] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [waiting, setWaiting] = useState(false);
+  const [description, setDescription] = useState('');
+  const [num, setNum] = useState(0);
 
   const user = getCurrentUser();
 
@@ -110,6 +112,8 @@ const Club = ({ navigation, route }) => {
       setMembers([...members, ...clubData.members]);
       setRegion(clubData.region);
       setMaxNumber(clubData.maxNumber);
+      setDescription(clubData.description);
+      setNum(clubData.members.length);
     } catch (e) {
       Alert.alert('클럽 데이터 수신 오류', e.message);
     }
@@ -158,13 +162,13 @@ const Club = ({ navigation, route }) => {
 
   return (
     <Container width={width}>
-      
+
       <TitleCon width={width}>
         <Text style={styles.First}>{title}</Text>
       </TitleCon>
       <AllCon width={width}>
 
-      <Text style={styles.Second}>소개글의 위치입니다. 다들 행복한 독서되세요.</Text>
+      <Text style={styles.Second}>{description}</Text>
       <Line width={width}></Line>
       <Text style={styles.Second}>관리자:  {leader.name}</Text>
       <Line width={width}></Line>
@@ -172,7 +176,7 @@ const Club = ({ navigation, route }) => {
       <Line width={width}></Line>
       <Text style={styles.Second}>모임형태:  모임형태의 위치입니다.</Text>
       <Line width={width}></Line>
-      <Text style={styles.Second}>최대인원:  {maxNumber}</Text>
+      <Text style={styles.Second}>인원 수 :  {num}/{maxNumber}</Text>
 
       </AllCon>
       <Button
