@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { theme } from '../theme';
 import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -6,11 +6,32 @@ import { ImageBrowser } from 'expo-image-picker-multiple';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const SelectPhoto = ({ navigation }) => {
+  const [uploading, setUploading] = useState(false);
+
+  const _maybeRenderUploadingOverlay = () => {
+    if (uploading) {
+      return (
+        <View
+					style={[
+						StyleSheet.absoluteFill,
+						{
+							backgroundColor: 'rgba(0,0,0,0.4)',
+							alignItems: 'center',
+							justifyContent: 'center'
+						}
+					]}
+				>
+					<ActivityIndicator color="#fff" animating size="large" />
+				</View>
+      );
+    }
+  };
   const _getHeaderLoader = () => (
     <ActivityIndicator size={30} color={theme.buttonIcon} style={{ marginRight: 13 }} />
   );
 
   const imagesCallback = (callback) => {
+    setUploading(true);
     navigation.setOptions({
       headerRight: () => _getHeaderLoader()
     });
@@ -24,6 +45,7 @@ const SelectPhoto = ({ navigation }) => {
           type: 'image/jpg'
         })
       }
+      setUploading(false);
       navigation.navigate('MyClubAlbum', { photos: cPhotos });
       //console.log(cPhotos);
     })
@@ -80,6 +102,7 @@ const SelectPhoto = ({ navigation }) => {
         renderSelectedComponent={renderSelectedComponent}
         emptyStayComponent={emptyStayComponent}
       />
+      {_maybeRenderUploadingOverlay()}
     </View>
   );
 };

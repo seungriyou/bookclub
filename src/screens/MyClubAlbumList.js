@@ -32,6 +32,14 @@ const ItemTitle = styled.View`
   justify-content: center;
   margin-top: 10px;
 `;
+const ItemTime = styled.View`
+  align-items: flex-end;
+  width: 45px;
+`;
+const ItemAuthor = styled.View`
+  align-items: flex-start;
+  width: ${({ width }) => (width - 40) / 2 - 65}px;
+`;
 
 const getDateOrTime = ts => {
   const now = moment().startOf('day');
@@ -54,8 +62,8 @@ const Item = React.memo(
         />
         <ItemTitle><Text numberOfLines={1} style={styles.itemTitle}>{title}</Text></ItemTitle>
         <ItemTextContainer width={width}>
-          <Text numberOfLines={1} style={styles.ItemAuthor}>{name}</Text>
-          <Text style={styles.itemTime}>{getDateOrTime(createAt)}</Text>
+          <ItemAuthor width={width}><Text numberOfLines={1} style={styles.ItemAuthor}>{name}</Text></ItemAuthor>
+          <ItemTime><Text style={styles.itemTime}>{getDateOrTime(createAt)}</Text></ItemTime>
         </ItemTextContainer>
       </ItemContainer>
     );
@@ -132,6 +140,7 @@ const styles = StyleSheet.create({
   },
   itemTime: {
     fontSize: 13,
+    marginTop: 3,
     color: theme.listTime,
   },
   ItemAuthor: {
