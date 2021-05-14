@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { Alert } from 'react-native';
+import { Alert, Dimensions, Text } from 'react-native';
 import { Input, Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ProgressContext } from '../contexts';
 import { createClub, getCurrentUser } from '../utils/firebase';
+import {Picker} from '@react-native-picker/picker';
 
 const Container = styled.View`
   flex: 1;
@@ -12,6 +13,17 @@ const Container = styled.View`
   justify-content: center;
   align-items: center;
   padding: 0 20px;
+`;
+
+const ContainerRow=styled.View`
+    width: ${({width})=>width}px;
+    height: 60px;
+    flex-direction: row;
+    background-color: ${({theme})=>theme.background};
+    align-items: center;
+    justify-content: center;
+    borderBottom-Width: 1px;
+    borderBottom-Color: ${({theme})=>theme.separator};
 `;
 
 const ErrorText = styled.Text`
@@ -30,6 +42,8 @@ const ClubCreation = ({ navigation }) => {
   const maxNumberRef = useRef();
   const [errorMessage, setErrorMessage] = useState('');
   const [disabled, setDisabled] = useState(true);
+
+  const width = Dimensions.get('window').width;
 
   const leader = getCurrentUser();
 
@@ -87,27 +101,34 @@ const ClubCreation = ({ navigation }) => {
           onChangeText={text => setDescription(text)}
           onSubmitEditing={() => {
             setDescription(description.trim());
-            regionRef.current.focus();
+            maxNumberRef.current.focus();
           }}
           onBlur={() => setDescription(description.trim())}
           placeholder="클럽 설명"
           returnKeyType="next"
           maxLength={40}
         />
-        <Input
-          ref={regionRef}
-          label="클럽 지역"
-          value={region}
-          onChangeText={text => setRegion(text)}
-          onSubmitEditing={() => {
-            setRegion(region.trim());
-            maxNumberRef.current.focus();
-          }}
-          onBlur={() => setRegion(region.trim())}
-          placeholder="클럽 지역"
-          returnKeyType="next"
-          maxLength={20}
-        />
+
+        <ContainerRow width={width}>
+          <Text>지역을 선택해주세요</Text>
+          <Picker
+              selectedValue={region}
+              style={{ height: 50, width: 200, margin: 10 }}
+              onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
+              <Picker.Item label="강서" value="강서" />
+              <Picker.Item label="강북" value="강북" />
+              <Picker.Item label="강남" value="강남" />
+              <Picker.Item label="강동" value="강동" />
+              <Picker.Item label="경기북부" value="경기북부" />
+              <Picker.Item label="경기남부" value="경기남부" />
+              <Picker.Item label="충청" value="충청" />
+              <Picker.Item label="전라" value="전라" />
+              <Picker.Item label="경북" value="경북" />
+              <Picker.Item label="경남" value="경남" />
+              <Picker.Item label="제주" value="제주" />
+          </Picker>
+        </ContainerRow>
+        
         <Input
           ref={maxNumberRef}
           label="클럽 최대 인원"

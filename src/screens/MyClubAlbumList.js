@@ -74,10 +74,6 @@ const MyClubAlbumList = ({navigation, route}) => {
   const id = route.params?.id;
   const title = route.params?.title;
 
-  const _handleAlbumWriteButtonPressed = params => {
-    navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbum', params: {id: id}});
-  };
-
   const getMyClubAlbumList = async() => {
     try{
       setRefreshing(true);
@@ -100,20 +96,6 @@ const MyClubAlbumList = ({navigation, route}) => {
   }
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      headerBackTitleVisible: false,
-      headerTintColor: '#000000',
-      headerRight: ({ tintColor }) => (
-        <MaterialIcons
-          name="edit"
-          size={30}
-          style={{ marginRight: 13 }}
-          color={tintColor}
-          onPress={_handleAlbumWriteButtonPressed} //글 등록 버튼 함수(이벤트 추가 필요)
-        />
-      ),
-    });
-    //console.log(navigation);
     getMyClubAlbumList();
   }, []);
 
