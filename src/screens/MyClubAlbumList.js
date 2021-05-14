@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   ItemAuthor: {
     fontSize: 13,
-    marginTop: 5,
+    marginTop: 3,
     color: theme.listTime,
   },
 });
