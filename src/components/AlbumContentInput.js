@@ -52,6 +52,7 @@ const AlbumContentInput = ({ onPress, photos, text, onChangeText }) => {
         style={{ height: 120, width: 120, margin: 5, borderRadius: 10 }}
         source={{ uri: item.uri }}
         key={i}
+        resizeMethod="resize"
       />
     );
   };

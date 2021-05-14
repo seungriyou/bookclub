@@ -51,6 +51,7 @@ const AlbumViewPost = ({ postInfo }) => {
           style={{ height: 140, width: 140, margin: 5, borderRadius: 10 }}
           source={{ uri: item.url }}
           key={i}
+          resizeMethod="resize"
         />
       </TouchableWithoutFeedback>
     );
