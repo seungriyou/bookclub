@@ -54,7 +54,7 @@ const Item = React.memo(
         />
         <ItemTitle><Text numberOfLines={1} style={styles.itemTitle}>{title}</Text></ItemTitle>
         <ItemTextContainer width={width}>
-          <Text style={styles.ItemAuthor}>{name}</Text>
+          <Text numberOfLines={1} style={styles.ItemAuthor}>{name}</Text>
           <Text style={styles.itemTime}>{getDateOrTime(createAt)}</Text>
         </ItemTextContainer>
       </ItemContainer>
@@ -127,7 +127,7 @@ const MyClubAlbumList = ({navigation, route}) => {
 
 const styles = StyleSheet.create({
   itemTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '600',
   },
   itemTime: {
