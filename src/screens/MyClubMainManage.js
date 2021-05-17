@@ -2,13 +2,12 @@
 //모임 탈퇴 함수가 필요합니다.
 
 import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text, Button, Image} from 'react-native';
+import {StyleSheet, Dimensions, Text, Button, Image, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
-
-
+import { DB, getCurrentUser } from '../utils/firebase';
 
 const Container=styled.View`
     flex: 1;
@@ -17,10 +16,10 @@ const Container=styled.View`
     align-items: center;
 `;
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 120px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -37,9 +36,9 @@ const MainHeader= ({clubname})=>{
 
     return (
         <Header width={width}>
-         
+
         <Text style={styles.clubname}>{clubname}</Text>
-        
+
         </Header>
     )
 };
@@ -135,19 +134,51 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-const tempData = {
-    "clubname": "SEORAP",
-    "booktitle": "보노보노, 오늘 하루는 어땠어?",
-    "goal": 226,
-
-}
-
-const MyClubMainManage=({ navigation })=>{
-
+const MyClubMainManage=({ navigation, route })=>{
+    const clubId = route.params.id;
     const width= Dimensions.get('window').width;
+    const user = getCurrentUser();
 
+    const [clubData, setClubData] = useState({
+      clubname: "",
+      leader: {
+        name: ""
+      },
+      maxNumber: 0,
+      region: "",
+      title: ""
+    });
+
+    const getClubInfo = async() => {
+      try {
+        const clubRef = DB.collection('clubs').doc(clubId);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data()
+        setClubData(clubData);
+      }
+      catch(e) {
+        Alert.alert('클럽 데이터 수신 에러', e.message);
+      }
+    }
+
+    const _handleUserAdminButtonPress = () => {
+      if (user.uid === clubData.leader.uid) {
+          navigation.navigate("MyClubMainInfoNav", {screen:"MyClubUserAdmin", params: {id: clubId}});
+      }
+      else {
+        Alert.alert("권한 오류", "멤버의 강퇴는 클럽 리더만 가능합니다.");
+      }
+
+    }
+
+    const _handleWaitAdminButtonPress = () => {
+      if (user.uid === clubData.leader.uid) {
+          navigation.navigate("MyClubMainInfoNav", {screen: "MyClubWaitAdmin", params: {id: clubId}});
+      }
+      else {
+        Alert.alert("권한 오류", "가입 승인은 클럽 리더만 가능합니다.");
+      }
+    }
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -155,7 +186,7 @@ const MyClubMainManage=({ navigation })=>{
             headerTintColor: '#000000',
             headerLeft: ({onPress, tintColor})=>{
                 return(
-                    
+
                     <MaterialCommunityIcons
                         name="keyboard-backspace"
                         size={30}
@@ -166,21 +197,20 @@ const MyClubMainManage=({ navigation })=>{
                 );
             },
         });
-      console.log(navigation);
+        getClubInfo();
     }, []);
 
-    
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
         <Container>
-            <MainHeader clubname={tempData.clubname}></MainHeader>
+            <MainHeader clubname={clubData.title}></MainHeader>
 
         <List width={width}>
             <AllCon width={width}>
-              <Text style={styles.Second}>소개글은 해당 위치에 들어갑니다. 길어질 경우 화면에 스크롤이 적용됩니다.</Text>
+              <Text style={styles.Second}>{clubData.description}</Text>
               <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -188,9 +218,9 @@ const MyClubMainManage=({ navigation })=>{
                       <Text style={styles.First}>관리자</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                      <Text style={styles.Second}>관리자의 이름</Text>
+                      <Text style={styles.Second}>{clubData.leader.name}</Text>
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
                 <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -198,9 +228,9 @@ const MyClubMainManage=({ navigation })=>{
                       <Text style={styles.First}>지역구</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                      <Text style={styles.Second}>지역구의 이름</Text>
+                      <Text style={styles.Second}>{clubData.region}</Text>
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
                 <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -210,7 +240,7 @@ const MyClubMainManage=({ navigation })=>{
                     <Fix2 width={width}>
                       <Text style={styles.Second}>모임형태의 이름</Text>
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
                 <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -218,23 +248,23 @@ const MyClubMainManage=({ navigation })=>{
                       <Text style={styles.First}>최대인원</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                      <Text style={styles.Second}>최대인원의 수</Text>
+                      <Text style={styles.Second}>{clubData.maxNumber}</Text>
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
 
             </AllCon>
-            
+
             <ButtonFix1 width={width}>
               <Button
                 color= '#fac8af'
-                title="회원 목록          "  
-                onPress={()=>navigation.navigate("MyClubUserAdmin")}
+                title="회원 목록          "
+                onPress={_handleUserAdminButtonPress}
               />
-            
+
               <Button
                 color= '#fac8af'
                 title="          승인 대기"
-                onPress={()=>navigation.navigate("MyClubWaitAdmin")}
+                onPress={_handleWaitAdminButtonPress}
               />
             </ButtonFix1>
 

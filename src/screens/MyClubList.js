@@ -71,16 +71,13 @@ const MyClubList = ({ navigation }) => {
   const getMyClubId = async () => {
     try {
       setRefreshing(true);
-      const userRef = DB.collection('users');
-      const snapshot = await userRef.where('uid', '==', user.uid).get();
-      snapshot.forEach(doc => {
-        console.log(doc.data());
-        setDoc(doc.data());
-      })
-      console.log("doc data test");
+      const userRef = DB.collection('users').doc(user.uid);
+      const userDoc = await userRef.get();
+      const userData = userDoc.data();
+      setDoc(userData);
     }
     catch(e) {
-      Alert.alert('클럽 데이터 수신 오류', e.message);
+      Alert.alert('유저 데이터 수신 오류', e.message);
       setRefreshing(false);
     }
   };
@@ -90,9 +87,11 @@ const MyClubList = ({ navigation }) => {
       const clubRef = DB.collection('clubs');
       const list = [];
       for(const clubId in clubIds){
-        const tempDoc = await clubRef.doc(clubId).get();
-        const tempData = tempDoc.data();
-        list.push(tempData);
+        if (clubIds[clubId] != false) {
+          const tempDoc = await clubRef.doc(clubId).get();
+          const tempData = tempDoc.data();
+          list.push(tempData);
+        }
       }
       setClubs(list);
       setRefreshing(false);
@@ -112,6 +111,7 @@ const MyClubList = ({ navigation }) => {
   }, [doc]);
 
   useEffect(() => {
+    console.log("clubIds",clubIds);
     getMyClubList();
   }, [clubIds])
 

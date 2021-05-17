@@ -5,7 +5,8 @@ import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubBoardView, MyClubSchedule, MyClubScheduleEdit, MyClubAlbum,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
   MyClubEssayView, MyClubMainInfo_1,
-  MyClubMainInfo_2 } from '../screens';
+  MyClubMainInfo_2, MyClubMainM, MyClubMainManage,
+  MyClubUserAdmin, MyClubWaitAdmin } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -24,6 +25,10 @@ const MyClubMainInfoNav = () => {
     >
       <Stack.Screen name="MyClubMainInfo_1" component={MyClubMainInfo_1} />
       <Stack.Screen name="MyClubMainInfo_2" component={MyClubMainInfo_2} />
+      <Stack.Screen name="MyClubMainM" component={MyClubMainM} />
+      <Stack.Screen name="MyClubMainManage" component={MyClubMainManage} />
+      <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} />
+      <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} />
     </Stack.Navigator>
   );
 };

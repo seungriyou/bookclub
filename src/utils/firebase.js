@@ -123,33 +123,3 @@ export const getClubInfo = async (id) => {
   const data = clubRef.data();
   return { title: data.title, leader: data.leader, members: data.members,region: data.region, maxNumber: data.maxNumber, description: data.description }
 }
-
-export const clubSignUpWaiting = async (clubId) => {
-  const user = Auth.currentUser;
-  const clubRef = DB.collection('clubs').doc(clubId);
-  const clubDoc = await clubRef.get();
-  const clubData = clubDoc.data();
-
-  const userRef = DB.collection('users').doc(user.uid);
-  const userDoc = await userRef.get();
-  const userData = userDoc.data();
-
-  const members = clubData.members;
-  members.push({
-    name: userData.name,
-    photoUrl: userData.photoUrl,
-    uid: userData.uid,
-    now_page: 0,
-  });
-
-  clubRef.update({members: members}).then(res => {
-    console.log(members);
-  });
-
-  const club = userData.club;
-  club[clubId] = true;
-
-  userRef.update({club: club});
-
-  return true;
-}

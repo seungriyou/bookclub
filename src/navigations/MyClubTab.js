@@ -50,7 +50,7 @@ const MainTab = ({ navigation, route }) => {
                 size={30}
                 style={{marginLeft:10}}
 
-                onPress={()=>{console.log("navigate to manage screen", id)}}   //클럽 정보를 관리하는 MyClubMainManage로 이동
+                onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubMainManage', params: {id: id}})}}   //클럽 정보를 관리하는 MyClubMainManage로 이동
                 //navigation.navigate('MyClubMainInfoNav', {screen: 'MyClubMainManage', params: {id: id}})
             />
           </Layout>
@@ -77,7 +77,7 @@ const MainTab = ({ navigation, route }) => {
                   size={30}
                   style={{marginRight:10}}
 
-                  onPress={()=>{console.log("navigate to complete book list")}}   //수정필요-진행완료된 책 화면으로 이동
+                  onPress={()=>{console.log("navigate to book complete list page")}}   //수정필요-진행완료된 책 화면으로 이동
 
               />
               <MaterialCommunityIcons

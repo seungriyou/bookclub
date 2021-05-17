@@ -2,12 +2,13 @@
 //승인, 거절 함수가 필요합니다.
 
 import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text} from 'react-native';
+import {StyleSheet, Dimensions, Text, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import WaitAdminList from '../components/WaitAdminList';
+import { DB, getCurrentUser } from '../utils/firebase';
 
 
 
@@ -18,10 +19,10 @@ const Container=styled.View`
     align-items: center;
 `;
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 120px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -48,7 +49,7 @@ const styles = StyleSheet.create({
       color: theme.text,
       padding: 3,
       marginLeft: 10,
-      marginVertical: 7, 
+      marginVertical: 7,
       backgroundColor: theme.background,
     },
     bookimg: {
@@ -68,73 +69,46 @@ const MainHeader= ({clubname})=>{
     )
 };
 
-
-const tempData = {
-    "userlist": [
-      {
-        "id": 1,
-        "user_name": "네글자름",
-        "img_url": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-        "user_mail": "ab12321312c@gmail.com"
-
-      },
-      {
-        "id": 2,
-        "user_name": "멤버B",
-        "img_url": "http://drive.google.com/uc?export=view&id=1psgmqUpSA_Mgrxw-5RY2cMSpDI_TKmuM",
-        "user_mail": "def@gmail.com"
-
-      },
-      {
-        "id": 3,
-        "user_name": "멤버C",
-        "img_url": "http://drive.google.com/uc?export=view&id=1Z-kttQHMB-kMHQ_3cyKqroT3paw_PJ1k",
-        "user_mail": "ghi@gmail.com"
-       
-      },
-      {
-        "id": 4,
-        "user_name": "멤버D",
-        "img_url": "http://drive.google.com/uc?export=view&id=1n1zQxO4FfO_Q4LUYcWR6tuXoI8UepvDJ",
-        "user_mail": "jkl@gmail.com"
-        
-      },
-      {
-        "id": 5,
-        "user_name": "멤버E",
-        "img_url": "http://drive.google.com/uc?export=view&id=1877gatJkVEbpzp9TL897--_Fj1oYrOZ2",
-        "user_mail": "mno@gmail.com"
-       
-      },
-      {
-        "id": 6,
-        "user_name": "멤버F",
-        "img_url": "http://drive.google.com/uc?export=view&id=1VDKn12Lw17MQ4tEmL8kMhDtL7kqTjwkS",
-        "user_mail": "pqr@gmail.com"
-       
-      },
-      {
-        "id": 7,
-        "user_name": "멤버G",
-        "img_url": "http://drive.google.com/uc?export=view&id=1_TNsKJatqW3PYWwByqDW_RDQ2qvMfrhY",
-        "user_mail": "stu@gmail.com"
-       
-      },
-      {
-        "id": 8,
-        "user_name": "멤버H",
-        "img_url": "http://drive.google.com/uc?export=view&id=1nuoptwRc_kqQdm_xqPzPkaPK-tG0u_08",
-        "user_mail": "vwx@gmail.com"
-       
-      },
-    ]
-}
-
-
-const MyClubWaitAdmin=({ navigation })=>{
-
+const MyClubWaitAdmin=({ navigation, route })=>{
+    const id = route.params.id;
     const width= Dimensions.get('window').width;
 
+    const [clubData, setClubData] = useState({
+      clubname: "",
+      leader: {
+        name: ""
+      },
+      maxNumber: 0,
+      region: "",
+      title: ""
+    });
+    const [memberData, setMemberData] = useState({
+      userlist: [],
+    });
+
+    const getClubInfo = async() => {
+      try {
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data()
+        setClubData(clubData);
+
+        let list = []
+        for (let member of clubData.waiting) {
+          const temp = {
+            id: member.uid,
+            user_name: member.name,
+            img_url: member.photoUrl,
+            user_mail: member.email,
+          }
+          list.push(temp);
+        }
+        setMemberData({userlist: list});
+      }
+      catch(e) {
+        Alert.alert('클럽 데이터 수신 에러', e.message);
+      }
+    }
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -152,22 +126,29 @@ const MyClubWaitAdmin=({ navigation })=>{
                 );
             },
         });
-      console.log(navigation);
+        getClubInfo();
     }, []);
 
-    
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getClubInfo();
+      });
+      return unsubscribe;
+    }, [navigation]);
+
+
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
         <Container>
-            <MainHeader clubname="SEORAP"></MainHeader>
+            <MainHeader clubname={clubData.title}></MainHeader>
 
             <List width={width}>
-              <WaitAdminList userInfo={tempData}></WaitAdminList>
+              <WaitAdminList userInfo={memberData} clubId={id} navigation={navigation}></WaitAdminList>
             </List>
-            
+
         </Container>
         </KeyboardAwareScrollView>
 

@@ -136,7 +136,6 @@ const Club = ({ navigation, route }) => {
   }, []);
 
   useEffect(() => {
-    console.log(members);
     isDisabled(members);
   }, [members]);
 
@@ -148,13 +147,53 @@ const Club = ({ navigation, route }) => {
     const id = route.params?.id
     try {
       spinner.start();
-      clubSignUpWaiting(id);
+      const clubRef = DB.collection('clubs').doc(id);
+
+      await DB.runTransaction(async (t) => {
+        const clubDoc = await t.get(clubRef);
+        const clubData = clubDoc.data();
+        const waiting = clubData.waiting;
+
+        let flag = true;
+
+        for (const member of waiting) {
+          if (member.id === user.uid) {
+            flag = false;
+          }
+        }
+        console.log(flag);
+        if (flag == true) {
+          waiting.push({
+            uid: user.uid,
+            email: user.email,
+            photoUrl: user.photoUrl,
+            name: user.name
+          });
+        }
+        else {
+          throw new Error("이미 가입 신청 대기중입니다.");
+        }
+
+        t.update(clubRef, {waiting: waiting});
+      });
+
+      const userRef = DB.collection('users').doc(user.uid);
+
+      await DB.runTransaction(async (t) => {
+        const userDoc = await t.get(userRef);
+        const userData = userDoc.data();
+
+        const club = userData.club;
+        club[id] = false;
+
+        t.update(userRef, {club: club});
+      });
+
+      Alert.alert('가입신청 완료');
     } catch (e) {
       Alert.alert('클럽 가입신청 오류', e.message);
     } finally {
       spinner.stop();
-      Alert.alert('가입신청 완료');
-
     }
 
     navigation.popToTop();
