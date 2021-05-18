@@ -161,7 +161,7 @@ const Club = ({ navigation, route }) => {
             flag = false;
           }
         }
-        console.log(flag);
+
         if (flag == true) {
           waiting.push({
             uid: user.uid,

@@ -107,7 +107,6 @@ const MyClubBoardList = ({navigation, route}) => {
   }, [navigation]);
 
   const _handleItemPress = params => {
-    console.log(params);
     navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardView', params});
   };
 

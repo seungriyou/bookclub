@@ -77,9 +77,6 @@ const MyClubBoard=({ navigation, route })=>{
       const boardRef = DB.collection('clubs').doc(id).collection('board').doc();
       const boardId = boardRef.id;
 
-      console.log(boardRef);
-      console.log(boardId);
-
       const newBoard = {
         id: boardId,
         title,
@@ -92,15 +89,11 @@ const MyClubBoard=({ navigation, route })=>{
 
       await boardRef.set(newBoard);
 
-      console.log("upload complete");
-
       return true;
 
     }
 
     const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
-      console.log("title:" ,title, "content:", content);
-      console.log(id, "id");
       if (title == '' || content == '') {
         alert(`제목 또는 글 내용이 없습니다.`);
       }

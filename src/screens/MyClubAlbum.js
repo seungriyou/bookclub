@@ -27,7 +27,6 @@ const MyClubAlbum = ({ navigation, route }) => {
   useEffect(() => {
     if (route.params.photos) {
       setPhotos(route.params.photos);
-      console.log(route.params.photos);   // 사진 uri 정보를 배열로 출력함
     }
   }, [route.params.photos]);
 
@@ -90,7 +89,6 @@ const MyClubAlbum = ({ navigation, route }) => {
     const tempUrls = [];
 
     for (let obj of photos) {
-      console.log(obj);
       const uri = obj.uri;
       const name = obj.name;
       const url = await uploadImage({ uri, albumId, name });
@@ -123,7 +121,6 @@ const MyClubAlbum = ({ navigation, route }) => {
     else {
       try {
         spinner.start();
-        console.log(id, "업로드중");
         await uploadAlbumImage();
         navigation.navigate('MyClubTab', { screen: 'MyClubAlbumList' });
         Alert.alert('등록이 완료되었습니다.');

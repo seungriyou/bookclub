@@ -49,7 +49,7 @@ const ButtonFix = styled.View`
   align-items: center;
 `;
 
-const UserAdminList = ({navigation, userInfo, clubId}) => {
+const UserAdminList = ({onchange, userInfo, clubId}) => {
     const width = Dimensions.get('window').width;
     const user = userInfo.userlist;
 
@@ -92,7 +92,7 @@ const UserAdminList = ({navigation, userInfo, clubId}) => {
 
                     t.update(userRef, {club: club});
                   });
-
+                  onchange();
                   Alert.alert(`${item.user_name}회원 강퇴 완료`);
 
                 }

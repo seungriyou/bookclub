@@ -54,7 +54,7 @@ const Item = React.memo(
 
     return (
       <ItemContainer width={width} onPress={() => onPress({ clubId, id, title, author })}>
-        <Image 
+        <Image
           style={{ height: (width-40)/2-20, width: (width-40)/2-20, borderRadius: 10 }}
           source={{ uri: photoUrls[0] }}
           key={id}
@@ -112,7 +112,6 @@ const MyClubAlbumList = ({navigation, route}) => {
   }, [navigation]);
 
   const _handleItemPress = params => {
-    console.log(params);
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbumView', params});
   };
 

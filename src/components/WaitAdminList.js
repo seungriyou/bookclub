@@ -49,7 +49,7 @@ const ButtonFix = styled.View`
   align-items: center;
 `;
 
-const WaitAdminList = ({navigation ,userInfo, clubId}) => {
+const WaitAdminList = ({onchange ,userInfo, clubId}) => {
     const width = Dimensions.get('window').width;
 
     const user = userInfo.userlist;
@@ -103,7 +103,7 @@ const WaitAdminList = ({navigation ,userInfo, clubId}) => {
 
                   t.update(userRef, {club: club});
                 });
-
+                onchange();
                 Alert.alert(`${item.user_name}회원 승인 완료`);
 
               }
@@ -156,7 +156,7 @@ const WaitAdminList = ({navigation ,userInfo, clubId}) => {
                 });
 
                 Alert.alert(`${item.user_name}회원 가입 거절 완료`);
-
+                onchange();
               }
               catch(e) {
                 Alert.alert("회원 가입 거절 오류", e.message);

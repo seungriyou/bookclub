@@ -81,15 +81,11 @@ const MyClubBoard=({ navigation, route })=>{
 
       await boardRef.set(newBoard);
 
-      console.log("upload complete");
-
       return true;
 
     }
 
     const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
-      console.log("title:" ,title, "content:", content);
-      console.log(id, "id");
       if (title == '' || content == '') {
         Alert.alert('글 수정 오류', `제목 또는 글 내용이 없습니다.`);
       }
@@ -100,7 +96,7 @@ const MyClubBoard=({ navigation, route })=>{
           const update = async() => {
             boardRef.update({title: title, content: content});
           }
-          
+
           update();
 
           navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
@@ -123,8 +119,6 @@ const MyClubBoard=({ navigation, route })=>{
 
         setTitle(data.title);
         setContent(data.content);
-
-        console.log(data);
 
       }
       catch(e) {

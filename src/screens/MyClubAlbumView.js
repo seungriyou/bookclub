@@ -70,11 +70,9 @@ const MyClubAlbumView = ({ navigation, route }) => {
           try {
             const albumRef = await DB.collection('clubs').doc(clubId).collection('album').doc(albumId).delete();
             const storageRef = Storage.ref();
-            console.log(`clubs/${clubId}/albums/${albumId}`);
             const storageAlbumRef = storageRef.child(`clubs/${clubId}/albums/${albumId}`);
             storageAlbumRef.listAll().then(res => {
               res.items.forEach( itemRef => {
-                console.log(itemRef);
                 itemRef.delete().then(() => {})
                 .catch(e => {console.log(e.message)});
               });
@@ -116,12 +114,10 @@ const MyClubAlbumView = ({ navigation, route }) => {
         comment_cnt: data.comment_cnt,
         photos: tempPhotos,
       }
-      console.log(tempData);
       setAlbumData(tempData);
 
       if (data.author.uid === user.uid) {
         setIsAuthor(true);
-        console.log("isAuthor true");
       }
     }
     catch (e) {
@@ -138,19 +134,16 @@ const MyClubAlbumView = ({ navigation, route }) => {
     }
     else {
       Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용: ${comment}`);
-      console.log(`Comment: ${comment}`);
       try{
         const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
         await DB.runTransaction(async (t) => {
           const doc = await t.get(albumRef);
           const data = doc.data();
 
-          console.log(data);
 
           const oldComment = data.comment;
           const oldCommentCnt = data.comment_cnt;
 
-          console.log("oldComment : ",oldComment, "cnt : ",oldCommentCnt);
 
           let newCommentIdx = 0;
 
@@ -168,15 +161,11 @@ const MyClubAlbumView = ({ navigation, route }) => {
             upload_date: Date.now(),
           }
 
-          console.log("tempComment : ", tempComment);
-
           const newCommentCnt = oldCommentCnt + 1;
 
           oldComment.push(tempComment)
 
           const newComment = oldComment;
-
-          console.log("newComment : ", newComment);
 
           t.update(albumRef, {comment: newComment, comment_cnt: newCommentCnt});
         });

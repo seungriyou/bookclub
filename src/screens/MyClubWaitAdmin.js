@@ -86,6 +86,8 @@ const MyClubWaitAdmin=({ navigation, route })=>{
       userlist: [],
     });
 
+    const [update, setUpdate] = useState(0);
+
     const getClubInfo = async() => {
       try {
         const clubRef = DB.collection('clubs').doc(id);
@@ -110,6 +112,10 @@ const MyClubWaitAdmin=({ navigation, route })=>{
       }
     }
 
+    const onUpdate = () => {
+      setUpdate(update + 1);
+    }
+
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerBackTitleVisible: false,
@@ -130,12 +136,8 @@ const MyClubWaitAdmin=({ navigation, route })=>{
     }, []);
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        getClubInfo();
-      });
-      return unsubscribe;
-    }, [navigation]);
-
+      getClubInfo();
+    }, [update]);
 
     return(
         <KeyboardAwareScrollView
@@ -146,7 +148,7 @@ const MyClubWaitAdmin=({ navigation, route })=>{
             <MainHeader clubname={clubData.title}></MainHeader>
 
             <List width={width}>
-              <WaitAdminList userInfo={memberData} clubId={id} navigation={navigation}></WaitAdminList>
+              <WaitAdminList userInfo={memberData} clubId={id} onchange={onUpdate}></WaitAdminList>
             </List>
 
         </Container>

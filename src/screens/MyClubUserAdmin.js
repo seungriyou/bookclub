@@ -91,6 +91,8 @@ const MyClubUserAdmin=({ navigation, route })=>{
       userlist: [],
     });
 
+    const [update, setUpdate] = useState(0)
+
     const getClubInfo = async() => {
       try {
         const clubRef = DB.collection('clubs').doc(clubId);
@@ -115,6 +117,10 @@ const MyClubUserAdmin=({ navigation, route })=>{
       }
     }
 
+    const onUpdate = () => {
+      setUpdate(update + 1);
+    }
+
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -136,11 +142,8 @@ const MyClubUserAdmin=({ navigation, route })=>{
     }, []);
 
     useEffect(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
         getClubInfo();
-      });
-      return unsubscribe;
-    }, [navigation]);
+    }, [update]);
 
 
     return(
@@ -152,7 +155,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
             <MainHeader clubname={clubData.title}></MainHeader>
 
             <List width={width}>
-              <UserAdminList userInfo={memberData} clubId={clubId} navigation={navigation}></UserAdminList>
+              <UserAdminList userInfo={memberData} clubId={clubId} onchange={onUpdate}></UserAdminList>
             </List>
 
         </Container>

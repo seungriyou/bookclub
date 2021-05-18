@@ -125,7 +125,6 @@ const MyClubBoardView=({ navigation, route })=>{
           comment: data.comment,
           comment_cnt: data.comment_cnt,
         }
-        console.log(tempData);
         setBoardData(tempData)
         setCommentCntTxt(`댓 ${data.comment_cnt}`);
       }
@@ -143,20 +142,16 @@ const MyClubBoardView=({ navigation, route })=>{
       }
       else {
         Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
-        console.log(`Comment: ${comment}`);
+
         try{
           const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
           await DB.runTransaction(async (t) => {
             const doc = await t.get(boardRef);
             const data = doc.data();
 
-            console.log(data);
 
             const oldComment = data.comment;
             const oldCommentCnt = data.comment_cnt;
-
-            console.log("oldComment : ",oldComment, "cnt : ",oldCommentCnt);
-
             let newCommentIdx = 0;
 
             if (oldCommentCnt == 0) {
@@ -173,15 +168,11 @@ const MyClubBoardView=({ navigation, route })=>{
               upload_date: Date.now(),
             }
 
-            console.log("tempComment : ", tempComment);
-
             const newCommentCnt = oldCommentCnt + 1;
 
             oldComment.push(tempComment)
 
             const newComment = oldComment;
-
-            console.log("newComment : ", newComment);
 
             t.update(boardRef, {comment: newComment, comment_cnt: newCommentCnt});
             setCommentCntTxt(`댓 ${newCommentCnt}`);
@@ -202,10 +193,6 @@ const MyClubBoardView=({ navigation, route })=>{
     useLayoutEffect(()=>{
       getBoard();
     }, []);
-
-    // useEffect(() => {
-    //
-    // }, []);
 
     useEffect(() => {
       getBoard();
