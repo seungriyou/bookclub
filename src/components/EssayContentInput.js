@@ -112,7 +112,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
       setIsImageSelected(true);
     }
 	};
-  const submitToGoogle = async () => {
+  const submitToGoogle = () => {
 		try {
 			setUploading(true);
 			let body = JSON.stringify({
@@ -127,7 +127,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
 					}
 				]
 			});
-			await fetch(
+			fetch (
 				'https://vision.googleapis.com/v1/images:annotate?key=' +
 					GOOGLE_CLOUD_VISION_API_KEY,
 				{
@@ -142,11 +142,36 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
         }).then((responseJson) => {
           //console.log(responseJson.responses[0].fullTextAnnotation.text);
           setGoogleResponse(responseJson.responses[0].fullTextAnnotation.text);
-        }).then(() => {
-          setUploading(false);
-          setIsImageSelected(false);
+          try {
+            fetch (
+              'https://bookclub-ocr.du.r.appspot.com/process',
+              {
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json'
+                },
+                method: 'POST',
+                body: JSON.stringify({
+                  lang: responseJson.responses[0].fullTextAnnotation.pages[0].property.detectedLanguages[0].languageCode,
+                  text: responseJson.responses[0].fullTextAnnotation.text + ' '
+                })
+              }).then((response) => {
+                console.log(JSON.stringify(response));
+                return response.json();
+              }).then((responseJson) => {
+                console.log(responseJson);
+                setGoogleResponse(responseJson.text_checked);
+              }).then(() => {
+                setUploading(false);
+                setIsImageSelected(false);
+              });
+            } catch (error) {
+              setUploading(false);
+              console.log(error);
+            }
         });
 		} catch (error) {
+      setUploading(false);
 			console.log(error);
       alert('다시 시도해주세요.');
 		}
