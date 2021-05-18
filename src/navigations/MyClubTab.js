@@ -85,7 +85,7 @@ const MainTab = ({ navigation, route }) => {
                   size={30}
                   style={{marginRight:10}}
 
-                  onPress={()=>{console.log("navigate to book recommend page")}}  //수정필요-책 추천화면 이동
+                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookSearch', params: {id: id}})}}  //수정필요-책 추천화면 이동
               />
               </Layout>
             )}

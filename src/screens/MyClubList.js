@@ -111,20 +111,13 @@ const MyClubList = ({ navigation }) => {
   }, [doc]);
 
   useEffect(() => {
-    console.log("clubIds",clubIds);
     getMyClubList();
   }, [clubIds])
-
-  useEffect(() => {
-    console.log(clubs);
-  }, [clubs]);
 
   const _handleItemPress = params => {
     const id = params.id;
     const title = params.title;
 
-    console.log(id);
-    console.log(title);
     navigation.navigate('MyClub',
     {
       screen : 'MyClubTab',

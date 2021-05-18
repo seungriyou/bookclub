@@ -6,7 +6,7 @@ import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
   MyClubEssayView, MyClubMainInfo_1,
   MyClubMainInfo_2, MyClubMainM, MyClubMainManage,
-  MyClubUserAdmin, MyClubWaitAdmin } from '../screens';
+  MyClubUserAdmin, MyClubWaitAdmin, MyClubBookSearch } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -29,6 +29,7 @@ const MyClubMainInfoNav = () => {
       <Stack.Screen name="MyClubMainManage" component={MyClubMainManage} />
       <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} />
       <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} />
+      <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} />
     </Stack.Navigator>
   );
 };
