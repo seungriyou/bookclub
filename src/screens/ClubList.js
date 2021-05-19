@@ -72,15 +72,9 @@ const ClubList = ({ navigation }) => {
       setRefreshing(true);
       const clubRef = DB.collection('clubs');
       const clubDoc = await clubRef.get();
-<<<<<<< HEAD
 
       let list = [];
 
-=======
-
-      let list = [];
-      console.log(clubDoc);
->>>>>>> 7627f4a4a3f097757fae550d576d4653ae58f5ea
       clubDoc.forEach(doc => {
         const data = doc.data();
         if (region === '') {
