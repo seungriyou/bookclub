@@ -111,7 +111,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   const userDoc = await userRef.get();
   const userData = userDoc.data();
   const club = userData.club;
-  club[id] = false
+  club[id] = true;
 
   userRef.update({club: club});
 

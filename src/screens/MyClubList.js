@@ -4,6 +4,7 @@ import { FlatList, Alert } from 'react-native';
 import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
+import {Picker} from '@react-native-picker/picker';
 
 const Container = styled.View`
   flex: 1;
@@ -66,6 +67,7 @@ const MyClubList = ({ navigation }) => {
   const [clubs, setClubs] = useState([]);
   const [doc, setDoc] = useState({});
   const [refreshing, setRefreshing] = useState(false);
+  const [region, setRegion] = useState('');
 
   const user = getCurrentUser();
   const getMyClubId = async () => {
@@ -90,7 +92,14 @@ const MyClubList = ({ navigation }) => {
         if (clubIds[clubId] != false) {
           const tempDoc = await clubRef.doc(clubId).get();
           const tempData = tempDoc.data();
-          list.push(tempData);
+          if(region === "") {
+              list.push(tempData);
+          }
+          else {
+            if(tempData.region === region) {
+              list.push(tempData);
+            }
+          }
         }
       }
       setClubs(list);
@@ -112,7 +121,7 @@ const MyClubList = ({ navigation }) => {
 
   useEffect(() => {
     getMyClubList();
-  }, [clubIds])
+  }, [clubIds, region]);
 
   const _handleItemPress = params => {
     const id = params.id;
@@ -128,6 +137,23 @@ const MyClubList = ({ navigation }) => {
 
   return (
     <Container>
+    <Picker
+        selectedValue={region}
+        style={{ height: 50, width: 200, margin: 10 }}
+        onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
+        <Picker.Item label="지역을 선택해주세요" value="" />
+        <Picker.Item label="강서" value="강서" />
+        <Picker.Item label="강북" value="강북" />
+        <Picker.Item label="강남" value="강남" />
+        <Picker.Item label="강동" value="강동" />
+        <Picker.Item label="경기북부" value="경기북부" />
+        <Picker.Item label="경기남부" value="경기남부" />
+        <Picker.Item label="충청" value="충청" />
+        <Picker.Item label="전라" value="전라" />
+        <Picker.Item label="경북" value="경북" />
+        <Picker.Item label="경남" value="경남" />
+        <Picker.Item label="제주" value="제주" />
+    </Picker>
       <FlatList
         keyExtractor={item => item['id']}
         data={clubs}
@@ -137,8 +163,6 @@ const MyClubList = ({ navigation }) => {
         refreshing={refreshing}
         onRefresh={getMyClubId}
         windowSize={3}
-
-
       />
     </Container>
   );

@@ -110,11 +110,11 @@ const ClubCreation = ({ navigation }) => {
         />
 
         <ContainerRow width={width}>
-          <Text>지역을 선택해주세요</Text>
           <Picker
               selectedValue={region}
               style={{ height: 50, width: 200, margin: 10 }}
               onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
+              <Picker.Item label="지역을 선택해주세요" value="" />
               <Picker.Item label="강서" value="강서" />
               <Picker.Item label="강북" value="강북" />
               <Picker.Item label="강남" value="강남" />
@@ -128,7 +128,7 @@ const ClubCreation = ({ navigation }) => {
               <Picker.Item label="제주" value="제주" />
           </Picker>
         </ContainerRow>
-        
+
         <Input
           ref={maxNumberRef}
           label="클럽 최대 인원"

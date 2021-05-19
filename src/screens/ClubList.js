@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { DB } from '../utils/firebase';
-import { FlatList } from 'react-native';
+import { FlatList, Alert } from 'react-native';
 import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
+import {Picker} from '@react-native-picker/picker';
 
 const Container = styled.View`
   flex: 1;
@@ -63,20 +64,45 @@ const Item = React.memo(
 
 const ClubList = ({ navigation }) => {
   const [clubs, setClubs] = useState([]);
+  const [region, setRegion] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+
+  const getClubList = async () => {
+    try {
+      setRefreshing(true);
+      const clubRef = DB.collection('clubs');
+      const clubDoc = await clubRef.get();
+
+      let list = [];
+
+      clubDoc.forEach(doc => {
+        const data = doc.data();
+        if (region === '') {
+          list.push(data);
+        }
+        else {
+          if (data.region === region) {
+            list.push(data);
+          }
+        }
+      });
+      setClubs(list);
+      setRefreshing(false);
+    }
+
+    catch(e) {
+      Alert.alert('클럽 list set error', e.message);
+      setRefreshing(false);
+    }
+  }
 
   useEffect(() => {
-    const unsubscribe = DB.collection('clubs')
-      .orderBy('createAt', 'desc')
-      .onSnapshot(snapshot => {
-        const list = [];
-        snapshot.forEach(doc => {
-          list.push(doc.data());
-        });
-        setClubs(list);
-
-      });
-    return () => unsubscribe();
+    getClubList();
   }, []);
+
+  useEffect(() => {
+    getClubList();
+  }, [region]);
 
   const _handleItemPress = params => {
     navigation.navigate('Club', params);
@@ -84,12 +110,31 @@ const ClubList = ({ navigation }) => {
 
   return (
     <Container>
+      <Picker
+          selectedValue={region}
+          style={{ height: 50, width: 200, margin: 10 }}
+          onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
+          <Picker.Item label="지역을 선택해주세요" value="" />
+          <Picker.Item label="강서" value="강서" />
+          <Picker.Item label="강북" value="강북" />
+          <Picker.Item label="강남" value="강남" />
+          <Picker.Item label="강동" value="강동" />
+          <Picker.Item label="경기북부" value="경기북부" />
+          <Picker.Item label="경기남부" value="경기남부" />
+          <Picker.Item label="충청" value="충청" />
+          <Picker.Item label="전라" value="전라" />
+          <Picker.Item label="경북" value="경북" />
+          <Picker.Item label="경남" value="경남" />
+          <Picker.Item label="제주" value="제주" />
+      </Picker>
       <FlatList
         keyExtractor={item => item['id']}
         data={clubs}
         renderItem={({ item }) => (
           <Item item={item} onPress={_handleItemPress} />
         )}
+        refreshing={refreshing}
+        onRefresh={getClubList}
         windowSize={3}
       />
     </Container>
