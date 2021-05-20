@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyClubMainInfo, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons } from '@expo/vector-icons';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { ThemeContext } from 'styled-components/native';
 import styled from 'styled-components/native';
@@ -109,12 +109,20 @@ const MainTab = ({ navigation, route }) => {
             );
             else if (index === 3)
               return (
+                <Layout>
+                <Ionicons
+                  name="heart"
+                  size={26}
+                  style={{ margin: 10 }}
+                  onPress={() => navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayLikeList', params: {id: id}})}
+                />
                 <MaterialIcons
                   name="edit"
                   size={26}
                   style={{ margin: 10 }}
                   onPress={() => navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssay', params: {id: id}})}
                 />
+                </Layout>
               );
           else if (index === 4)
             return (

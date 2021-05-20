@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubBoardView, MyClubSchedule, MyClubScheduleEdit, MyClubAlbum,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
-  MyClubEssayView, MyClubMainInfo_1,
+  MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo_1,
   MyClubMainInfo_2, MyClubMainM, MyClubMainManage,
   MyClubUserAdmin, MyClubWaitAdmin, MyClubBookSearch } from '../screens';
 import MainTab from './MainTab';
@@ -85,6 +85,7 @@ const MyClubEssayNav = ({navigate, route}) => {
     >
       <Stack.Screen name="MyClubEssay" component={MyClubEssay} />
       <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} />
+      <Stack.Screen name="MyClubEssayLikeList" component={MyClubEssayLikeList} />
     </Stack.Navigator>
   );
 };

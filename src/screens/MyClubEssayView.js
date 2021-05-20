@@ -11,30 +11,6 @@ import { ProgressContext } from '../contexts';
 import { DB, Storage, getCurrentUser} from '../utils/firebase';
 import moment from 'moment';
 
-const tempData = {
-  "title": "리스본행 야간열차 (파스칼 메르시어)",
-  "writer_name": "관리자",
-  "upload_date": "2021/05/05",
-  "comment_cnt": 2,
-  "comment": [
-    {
-      "id": 1,
-      "writer_name": "멤버A",
-      "content": "우리가 우리 안에 있는 것들 가운데 아주 작은 부분만을 경험할 수 있다면 나머지는 어떻게 되는 걸까요?",
-      "upload_date": "2021/05/05",
-    },
-    {
-      "id": 2,
-      "writer_name": "멤버B",
-      "content": "'언어의 연금술사'라는 책이 실제로 있다면 읽어보고 싶네요",
-      "upload_date": "2021/05/05",
-    }
-  ],
-  "ocr_text": "-뚜렷하지 않은 심연. 인간 행위의 표면 아래에 우리가 알지 못하는 어떤 비밀이 있을까? 아니면 인간은 자신이 만천하에 드러내는 행동과 완벽하게 일치할까? 아주 이상하게 들리지만, 이 질문에 대한 대답은 이 도시와 타호 강을 비추는 햇빛처럼 내 마음속에서 늘 변한다. 뚜렷하고 예리한 그림자를 만드는, 반짝이는 8월의 매력적인 햇빛은 인간에게 숨겨진 심연이 있다는 나의 생각을 터무니없는 것으로 느끼게 만든다.",
-  "content": "파스칼 메르시어의 '리스본행 야간열차'를 읽고 인상적이었던 부분입니다.\n\n소설 속에 등장하는 또 다른 책인 '언어의 연금술사'에 나오는 구절입니다.\n\n책의 36페이지 하단에 위치해있습니다.",
-  "like_cnt": 10,
-};
-
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.appBackground};
@@ -126,8 +102,6 @@ const MyClubEssayView = ({ navigation, route }) => {
       const essayRef = await DB.collection('clubs').doc(clubId).collection('essay').doc(essayId).get();
       const data = essayRef.data();
 
-      console.log(data);
-
       if (data.author.uid === user.uid) {
         setIsAuthor(true);
         console.log("isAuthor true");
@@ -167,12 +141,9 @@ const MyClubEssayView = ({ navigation, route }) => {
           const doc = await t.get(essayRef);
           const data = doc.data();
 
-          console.log(data);
 
           const oldComment = data.comment;
           const oldCommentCnt = data.comment_cnt;
-
-          console.log("oldComment : ",oldComment, "cnt : ",oldCommentCnt);
 
           let newCommentIdx = 0;
 
@@ -190,15 +161,12 @@ const MyClubEssayView = ({ navigation, route }) => {
             upload_date: Date.now(),
           }
 
-          console.log("tempComment : ", tempComment);
 
           const newCommentCnt = oldCommentCnt + 1;
 
           oldComment.push(tempComment)
 
           const newComment = oldComment;
-
-          console.log("newComment : ", newComment);
 
           t.update(essayRef, {comment: newComment, comment_cnt: newCommentCnt});
         });
@@ -241,7 +209,6 @@ const MyClubEssayView = ({ navigation, route }) => {
 
   useEffect(() => {
     getEssay();
-    console.log(isLiked);
     navigation.setOptions({
       headerRight: () => (
         <View style={{ flexDirection: 'row' }}>

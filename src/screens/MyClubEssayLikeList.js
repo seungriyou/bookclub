@@ -72,6 +72,8 @@ const MyClubEssayList = ({navigation, route}) => {
     const [essays, setEssays] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
+    const user = getCurrentUser();
+
     const id = route.params?.id;
 
     const getMyClubEssayList = async() => {
@@ -82,8 +84,10 @@ const MyClubEssayList = ({navigation, route}) => {
         const list = [];
         essayDoc.forEach(doc => {
           const data = doc.data();
-          data['clubId'] = id;
-          list.push(data);
+          if(data.like_table[user.uid] === true) {
+            data['clubId'] = id;
+            list.push(data);
+          }
         })
         setEssays(list);
 
