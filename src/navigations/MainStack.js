@@ -154,9 +154,9 @@ const MainStack = () => {
       <Stack.Screen name="Main" component={MainTab} />
       <Stack.Screen name="Club Creation" component={ClubCreation} options={{title: "클럽 생성"}}/>
       <Stack.Screen name="Club" component={Club} options={{title: "클럽 조회"}}/>
-
+      <Stack.Screen name="MyClub" component={MyClub} options={{headerShown: false, title: "내 클럽"}}/>
     </Stack.Navigator>
   );
 };
-//<Stack.Screen name="MyClub" component={MyClub} options={{headerShown: false, title: "내 클럽"}}/>
+//
 export default MainStack;
