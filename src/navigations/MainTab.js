@@ -21,7 +21,8 @@ const MainTab = ({ navigation, route }) => {
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    const titles = route.state?.routeNames || ['Clubs'];
+    //const titles = route.state?.routeNames || ['Clubs'];
+    const titles = ['클럽 목록', '내가 가입한 클럽 목록', '내 프로필'];
     const index = route.state?.index || 0;
     navigation.setOptions({
       headerTitle: titles[index],

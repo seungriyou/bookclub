@@ -103,6 +103,28 @@ const MyClubAlbumList = ({navigation, route}) => {
     }
   }
 
+  const getAlbumSearchData = async() => {
+    try{
+      setRefreshing(true);
+      const albumRef = DB.collection('clubs').doc(id).collection('album');
+      const albumDoc = await albumRef.orderBy('createAt', 'desc').get();
+      const list = [];
+      albumDoc.forEach(doc => {
+        const data = doc.data();
+        if(data.title.includes(search)) {
+          data['clubId'] = id;
+          list.push(data);
+        }
+      })
+      setAlbums(list);
+      setRefreshing(false);
+    }
+    catch(e){
+      Alert.alert('앨범 list set error', e.message);
+      setRefreshing(false);
+    }
+  }
+
   useLayoutEffect(() => {
     getMyClubAlbumList();
   }, []);
@@ -122,16 +144,18 @@ const MyClubAlbumList = ({navigation, route}) => {
   const _handleSearchChange = text => {
     setSearch(text);
   };
+
   const _searchPost = () => {
     if (!search) {
       alert("검색어를 입력해주세요.");
     }
     else {
       alert(`검색합니다: ${search}`);
-      console.log(`Search: ${search}`);
+      getAlbumSearchData();
       //setSearch('');
     }
   };
+
   const _clearSearch = () => {
     setSearch('');
   };

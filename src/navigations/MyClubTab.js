@@ -29,7 +29,8 @@ const MainTab = ({ navigation, route }) => {
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    const titles = route.state?.routeNames || ['MainInfo'];
+    //const titles = route.state?.routeNames || ['MainInfo'];
+    const titles = ['메인화면', '게시판', '앨범', '에세이', '일정'];
     const id = route.params?.id;
     const index = route.state?.index || 0;
     navigation.setOptions({

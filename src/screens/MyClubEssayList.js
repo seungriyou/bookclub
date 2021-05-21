@@ -98,6 +98,29 @@ const MyClubEssayList = ({navigation, route}) => {
     }
   }
 
+  const getEssaySearchData = async() => {
+    try{
+      setRefreshing(true);
+      const essayRef = DB.collection('clubs').doc(id).collection('essay');
+      const essayDoc = await essayRef.orderBy('createAt', 'desc').get();
+      const list = [];
+      essayDoc.forEach(doc => {
+        const data = doc.data();
+        if(data.title.includes(search)){
+          data['clubId'] = id;
+          list.push(data);
+        }
+      })
+      setEssays(list);
+
+      setRefreshing(false);
+    }
+    catch(e){
+      Alert.alert('에세이 search error', e.message);
+      setRefreshing(false);
+    }
+  }
+
   useLayoutEffect(() => {
     getMyClubEssayList();
   }, []);
@@ -117,16 +140,18 @@ const MyClubEssayList = ({navigation, route}) => {
   const _handleSearchChange = text => {
     setSearch(text);
   };
+  
   const _searchPost = () => {
     if (!search) {
       alert("검색어를 입력해주세요.");
     }
     else {
       alert(`검색합니다: ${search}`);
-      console.log(`Search: ${search}`);
+      getEssaySearchData();
       //setSearch('');
     }
   };
+
   const _clearSearch = () => {
     setSearch('');
   };

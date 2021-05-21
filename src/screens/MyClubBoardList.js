@@ -98,6 +98,29 @@ const MyClubBoardList = ({navigation, route}) => {
     }
   }
 
+  const getBoardSearchData = async() => {
+    try{
+      setRefreshing(true);
+      const boardRef = DB.collection('clubs').doc(id).collection('board');
+      const boardDoc = await boardRef.orderBy('createAt', 'desc').get();
+      const list = [];
+      boardDoc.forEach(doc => {
+        const data = doc.data();
+        if(data.title.includes(search)){
+          data['clubId'] = id;
+          list.push(data);
+        }
+      })
+      setBoards(list);
+
+      setRefreshing(false);
+    }
+    catch(e){
+      Alert.alert('게시판 search error', e.message);
+      setRefreshing(false);
+    }
+  }
+
   useEffect(() => {
     getMyClubBoardList();
   }, []);
@@ -117,16 +140,18 @@ const MyClubBoardList = ({navigation, route}) => {
   const _handleSearchChange = text => {
     setSearch(text);
   };
+
   const _searchPost = () => {
     if (!search) {
       alert("검색어를 입력해주세요.");
     }
     else {
       alert(`검색합니다: ${search}`);
-      console.log(`Search: ${search}`);
+      getBoardSearchData();
       //setSearch('');
     }
   };
+
   const _clearSearch = () => {
     setSearch('');
   };

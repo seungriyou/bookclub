@@ -45,9 +45,9 @@ const MyClubBoardNav = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubBoard" component={MyClubBoard} />
-      <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} />
-      <Stack.Screen name="MyClubBoardEdit" component={MyClubBoardEdit} />
+      <Stack.Screen name="MyClubBoard" component={MyClubBoard} options={{title: "게시판 글 작성"}}/>
+      <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} options={{title: "게시판"}}/>
+      <Stack.Screen name="MyClubBoardEdit" component={MyClubBoardEdit} options={{title: "게시판 글 수정"}}/>
     </Stack.Navigator>
   );
 };
@@ -64,9 +64,9 @@ const MyClubAlbumNav = ({navigate, route}) => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubAlbum" component={MyClubAlbum} initialParams={[]} />
-      <Stack.Screen name="MyClubAlbumSelectPhoto" component={MyClubAlbumSelectPhoto} />
-      <Stack.Screen name="MyClubAlbumView" component={MyClubAlbumView} />
+      <Stack.Screen name="MyClubAlbum" component={MyClubAlbum} options={{title: "앨범 작성"}} />
+      <Stack.Screen name="MyClubAlbumSelectPhoto" component={MyClubAlbumSelectPhoto} options={{title: "사진 선택"}}/>
+      <Stack.Screen name="MyClubAlbumView" component={MyClubAlbumView} options={{title: "앨범 조회"}}/>
     </Stack.Navigator>
   );
 };
@@ -83,9 +83,9 @@ const MyClubEssayNav = ({navigate, route}) => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubEssay" component={MyClubEssay} />
-      <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} />
-      <Stack.Screen name="MyClubEssayLikeList" component={MyClubEssayLikeList} />
+      <Stack.Screen name="MyClubEssay" component={MyClubEssay} options={{title: "에세이 작성"}}/>
+      <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} options={{title: "에세이 조회"}}/>
+      <Stack.Screen name="MyClubEssayLikeList" component={MyClubEssayLikeList} options={{title: "좋아요한 에세이"}}/>
     </Stack.Navigator>
   );
 };
@@ -101,8 +101,8 @@ const MyClubScheduleNav = ({navigate, route}) => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} />
-      <Stack.Screen name="MyClubScheduleEdit" component={MyClubScheduleEdit} />
+      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} options={{title: "일정"}}/>
+      <Stack.Screen name="MyClubScheduleEdit" component={MyClubScheduleEdit} options={{title: "일정 수정"}}/>
     </Stack.Navigator>
   );
 };
@@ -152,11 +152,11 @@ const MainStack = () => {
       headerMode="float"
     >
       <Stack.Screen name="Main" component={MainTab} />
-      <Stack.Screen name="Club Creation" component={ClubCreation} />
-      <Stack.Screen name="Club" component={Club} />
-      <Stack.Screen name="MyClub" component={MyClub} options={{headerShown: false}}/>
+      <Stack.Screen name="Club Creation" component={ClubCreation} options={{title: "클럽 생성"}}/>
+      <Stack.Screen name="Club" component={Club} options={{title: "클럽 조회"}}/>
+
     </Stack.Navigator>
   );
 };
-
+//<Stack.Screen name="MyClub" component={MyClub} options={{headerShown: false, title: "내 클럽"}}/>
 export default MainStack;
