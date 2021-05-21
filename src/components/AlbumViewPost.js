@@ -5,6 +5,9 @@ import { View, Image, ScrollView, useWindowDimensions, Text, StyleSheet, Modal, 
 import { theme } from '../theme';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import moment from 'moment';
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+import { downloadAsync } from 'expo-file-system';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -36,6 +39,8 @@ const AlbumViewPost = ({ postInfo }) => {
   const width = useWindowDimensions().width;
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasPermission, setHasPermission] = useState(null);
+
   const openModal = (index) => {
     setIsModalOpened(true);
     setCurrentImageIndex(index);
@@ -43,6 +48,21 @@ const AlbumViewPost = ({ postInfo }) => {
   useEffect(() => {
     return () => setIsModalOpened(false);
   }, []);
+
+  // 로컬 앨범에 사진을 저장하기 위해 권한을 얻는 부분
+  useEffect(() => {
+    (async () => {
+      const { status } = await MediaLibrary.getPermissionsAsync();
+      if (status === 'granted') {
+        setHasPermission(true);
+        //console.log('hasPermission!');
+      } else {
+        setHasPermission(false);
+        console.log('The user has not granted us permission.');
+      }
+    })();    
+  }, []);
+
   /*console.log(postInfo.photos);*/
   const renderImage = (item, i) => {
     return (
@@ -55,6 +75,21 @@ const AlbumViewPost = ({ postInfo }) => {
         />
       </TouchableWithoutFeedback>
     );
+  };
+
+  // 로컬 앨범에 사진을 저장하는 함수
+  const _onSave = async (img) => {
+    if (hasPermission) {
+      const dirInfo = await FileSystem.cacheDirectory + 'album/';
+      if (!dirInfo.exists) {
+        //console.log("Cache directory doesn't exist, creating...");
+        await FileSystem.makeDirectoryAsync(dirInfo, { intermediates: true });
+      }
+      //console.log(`img: ${img}`);
+      const url = await downloadAsync(img, dirInfo + 'bookclub'+ moment().format('YYMMDDHHmmss').toString() +'.jpg');
+      console.log(`local uri: ${url.uri}`);
+      await MediaLibrary.saveToLibraryAsync(url.uri);  
+    }
   };
 
   const getDate = ts => {
@@ -95,6 +130,7 @@ const AlbumViewPost = ({ postInfo }) => {
           enableSwipeDown={true}
           onSwipeDown={() => setIsModalOpened(false)}
           menuContext={{ saveToLocal: '이미지 저장', cancel: '취소' }}
+          onSave={_onSave}
         />
       </Modal>
     </Container>

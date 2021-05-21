@@ -42,7 +42,10 @@
     "react-native-web": "~0.13.12",
     "react-native-xml2js": "^1.0.3",
     "styled-components": "^5.2.3",
-    "xml-js": "^1.6.11"
+    "xml-js": "^1.6.11",
+    "expo-permissions": "~12.0.1",
+    "expo-media-library": "~12.0.2",
+    "expo-file-system": "~11.0.2"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

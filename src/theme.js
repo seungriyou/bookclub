@@ -42,9 +42,9 @@ export const theme = {
   // MyClubAlbum 관련 추가
   appBackground: colors.pastel_pink,
   inputBackground: colors.white,
-  buttonIcon: colors.grey_2,
+  buttonIcon: colors.black,
   separator: colors.grey_0,
-  infoText: colors.grey_2,
+  infoText: colors.black,
   infoTextComment: colors.grey_1,
   
   // MyClubBoardView 작성 중 추가 
