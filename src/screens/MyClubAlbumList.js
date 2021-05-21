@@ -7,6 +7,7 @@ import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import { theme } from '../theme';
+import SearchForm from '../components/SearchForm';
 
 
 const Container = styled.View`
@@ -75,6 +76,8 @@ const MyClubAlbumList = ({navigation, route}) => {
 
   const [albums, setAlbums] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState('');
+
 
   const id = route.params?.id;
   const title = route.params?.title;
@@ -115,6 +118,25 @@ const MyClubAlbumList = ({navigation, route}) => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbumView', params});
   };
 
+  /* 검색폼 부분. 검색하는 기능과 연동 필요 */
+  const _handleSearchChange = text => {
+    setSearch(text);
+  };
+  const _searchPost = () => {
+    if (!search) {
+      alert("검색어를 입력해주세요.");
+    }
+    else {
+      alert(`검색합니다: ${search}`);
+      console.log(`Search: ${search}`);
+      //setSearch('');
+    }
+  };
+  const _clearSearch = () => {
+    setSearch('');
+  };
+
+
   return (
     <Container>
       <FlatList
@@ -127,6 +149,14 @@ const MyClubAlbumList = ({navigation, route}) => {
         onRefresh={getMyClubAlbumList}
         windowSize={3}
         numColumns={2}
+      />
+      <SearchForm
+        placeholder="검색어를 입력하세요."
+        value={search}
+        onChangeText={_handleSearchChange}
+        onSubmitEditing={() => { }}
+        onPress={_searchPost}
+        clearSearch={_clearSearch}
       />
     </Container>
   );

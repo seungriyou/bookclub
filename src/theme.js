@@ -3,6 +3,7 @@ const colors = {
   black: '#000000',
   grey_0: '#d5d5d5',
   grey_1: '#a6a6a6',
+  grey_2: '#ededed',
   red: '#e84118',
   blue: '#3679fe',
   pastel_pink: '#fac8af',
@@ -48,4 +49,7 @@ export const theme = {
   
   // MyClubBoardView 작성 중 추가 
   line: colors.grey_0,
+
+  // SearchForm 관련 추가
+  search: colors.grey_2,
 };

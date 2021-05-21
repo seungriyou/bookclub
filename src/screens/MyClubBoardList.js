@@ -6,6 +6,7 @@ import { Button } from '../components';
 import { ProgressContext } from '../contexts';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
+import SearchForm from '../components/SearchForm';
 
 const Container = styled.View`
   flex: 1;
@@ -70,6 +71,8 @@ const Item = React.memo(
 const MyClubBoardList = ({navigation, route}) => {
   const [boards, setBoards] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [search, setSearch] = useState('');
+
 
   const id = route.params?.id;
   const title = route.params?.title;
@@ -110,6 +113,25 @@ const MyClubBoardList = ({navigation, route}) => {
     navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardView', params});
   };
 
+  /* 검색폼 부분. 검색하는 기능과 연동 필요 */
+  const _handleSearchChange = text => {
+    setSearch(text);
+  };
+  const _searchPost = () => {
+    if (!search) {
+      alert("검색어를 입력해주세요.");
+    }
+    else {
+      alert(`검색합니다: ${search}`);
+      console.log(`Search: ${search}`);
+      //setSearch('');
+    }
+  };
+  const _clearSearch = () => {
+    setSearch('');
+  };
+
+
   return (
     <Container>
       <FlatList
@@ -122,7 +144,14 @@ const MyClubBoardList = ({navigation, route}) => {
         onRefresh={getMyClubBoardList}
         windowSize={3}
       />
-
+      <SearchForm
+        placeholder="검색어를 입력하세요."
+        value={search}
+        onChangeText={_handleSearchChange}
+        onSubmitEditing={() => { }}
+        onPress={_searchPost}
+        clearSearch={_clearSearch}
+      />
     </Container>
   );
 }
