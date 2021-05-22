@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
-import { Text, Dimensions } from 'react-native';
+import { Text, Dimensions, Alert } from 'react-native';
 import { Input, Button } from '../components';
 import {ALADIN_SEARCH_API_KEY} from '../../secret';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { parseString } from 'react-native-xml2js';
 import BookSearchList from '../components/BookSearchList';
+import {decode} from 'html-entities';
 
 
 const Container = styled.View`
@@ -70,18 +71,15 @@ const tempData = {
   ]
 }
 
-
-
-
 const MyClubBookSearch = ({ navigate, route }) => {
   const width= Dimensions.get('window').width;
   const theme = useContext(ThemeContext);
   const [bookname, setBookname] = useState("");
-  const [result, setResult] = useState({});
-
+  const [items, setItems] = useState([]);
 
   const _handleSearchButtonPressed = async() => {
     try {
+      let list = [];
       const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${ALADIN_SEARCH_API_KEY}&Query=${bookname}`;
       //console.log(url);
       await fetch(url)
@@ -90,19 +88,39 @@ const MyClubBookSearch = ({ navigate, route }) => {
         parseString(data, function(err, result) {
           //console.log(JSON.stringify(result));
           //console.log(JSON.parse(JSON.stringify(result)));
-          setResult(JSON.parse(JSON.stringify(result)));
-          console.log(result);
-        })
+          const items = result.object.item;
+          let index = 1;
+          for(const item of items) {
+            let tempDescription = "";
+            if(item.description[0].indexOf("<br/>") != -1){
+              const temp = item.description[0].split("<br/>");
+              tempDescription = decode(temp[1]);
+            }
+            else{
+              tempDescription = decode(item.description[0]);
+            }
+            const tempData = {
+              itemId: index,
+              title: item.title[0],
+              cover: item.cover[0],
+              author: item.author[0],
+              description: tempDescription,
+            }
+            list.push(tempData);
+            index++;
+          }
+        });
       });
-      }
-      catch(e) {
-        console.log(e.message);
-      }
+      setItems(list);
+    }
+    catch(e) {
+      Alert.alert("검색 오류", e.message);
+    }
   }
 
   useState(()=> {
-    console.log(result);
-  }, [result]);
+    console.log("set Complete");
+  }, [items]);
 
 
   return (
@@ -119,7 +137,7 @@ const MyClubBookSearch = ({ navigate, route }) => {
       </FixBar>
 
       <List width={width}>
-        <BookSearchList bookInfo={tempData.object}></BookSearchList>
+        <BookSearchList bookInfo={items}></BookSearchList>
       </List>
     </Container>
   );

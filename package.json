@@ -16,13 +16,17 @@
     "@react-navigation/stack": "^5.14.3",
     "expo": "^41.0.0",
     "expo-app-loading": "^1.0.1",
+    "expo-file-system": "~11.0.2",
     "expo-font": "~9.1.0",
     "expo-image-manipulator": "~9.1.0",
     "expo-image-picker": "~10.1.4",
     "expo-image-picker-multiple": "^1.4.1",
+    "expo-media-library": "~12.0.2",
+    "expo-permissions": "~12.0.1",
     "expo-status-bar": "~1.0.4",
     "expo-updates": "~0.5.4",
     "firebase": "8.2.3",
+    "html-entities": "^2.3.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
@@ -42,10 +46,7 @@
     "react-native-web": "~0.13.12",
     "react-native-xml2js": "^1.0.3",
     "styled-components": "^5.2.3",
-    "xml-js": "^1.6.11",
-    "expo-permissions": "~12.0.1",
-    "expo-media-library": "~12.0.2",
-    "expo-file-system": "~11.0.2"
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

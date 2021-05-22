@@ -2,19 +2,19 @@
 //조작 부분 외 다른 부분의 클릭을 막는 방법 필요
 
 import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text, Image, Button, TextInput} from 'react-native';
+import {StyleSheet, Dimensions, Text, Image, Button, TextInput, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
-
-
+import { DB, getCurrentUser } from '../utils/firebase';
+import { ProgressContext } from '../contexts';
 
 const Container=styled.View`
     flex: 1;
     flex-direction: column;
-    background-color: ${({theme})=>theme.text};
+    background-color: ${({theme})=>theme.background};
     align-items: center;
 `;
 
@@ -108,13 +108,13 @@ const MainHeader= ({clubname, onPress1, onPress2})=>{
     return (
         <Header width={width}>
         <Button
-            title="등록"
+            title="책 완료하기"
             onPress={onPress1}      //수정필요-진행완료한 책 목록 화면으로 이동
             color= '#fac8af'
         />
         <Text style={styles.clubname}>{clubname}</Text>
         <Button
-            title="완료"
+            title="수정 완료"
             onPress={onPress2}      //다시 maininfo로 복귀
             color= '#fac8af'
         />
@@ -122,7 +122,7 @@ const MainHeader= ({clubname, onPress1, onPress2})=>{
     )
 };
 
-const MainProcess=({title, _handlebookChange, goal, _handlegoalChange, page})=>{
+const MainProcess=({booktitle, _handlebookChange, goal, _handlegoalChange, page, cover})=>{
     const width = Dimensions.get('window').width;
     return(
         <Process>
@@ -130,18 +130,13 @@ const MainProcess=({title, _handlebookChange, goal, _handlegoalChange, page})=>{
             <Image
                 style={styles.bookimg}
                 source={{
-                uri: 'http://drive.google.com/uc?export=view&id=1hOSJNzP8gFXMqfeu-7Suo4mTgiQcLrIp',
+                uri: cover,
                 }}
             />
         </ProcessBook>
         <ProcessText>
             <ProcessCon width={width}>
-            <TextInput
-                style={styles.input}
-                placeholder="제목을 입력하세요"
-                onChangeText={_handlebookChange}
-                value={title}
-            />
+            <Text style={styles.processText}>제목: {booktitle}</Text>
             </ProcessCon>
             <ProcessCon width={width}>
             <TextInput
@@ -152,109 +147,139 @@ const MainProcess=({title, _handlebookChange, goal, _handlegoalChange, page})=>{
             />
             </ProcessCon>
             <ProcessCon width={width}>
-            <Text style={styles.processText}>진행중인 페이지: {page}P</Text>
+            <Text style={styles.processText}>현재 목표치: {page}P</Text>
             </ProcessCon>
         </ProcessText>
     </Process>
     )
 }
 
-
-const tempData = {
-    "clubname": "SEORAP",
-    "booktitle": "보노보노, 오늘 하루는 어땠어?",
-    "goal": 226,
-    "userlist": [
-      {
-        "id": 1,
-        "user_name": "멤버A",
-        "img_url": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-        "user_rate": 1,
-      },
-      {
-        "id": 2,
-        "user_name": "멤버B",
-        "img_url": "http://drive.google.com/uc?export=view&id=1psgmqUpSA_Mgrxw-5RY2cMSpDI_TKmuM",
-        "user_rate": 0.3,
-
-      },
-      {
-        "id": 3,
-        "user_name": "멤버C",
-        "img_url": "http://drive.google.com/uc?export=view&id=1Z-kttQHMB-kMHQ_3cyKqroT3paw_PJ1k",
-        "user_rate": 0.5,
-
-      },
-      {
-        "id": 4,
-        "user_name": "멤버D",
-        "img_url": "http://drive.google.com/uc?export=view&id=1n1zQxO4FfO_Q4LUYcWR6tuXoI8UepvDJ",
-        "user_rate": 0.7,
-
-      },
-      {
-        "id": 5,
-        "user_name": "멤버E",
-        "img_url": "http://drive.google.com/uc?export=view&id=1877gatJkVEbpzp9TL897--_Fj1oYrOZ2",
-        "user_rate": 0.1,
-
-      },
-      {
-        "id": 6,
-        "user_name": "멤버F",
-        "img_url": "http://drive.google.com/uc?export=view&id=1VDKn12Lw17MQ4tEmL8kMhDtL7kqTjwkS",
-        "user_rate": 0.45,
-
-      },
-      {
-        "id": 7,
-        "user_name": "멤버G",
-        "img_url": "http://drive.google.com/uc?export=view&id=1_TNsKJatqW3PYWwByqDW_RDQ2qvMfrhY",
-        "user_rate": 0.1,
-
-      },
-      {
-        "id": 8,
-        "user_name": "멤버H",
-        "img_url": "http://drive.google.com/uc?export=view&id=1nuoptwRc_kqQdm_xqPzPkaPK-tG0u_08",
-        "user_rate": 0.1,
-
-      },
-
-    ]
-}
-
-
-
 const MyClubMainInfo_1=({ navigation, route })=>{
     const id = route.params?.id;
     const width= Dimensions.get('window').width;
 
-    const [title, settitle] = useState('');
-    const [goal, setgoal] = useState('');
+    const user = getCurrentUser();
 
-    const _handlebookChange = text => {
-        settitle(text);
-    }
+    const [goal, setgoal] = useState('');
+    const [userPage, setUserPage] = useState('');
+    const [mainData, setMainData] = useState({
+      clubname: "",
+      booktitle: "",
+      bookcover: "",
+      goal: 0,
+      userlist: []
+    });
 
     const _handlegoalChange = text => {
-        setgoal(text);
+          setgoal(text);
     }
 
-    const _alertfinish=()=>{
-        alert('수정을 완료했습니다.')
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //다시 maininfo로 복귀
+    const _alertfinish= async() => {
+      const regex = /^[0-9]/;
+      if (regex.test(goal)) {
+        try{
+          const clubRef = DB.collection('clubs').doc(id);
+          await DB.runTransaction(async (t) => {
+            const doc = await t.get(clubRef);
+            const data = doc.data();
+
+            const bookNow = data.book_now;
+            bookNow.goal = goal;
+
+            t.update(clubRef, {book_now: bookNow});
+          });
+          setgoal();
+          alert('수정을 완료했습니다.');
+          navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+        }
+        catch(e) {
+          Alert.alert("목표 페이지 수정 에러", e.message);
+        }
+      }
+      else{
+        alert('페이지는 정수로 입력해주세요');
+      }
     }
 
-    const _alertadd=()=>{
-        alert('책을 등록하였습니다.') //수정필요 - 진행완료한 책 화면으로 이동
+    const _alertadd= async() =>{
+      try{
+        const clubRef = DB.collection('clubs').doc(id);
+        await DB.runTransaction(async (t) => {
+          const doc = await t.get(clubRef);
+          const data = doc.data();
+
+          let bookNow = data.book_now;
+          let bookCompleted = data.bookCompleted;
+          let members = data.members;
+          for(let i = 0; i < members.length; i++) {
+            members[i].now_page = 0;
+          }
+
+          bookCompleted.push(bookNow);
+
+          bookNow = {};
+
+          t.update(clubRef, {book_now: bookNow, book_completed: bookCompleted, members: members});
+        });
+        alert('등록을 완료했습니다.');
+        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});
+      }
+      catch(e) {
+        Alert.alert('책 완료 등록 에러', e.message);
+      }
     }
 
+    const getMainData= async() => {
+      try{
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+        const tempData = {
+          clubname: "",
+          booktitle: "",
+          bookcover: "",
+          goal: 0,
+          userlist: []
+        }
+
+        tempData.clubname = clubData.title;
+        tempData.booktitle = clubData.book_now.title;
+        tempData.goal = clubData.book_now.goal;
+        tempData.bookcover = clubData.book_now.cover;
+        const tempuserlist = [];
+        let index = 0;
+        for (let member of clubData.members) {
+          const user_rate = member.now_page / tempData.goal;
+          user_rate = user_rate.toFixed(1);
+          if (member.uid === user.uid) {
+            setUserPage(member.now_page);
+          }
+          if (user_rate > 1.0) {
+            user_rate = 1.0;
+          }
+          index = index + 1;
+          const tempuser = {
+            id: index,
+            user_name: member.name,
+            img_url: member.photoUrl,
+            user_rate: user_rate,
+          }
+
+          tempData.userlist.push(tempuser);
+        }
+
+        setMainData(tempData);
+      }
+      catch(e) {
+        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
+      }
+    };
 
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerBackTitleVisible: false,
             headerTintColor: '#000000',
+            headerTitle: '진행 목표 수정',
             headerLeft: ({onPress,tintColor})=>{
                 return(
                     <Layout>
@@ -297,7 +322,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
                 );
             },
         });
-      console.log(navigation);
+      getMainData();
     }, []);
 
 
@@ -308,21 +333,22 @@ const MyClubMainInfo_1=({ navigation, route })=>{
         >
         <Container>
             <MainHeader
-                clubname={tempData.clubname}
+                clubname={mainData.clubname}
                 onPress1={_alertadd}
                 onPress2={_alertfinish}
             ></MainHeader>
 
             <MainProcess
-                title={title}
-                _handlebookChange={_handlebookChange}
+                booktitle={mainData.booktitle}
                 goal={goal}
                 _handlegoalChange={_handlegoalChange}
-                page={226}
+                goalpage={mainData.goal}
+                cover={mainData.bookcover}
+                page={mainData.goal}
             ></MainProcess>
 
             <List width={width}>
-            <UserProcessList userInfo={tempData}></UserProcessList>
+            <UserProcessList userInfo={mainData}></UserProcessList>
             </List>
 
         </Container>

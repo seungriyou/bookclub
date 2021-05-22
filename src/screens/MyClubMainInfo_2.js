@@ -132,7 +132,7 @@ const MainProcess=({booktitle, goalpage, cover, page, _handlepageChange})=>{
             <Image
                 style={styles.bookimg}
                 source={{
-                uri: 'http://drive.google.com/uc?export=view&id=1hOSJNzP8gFXMqfeu-7Suo4mTgiQcLrIp',
+                uri: cover,
                 }}
             />
         </ProcessBook>
@@ -180,7 +180,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
       }
     }
 
-    const _alertfinish= async () => {
+    const _alertfinish = async () => {
       if (errorMessage == '' || (!userPage)) {
         try {
           spinner.start();
@@ -188,8 +188,6 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           await DB.runTransaction(async (t) => {
             const doc = await t.get(clubRef);
             const data = doc.data();
-
-            console.log(data);
 
             const oldMembers = data.members;
 
@@ -209,7 +207,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           spinner.stop();
         }
         alert('수정을 완료했습니다.');
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id, reload: true}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
       }
       else {
         Alert.alert('Page값 에러', errorMessage);
@@ -256,7 +254,6 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           tempData.userlist.push(tempuser);
         }
 
-        console.log("tempData", tempData);
         setMainData(tempData);
 
       }
@@ -268,14 +265,11 @@ const MyClubMainInfo_2=({ navigation, route })=>{
       }
     };
 
-    useEffect(() => {
-      console.log(mainData);
-    }, [mainData]);
-
     useLayoutEffect(()=>{
         navigation.setOptions({
             headerBackTitleVisible: false,
             headerTintColor: '#000000',
+            headerTitle: '진행 상황 수정',
             headerLeft: ({onPress, tintColor})=>{
                 return(
                     <Layout>
@@ -318,7 +312,6 @@ const MyClubMainInfo_2=({ navigation, route })=>{
                 );
             },
         });
-      console.log(navigation);
       getMainData();
     }, []);
 

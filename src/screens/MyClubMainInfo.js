@@ -96,17 +96,17 @@ const MainHeader= ({clubname, movetoInfo1, movetoInfo2})=>{
 
     return (
         <Header width={width}>
-         <Button                    //개인이 개인의 진행 상황(게이지 바)를 수정하는 화면으로 이동
-            title="목표 수정"
-            onPress={movetoInfo1}
-            color= '#fac8af'
-        />
-        <Text style={styles.clubname}>{clubname}</Text>
-        <Button
+          <Button
+           title="목표 수정"
+           onPress={movetoInfo1}
+           color= '#fac8af'
+          />
+          <Text style={styles.clubname}>{clubname}</Text>
+          <Button
             title="진행 수정"
-            onPress={movetoInfo2}       //클럽 모임장에게만 드러나는 버튼->목표 책 제목/페이지를 수정하는 화면으로 이동
-            color= '#fac8af'            //드러나지 않게 하는 방법은 color를 '#ffffff'로 수정하면 될 것이라고 생각합니다. (MyClubMainInfo_2의 헤더 참조)
-        />
+            onPress={movetoInfo2}
+            color= '#fac8af'
+          />
         </Header>
     )
 };
@@ -156,6 +156,7 @@ const MyClubMainInfo=({ navigation, route })=>{
       uid: 0
     });
     const [userPage, setUserPage] = useState(0);
+    const [isThereBook, setIsThereBook] = useState(false);
 
     const movetoInfo2=()=>{
         navigation.navigate('MyClubMainInfoNav', {screen: 'MyClubMainInfo_2', params: {id: id, user: user}});
@@ -172,60 +173,56 @@ const MyClubMainInfo=({ navigation, route })=>{
 
     const getMainData= async() => {
       try{
-
         const clubRef = DB.collection('clubs').doc(id);
         const clubDoc = await clubRef.get();
         const clubData = clubDoc.data();
-        const tempData = {
-          clubname: "",
-          booktitle: "",
-          bookcover: "",
-          goal: 0,
-          userlist: []
+        if (clubData.book_now === {}) {
+          setIsThereBook(false);
+        }
+        else {
+          setIsThereBook(true);
+          const tempData = {
+            clubname: "",
+            booktitle: "",
+            bookcover: "",
+            goal: 0,
+            userlist: []
+          }
+
+          tempData.clubname = clubData.title;
+          tempData.booktitle = clubData.book_now.title;
+          tempData.goal = clubData.book_now.goal;
+          tempData.bookcover = clubData.book_now.cover;
+          const tempuserlist = [];
+          let index = 0;
+          for (let member of clubData.members) {
+            const user_rate = member.now_page / tempData.goal;
+            user_rate = user_rate.toFixed(1);
+            if (member.uid === user.uid) {
+              setUserPage(member.now_page);
+            }
+            if (user_rate > 1.0) {
+              user_rate = 1.0;
+            }
+            index = index + 1;
+            const tempuser = {
+              id: index,
+              user_name: member.name,
+              img_url: member.photoUrl,
+              user_rate: user_rate,
+            }
+            tempData.userlist.push(tempuser);
+          }
+
+          setMainData(tempData);
+          setLeader(clubData.leader);
         }
 
-        tempData.clubname = clubData.title;
-        tempData.booktitle = clubData.book_now.title;
-        tempData.goal = clubData.book_now.goal;
-        tempData.bookcover = clubData.book_now.cover;
-        const tempuserlist = [];
-        let index = 0;
-        for (let member of clubData.members) {
-          const user_rate = member.now_page / tempData.goal;
-          user_rate = user_rate.toFixed(1);
-          if (member.uid === user.uid) {
-            setUserPage(member.now_page);
-          }
-          if (user_rate > 1.0) {
-            user_rate = 1.0;
-          }
-          index = index + 1;
-          const tempuser = {
-            id: index,
-            user_name: member.name,
-            img_url: member.photoUrl,
-            user_rate: user_rate,
-          }
-
-          tempData.userlist.push(tempuser);
-        }
-
-        console.log("tempData", tempData);
-        setMainData(tempData);
-        setLeader(clubData.leader);
       }
       catch(e) {
         Alert.alert('메인 페이지 데이터 수신 에러', e.message);
       }
     };
-
-    useEffect(()=> {
-      getMainData();
-    }, [])
-
-    useEffect(()=>{
-      console.log(mainData);
-    }, [mainData]);
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -280,7 +277,7 @@ const MyClubMainInfo=({ navigation, route })=>{
                 );
             },
         });
-      console.log(navigation);
+        getMainData();
     }, []);
 
 
@@ -289,21 +286,32 @@ const MyClubMainInfo=({ navigation, route })=>{
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
-        <Container>
-            <MainHeader clubname={mainData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2}></MainHeader>
-
-            <MainProcess
-                booktitle={mainData.booktitle}
-                goalpage={mainData.goal}
-                page={userPage}
-                cover={mainData.bookcover}
-            ></MainProcess>
-
-            <List width={width}>
-            <UserProcessList userInfo={mainData}></UserProcessList>
-            </List>
-
-        </Container>
+          <Container>
+            {isThereBook && (
+              <MainHeader clubname={mainData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2} />
+            )}
+            
+            {isThereBook && (
+              <MainProcess
+                  booktitle={mainData.booktitle}
+                  goalpage={mainData.goal}
+                  page={userPage}
+                  cover={mainData.bookcover}
+              />
+            )}
+            {isThereBook && (
+              <List width={width}>
+                <UserProcessList userInfo={mainData}></UserProcessList>
+              </List>
+            )}
+            {!isThereBook && (
+              <Button
+                title="목표 도서 등록하기"
+                onPress={()=>{console.log("검색창 띄우기")}}
+                color= '#fac8af'
+              />
+            )}
+          </Container>
         </KeyboardAwareScrollView>
 
     );
