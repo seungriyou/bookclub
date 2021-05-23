@@ -23,6 +23,7 @@ import MyClubAlbumList from './MyClubAlbumList';
 import MyClubAlbumView from './MyClubAlbumView';
 import MyClubEssay from './MyClubEssay';
 import MyClubEssayView from './MyClubEssayView';
+import MyClubEssayEdit from './MyClubEssayEdit';
 import MyClubEssayList from './MyClubEssayList';
 import MyClubEssayLikeList from './MyClubEssayLikeList'
 import MyClubSchedule from './MyClubSchedule';
@@ -32,5 +33,6 @@ import MyClubScheduleEdit from './MyClubScheduleEdit';
 
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard, MyClubBoardEdit, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
-  MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2, MyClubMainM, MyClubMainManage, MyClubBookSearch, MyClubUserAdmin, MyClubWaitAdmin
+  MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2, MyClubMainM, MyClubMainManage, MyClubBookSearch, MyClubUserAdmin, MyClubWaitAdmin,
+  MyClubEssayEdit
  };

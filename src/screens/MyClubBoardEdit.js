@@ -32,13 +32,54 @@ const MyClubBoard=({ navigation, route })=>{
     const [title, setTitle]=useState('');
     const [content, setContent]=useState('');
 
-    const [update, setUpdate] = useState(0);
-
     const _handleTitleChange = text => {
       setTitle(text);
     }
+
     const _handleContentChange = text => {
       setContent(text);
+    }
+
+    const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
+      if (title == '' || content == '') {
+        Alert.alert('글 수정 오류', `제목 또는 글 내용이 없습니다.`);
+      }
+      else{
+        try {
+          spinner.start();
+          const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
+          await DB.runTransaction(async (t) => {
+            t.update(boardRef, {title:title, content: content});
+          })
+
+          navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
+          Alert.alert('수정이 완료되었습니다.');
+        }
+        catch(e) {
+          Alert.alert('글 수정 오류', e.message);
+        }
+        finally {
+          spinner.stop();
+        }
+      }
+    };
+
+    const getBoard = async() => {
+      try{
+        spinner.start();
+        const boardRef = await DB.collection('clubs').doc(clubId).collection('board').doc(boardId).get();
+        const data = boardRef.data();
+
+        setTitle(data.title);
+        setContent(data.content);
+
+      }
+      catch(e) {
+        Alert.alert('게시판 데이터 수신 오류', e.message);
+      }
+      finally {
+        spinner.stop();
+      }
     }
 
     useLayoutEffect(()=>{
@@ -72,62 +113,6 @@ const MyClubBoard=({ navigation, route })=>{
       getBoard();
     }, []);
 
-
-    const myClubBoardWrite = async() => {
-
-      const user = getCurrentUser();
-      const boardRef = DB.collection('clubs').doc(id).collection('board').doc(boardId);
-      const boardData =
-
-      await boardRef.set(newBoard);
-
-      return true;
-
-    }
-
-    const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
-      if (title == '' || content == '') {
-        Alert.alert('글 수정 오류', `제목 또는 글 내용이 없습니다.`);
-      }
-      else{
-        try {
-          spinner.start();
-          const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
-          const update = async() => {
-            boardRef.update({title: title, content: content});
-          }
-
-          update();
-
-          navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
-          Alert.alert('수정이 완료되었습니다.');
-        }
-        catch(e) {
-          Alert.alert('글 수정 오류', e.message);
-        }
-        finally {
-          spinner.stop();
-        }
-      }
-    };
-
-    const getBoard = async() => {
-      try{
-        spinner.start();
-        const boardRef = await DB.collection('clubs').doc(clubId).collection('board').doc(boardId).get();
-        const data = boardRef.data();
-
-        setTitle(data.title);
-        setContent(data.content);
-
-      }
-      catch(e) {
-        Alert.alert('게시판 데이터 수신 오류', e.message);
-      }
-      finally {
-        spinner.stop();
-      }
-    }
 
     return(
         <KeyboardAwareScrollView

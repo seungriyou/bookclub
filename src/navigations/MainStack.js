@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubBoardView, MyClubSchedule, MyClubScheduleEdit, MyClubAlbum,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
-  MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo_1,
+  MyClubEssayView, MyClubEssayLikeList, MyClubEssayEdit, MyClubMainInfo_1,
   MyClubMainInfo_2, MyClubMainM, MyClubMainManage,
   MyClubUserAdmin, MyClubWaitAdmin, MyClubBookSearch } from '../screens';
 import MainTab from './MainTab';
@@ -86,6 +86,7 @@ const MyClubEssayNav = ({navigate, route}) => {
       <Stack.Screen name="MyClubEssay" component={MyClubEssay} options={{title: "에세이 작성"}}/>
       <Stack.Screen name="MyClubEssayView" component={MyClubEssayView} options={{title: "에세이 조회"}}/>
       <Stack.Screen name="MyClubEssayLikeList" component={MyClubEssayLikeList} options={{title: "좋아요한 에세이"}}/>
+      <Stack.Screen name="MyClubEssayEdit" component={MyClubEssayEdit} options={{title: "에세이 수정"}}/>
     </Stack.Navigator>
   );
 };

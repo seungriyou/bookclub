@@ -3,12 +3,12 @@ import styled, { ThemeProvider } from 'styled-components/native';
 import { theme } from '../theme';
 import { View, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EssayViewPost from '../components/EssayViewPost';
 import EssayCommentList from '../components/EssayCommentList';
 import ReplyInput from '../components/ReplyInput';
 import { ProgressContext } from '../contexts';
-import { DB, Storage, getCurrentUser} from '../utils/firebase';
+import { DB, getCurrentUser} from '../utils/firebase';
 import moment from 'moment';
 
 const Container = styled.View`
@@ -18,12 +18,14 @@ const Container = styled.View`
   justify-content: flex-start;
   padding-bottom: 100px;
 `;
+
 const CommentForm = styled.View`
   position: absolute;
   bottom: 0;
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
+
 
 const MyClubEssayView = ({ navigation, route }) => {
   const { spinner } = useContext(ProgressContext);
@@ -46,12 +48,12 @@ const MyClubEssayView = ({ navigation, route }) => {
   const [isAuthor, setIsAuthor] = useState(false);
   const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
+
   const _handleReplyChange = text => {
     setComment(text);
   };
 
   const _handleLikeButtonPress = async() => {
-
     try{
       const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
       await DB.runTransaction(async (t) => {
@@ -93,8 +95,35 @@ const MyClubEssayView = ({ navigation, route }) => {
       spinner.stop();
       setUpdate(update => update + 1);
     }
-
   }
+
+  const _handelEditButtonPress = () => {
+    navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayEdit', params: {clubId: clubId, essayId: essayId}});
+    console.log(clubId, essayId);
+  };
+
+  const _handelDeleteButtonPress = () => {
+    Alert.alert("경고", "글을 삭제하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            const essay = await DB.collection('clubs').doc(clubId).collection('essay').doc(essayId).delete();
+            navigation.navigate("MyClubTab", {screen: "MyClubEssayList", params: {id: clubId}});
+            Alert.alert("글 삭제 완료");
+          }
+          catch(e) {
+            Alert.alert("글 삭제 오류", e.message);
+          }
+        }
+      }
+    ]);
+  };
 
   const getEssay = async() => {
     try{
@@ -104,7 +133,6 @@ const MyClubEssayView = ({ navigation, route }) => {
 
       if (data.author.uid === user.uid) {
         setIsAuthor(true);
-        console.log("isAuthor true");
       }
 
       const tempData = {
@@ -211,27 +239,45 @@ const MyClubEssayView = ({ navigation, route }) => {
     getEssay();
     navigation.setOptions({
       headerRight: () => (
-        <View style={{ flexDirection: 'row' }}>
-          <Ionicons
-            name={isLiked ? "heart" : "heart-outline"}
-            size={30}
-            style={{ marginRight: 20 }}
-            color={theme.buttonIcon}
-            onPress={_handleLikeButtonPress} // 좋아요 버튼 함수(이벤트 추가 필요)
-          />
-          <MaterialIcons
-            name="edit"
-            size={30}
-            style={{ marginRight: 13 }}
-            color={theme.buttonIcon}
-            onPress={() => { Alert.alert("글을 수정합니다.") }} //글 수정 버튼 함수(이벤트 추가 필요)
-          />
-        </View>
+        isAuthor ? (
+          <View style={{ flexDirection: 'row' }}>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={25}
+              style={{ marginRight: 10 }}
+              color={theme.buttonIcon}
+              onPress={_handleLikeButtonPress} // 좋아요 버튼 함수(이벤트 추가 필요)
+            />
+            <MaterialCommunityIcons
+                name="pencil"
+                size={25}
+                style={{marginRight:10}}
+                color={theme.buttonIcon}
+                onPress={_handelEditButtonPress}
+            />
+            <MaterialCommunityIcons
+                name="trash-can"
+                size={25}
+                style={{marginRight:10}}
+                color={theme.buttonIcon}
+                onPress={_handelDeleteButtonPress}
+            />
+          </View>
+        ) : (
+          <View style={{ flexDirection: 'row' }}>
+            <Ionicons
+              name={isLiked ? "heart" : "heart-outline"}
+              size={30}
+              style={{ marginRight: 20 }}
+              color={theme.buttonIcon}
+              onPress={_handleLikeButtonPress} // 좋아요 버튼 함수(이벤트 추가 필요)
+            />
+          </View>
+        )
+
       ),
     });
-  }, [isLiked]);
-
-
+  }, [isLiked, isAuthor]);
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.appBackground }}>
@@ -246,7 +292,7 @@ const MyClubEssayView = ({ navigation, route }) => {
           placeholder="댓글을 입력하세요."
           value={comment}
           onChangeText={_handleReplyChange}
-          onSubmitEditing={() => { }}
+          onSubmitEditing={() => {}}
           onPress={_addReply}
         />
       </CommentForm>
