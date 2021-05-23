@@ -269,52 +269,6 @@ const MyClubMainInfo_2=({ navigation, route })=>{
     };
 
     useLayoutEffect(()=>{
-        navigation.setOptions({
-            headerBackTitleVisible: false,
-            headerTintColor: '#000000',
-            headerTitle: '진행 상황 수정',
-            headerLeft: ({onPress, tintColor})=>{
-                return(
-                    <Layout>
-                    <MaterialCommunityIcons
-                        name="keyboard-backspace"
-                        size={30}
-                        style={{marginLeft:13}}
-                        color={tintColor}
-                        onPress={onPress}   //뒤로가기
-                    />
-                    <MaterialCommunityIcons
-                        name="alert-circle"
-                        size={30}
-                        style={{marginLeft:10}}
-                        color={tintColor}
-                        onPress={()=>{}}   //고민
-                    />
-                    </Layout>
-                );
-            },
-            headerRight: ({tintColor})=>{
-                return(
-                    <Layout>
-                    <MaterialCommunityIcons
-                        name="format-list-bulleted"
-                        size={30}
-                        style={{marginRight:10}}
-                        color={tintColor}
-                        onPress={()=>{}}   //고민
-
-                    />
-                    <MaterialCommunityIcons
-                        name="magnify"
-                        size={30}
-                        style={{marginRight:10}}
-                        color={tintColor}
-                        onPress={()=>{}}   //고민
-                    />
-                    </Layout>
-                );
-            },
-        });
       getMainData();
     }, []);
 

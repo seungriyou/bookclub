@@ -180,25 +180,41 @@ const MyClubMainManage=({ navigation, route })=>{
       }
     }
 
-    useLayoutEffect(()=>{
-        navigation.setOptions({
-            headerBackTitleVisible: false,
-            headerTintColor: '#000000',
-            headerLeft: ({onPress, tintColor})=>{
-                return(
+    const _handleMainManageButtonPress = () => {
+      if (user.uid === clubData.leader.uid) {
+          navigation.navigate("MyClubMainInfoNav", {screen: "MyClubMainM", params: {id: clubId}});
+      }
+      else {
+        Alert.alert("권한 오류", "클럽 정보 수정은 클럽 리더만 가능합니다.");
+      }
+    }
 
-                    <MaterialCommunityIcons
-                        name="keyboard-backspace"
-                        size={30}
-                        style={{marginLeft:13}}
-                        color={tintColor}
-                        onPress={onPress}   //추후수정-뒤로가기
-                    />
-                );
-            },
-        });
+    useLayoutEffect(()=>{
+        // navigation.setOptions({
+        //     headerBackTitleVisible: false,
+        //     headerTintColor: '#000000',
+        //     headerLeft: ({onPress, tintColor})=>{
+        //         return(
+        //
+        //             <MaterialCommunityIcons
+        //                 name="keyboard-backspace"
+        //                 size={30}
+        //                 style={{marginLeft:13}}
+        //                 color={tintColor}
+        //                 onPress={onPress}   //추후수정-뒤로가기
+        //             />
+        //         );
+        //     },
+        // });
         getClubInfo();
     }, []);
+
+    useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        getClubInfo();
+      });
+      return unsubscribe;
+    }, [navigation]);
 
     return(
         <KeyboardAwareScrollView
@@ -275,9 +291,14 @@ const MyClubMainManage=({ navigation, route })=>{
                   onPress={()=>alert('탈퇴 함수 필요. 모임을 탈퇴하시겠습니까?')}    //모임 탈퇴 함수가 필요합니다.
               />
               <Button
+                  color= '#fac8af'
+                  title="모임 삭제"
+                  onPress={()=>alert('삭제 함수 필요. 모임을 삭제하시겠습니까?')}    //모임 탈퇴 함수가 필요합니다.
+              />
+              <Button
                 color= '#fac8af'
                 title="정보 수정"
-                onPress={()=>navigation.navigate('MyClubMainM')}    //모임 정보 수정 화면으로 이동할 예정
+                onPress={_handleMainManageButtonPress}  //모임 정보 수정 화면으로 이동할 예정
               />
             </ButtonFix2>
         </List>

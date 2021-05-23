@@ -4,14 +4,14 @@
 
 
 import React, {useLayoutEffect, useState, useEffect, useRef, forwardRef} from 'react';
-import {StyleSheet, Dimensions, Text, Button, Image} from 'react-native';
+import {StyleSheet, Dimensions, Text, Button, Image, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import PropTypes from 'prop-types';
-
-
+import { DB, getCurrentUser } from '../utils/firebase';
+import {Picker} from '@react-native-picker/picker';
 
 const StyledIntroInput=styled.TextInput.attrs(({theme})=>({
     placeholderTextColor: theme.inputPlaceholder,
@@ -27,17 +27,17 @@ const StyledIntroInput=styled.TextInput.attrs(({theme})=>({
 
 const IntroInput= forwardRef(({placeholder, value, onChangeText, onSubmitEditing},ref)=>{
     const width = Dimensions.get('window').width;
-    
-    return <StyledIntroInput 
-        width={width} 
-        placeholder={placeholder} 
+
+    return <StyledIntroInput
+        width={width}
+        placeholder={placeholder}
         maxLength={30}
         maxLength={1000}
         multiline={true}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType= "next"
-        
+
         ref={ref}
         value={value}
         onChangeText={onChangeText}
@@ -69,15 +69,15 @@ const StyledInput=styled.TextInput.attrs(({theme})=>({
 
 const Input= forwardRef(({placeholder, value, onChangeText, onSubmitEditing},ref)=>{
     const width = Dimensions.get('window').width;
-    
-    return <StyledInput 
-        width={width} 
-        placeholder={placeholder} 
+
+    return <StyledInput
+        width={width}
+        placeholder={placeholder}
         maxLength={30}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType= "next"
-        
+
         ref={ref}
         value={value}
         onChangeText={onChangeText}
@@ -94,9 +94,6 @@ Input.propTypes={
 };
 
 
-
-
-
 const Container=styled.View`
     flex: 1;
     flex-direction: column;
@@ -104,10 +101,10 @@ const Container=styled.View`
     align-items: center;
 `;
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 120px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -124,9 +121,9 @@ const MainHeader= ({clubname})=>{
 
     return (
         <Header width={width}>
-         
+
         <Text style={styles.clubname}>{clubname}</Text>
-        
+
         </Header>
     )
 };
@@ -215,18 +212,8 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
-const tempData = {
-    "clubname": "SEORAP",
-    "booktitle": "보노보노, 오늘 하루는 어땠어?",
-    "goal": 226,
-
-}
-
-
-
-const MyClubMainM=({ navigation })=>{
+const MyClubMainM=({ navigation, route })=>{
+    const id = route.params.id;
 
     const width= Dimensions.get('window').width;
 
@@ -236,37 +223,52 @@ const MyClubMainM=({ navigation })=>{
     const reftype=useRef();
     const refmaxnum=useRef();
 
-
+    const [clubname, setClubname] = useState('');
     const [newIntro, setNewIntro]=useState('');
-    const [newAdmin, setNewAdmin]=useState('');
+    const [admin, setAdmin]=useState('');
     const [newRegion, setNewRegion]=useState('');
-    const [newType, setNewType]=useState('');
+    //const [newType, setNewType]=useState('');
     const [newMaxnum, setNewMaxnum]=useState('');
+
+    const getClubData = async() => {
+      try{
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+
+        setClubname(clubData.title);
+        setAdmin(clubData.leader.name);
+        setNewRegion(clubData.region);
+        setNewMaxnum(clubData.maxNumber);
+        setNewIntro(clubData.description);
+      }
+      catch(e){
+        Alert.alert("클럽 수신 데이터 오류", e.message);
+      }
+    }
 
     const _handleIntroChange = text => {
         setNewIntro(text);
     };
 
-    const _handleAdminChange = text => {
-        setNewAdmin(text);
-    };
-
-    const _handleRegionChange = text => {
-        setNewRegion(text);
-    };
-    
-    const _handleTypeChange = text => {
-        setNewType(text);
-    };
-    
     const _handleMaxnumChange = text => {
         setNewMaxnum(text);
     };
 
+    const _handelEditButtonPress = async() => {
+      try{
+        const clubRef = DB.collection('clubs').doc(id);
+        await DB.runTransaction(async (t) => {
+          t.update(clubRef, {description: newIntro, region: newRegion, maxNumber: newMaxnum});
+        });
 
-
-
-
+        Alert.alert('클럽 정보 수정 완료');
+        navigation.navigate('MyClubMainInfoNav', {screen:"MyClubMainManage", params:{id: id}});
+      }
+      catch (e) {
+        Alert.alert('클럽 정보 수정 오류', e.message);
+      }
+    }
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -274,7 +276,7 @@ const MyClubMainM=({ navigation })=>{
             headerTintColor: '#000000',
             headerLeft: ({onPress, tintColor})=>{
                 return(
-                    
+
                     <MaterialCommunityIcons
                         name="keyboard-backspace"
                         size={30}
@@ -285,17 +287,17 @@ const MyClubMainM=({ navigation })=>{
                 );
             },
         });
-      console.log(navigation);
+        getClubData();
     }, []);
 
-    
+
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
         <Container>
-            <MainHeader clubname={tempData.clubname}></MainHeader>
+            <MainHeader clubname={clubname}></MainHeader>
 
         <List width={width}>
             <AllCon width={width}>
@@ -313,15 +315,9 @@ const MyClubMainM=({ navigation })=>{
                       <Text style={styles.Second}>관리자</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                        <Input
-                            ref={refadmin}
-                            placeholder="새로운 관리자를 입력해주세요."
-                            value={newAdmin}
-                            onChangeText={_handleAdminChange}
-                            onSubmitEditing={()=>refregion.current.focus()}
-                        />
+                        <Text style={styles.Second}>{admin}</Text>
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
                 <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -329,31 +325,25 @@ const MyClubMainM=({ navigation })=>{
                       <Text style={styles.First}>지역구</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                        <Input
-                            ref={refregion}
-                            placeholder="새로운 지역을 입력해주세요."
-                            value={newRegion}
-                            onChangeText={_handleRegionChange}
-                            onSubmitEditing={()=>reftype.current.focus()}       
-                        />  
+                    <Picker
+                        selectedValue={newRegion}
+                        style={{ height: 50, width: 200, margin: 10 }}
+                        onValueChange={(itemValue, itemIndex) => setNewRegion(itemValue)}>
+                        <Picker.Item label="지역을 선택해주세요" value="" />
+                        <Picker.Item label="강서" value="강서" />
+                        <Picker.Item label="강북" value="강북" />
+                        <Picker.Item label="강남" value="강남" />
+                        <Picker.Item label="강동" value="강동" />
+                        <Picker.Item label="경기북부" value="경기북부" />
+                        <Picker.Item label="경기남부" value="경기남부" />
+                        <Picker.Item label="충청" value="충청" />
+                        <Picker.Item label="전라" value="전라" />
+                        <Picker.Item label="경북" value="경북" />
+                        <Picker.Item label="경남" value="경남" />
+                        <Picker.Item label="제주" value="제주" />
+                    </Picker>
                     </Fix2>
-                </ContainerRow> 
-                <Line width={width}></Line>
-
-                <ContainerRow width={width}>
-                    <Fix1 width={width}>
-                      <Text style={styles.First}>모임형태</Text>
-                    </Fix1>
-                    <Fix2 width={width}>
-                        <Input
-                            ref={reftype}
-                            placeholder="새로운 모임형태를 입력해주세요."
-                            value={newType}
-                            onChangeText={_handleTypeChange}
-                            onSubmitEditing={()=>refmaxnum.current.focus()}
-                        />
-                    </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
                 <Line width={width}></Line>
 
                 <ContainerRow width={width}>
@@ -369,15 +359,15 @@ const MyClubMainM=({ navigation })=>{
                             onSubmitEditing={()=>{}}
                         />
                     </Fix2>
-                </ContainerRow> 
+                </ContainerRow>
 
             </AllCon>
-    
+
             <ButtonFix2 width={width}>
               <Button
                 color= '#fac8af'
                 title="정보 수정 완료"
-                onPress={()=>alert('수정이 완료되었습니다.')}    //수정 완료 함수 필요
+                onPress={_handelEditButtonPress}    //수정 완료 함수 필요
               />
             </ButtonFix2>
         </List>
@@ -386,5 +376,21 @@ const MyClubMainM=({ navigation })=>{
 
     );
 };
+
+// <ContainerRow width={width}>
+//     <Fix1 width={width}>
+//       <Text style={styles.First}>모임형태</Text>
+//     </Fix1>
+//     <Fix2 width={width}>
+//         <Input
+//             ref={reftype}
+//             placeholder="새로운 모임형태를 입력해주세요."
+//             value={newType}
+//             onChangeText={_handleTypeChange}
+//             onSubmitEditing={()=>refmaxnum.current.focus()}
+//         />
+//     </Fix2>
+// </ContainerRow>
+// <Line width={width}></Line>
 
 export default MyClubMainM;

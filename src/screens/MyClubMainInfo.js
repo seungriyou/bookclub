@@ -176,28 +176,22 @@ const MyClubMainInfo=({ navigation, route })=>{
         const clubRef = DB.collection('clubs').doc(id);
         const clubDoc = await clubRef.get();
         const clubData = clubDoc.data();
+        const tempData = {
+          clubname: "",
+          booktitle: "",
+          bookcover: "",
+          goal: 0,
+          userlist: []
+        }
         if (clubData.book_now.title === "" && clubData.book_now.cover === "") {
           setIsThereBook(false);
-          const tempData = {
-            clubname: "",
-            booktitle: "",
-            bookcover: "",
-            goal: 0,
-            userlist: []
-          }
+          
           tempData.clubname = clubData.title;
           setMainData(tempData);
           setLeader(clubData.leader);
         }
         else {
           setIsThereBook(true);
-          const tempData = {
-            clubname: "",
-            booktitle: "",
-            bookcover: "",
-            goal: 0,
-            userlist: []
-          }
 
           tempData.clubname = clubData.title;
           tempData.booktitle = clubData.book_now.title;

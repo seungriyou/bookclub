@@ -23,13 +23,13 @@ const MyClubMainInfoNav = () => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubMainInfo_1" component={MyClubMainInfo_1} />
-      <Stack.Screen name="MyClubMainInfo_2" component={MyClubMainInfo_2} />
-      <Stack.Screen name="MyClubMainM" component={MyClubMainM} />
-      <Stack.Screen name="MyClubMainManage" component={MyClubMainManage} />
-      <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} />
-      <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} />
-      <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} />
+      <Stack.Screen name="MyClubMainInfo_1" component={MyClubMainInfo_1} options={{title: "독서 목표 수정"}}/>
+      <Stack.Screen name="MyClubMainInfo_2" component={MyClubMainInfo_2} options={{title: "독서 진행상황 수정"}}/>
+      <Stack.Screen name="MyClubMainM" component={MyClubMainM} options={{title: "클럽 정보 수정"}}/>
+      <Stack.Screen name="MyClubMainManage" component={MyClubMainManage} options={{title: "클럽 정보"}}/>
+      <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} options={{title: "클럽원 목록"}}/>
+      <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} options={{title: "가입 대기중인 회원"}}/>
+      <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} options={{title: "도서 검색"}}/>
     </Stack.Navigator>
   );
 };
