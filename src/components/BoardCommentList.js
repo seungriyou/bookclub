@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { View, useWindowDimensions, Text, StyleSheet, FlatList } from 'react-native';
 import { theme } from '../theme';
 import moment from 'moment';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -14,7 +15,7 @@ const Container = styled.View`
   margin: 10px 0 0 0;
   padding: 0px 5px;
 `;
-const CommentInfo = styled.View`
+const CommentHeader = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
@@ -27,6 +28,51 @@ const CommentArea = styled.View`
   padding: 5px 5px;
 `;
 
+// 삭제, 수정 버튼
+const CommentButtonArea = styled.View`
+  flex-direction: row;
+`;
+const CommentButtonContainer = styled.TouchableOpacity`
+  width: 30px;
+  height: 25px;
+  justify-content: center;
+  align-items: flex-end;
+  padding-right: 1px;
+  padding-left: 3px;
+`;
+const DeleteButtonIcon = () => {
+  return (
+    <MaterialCommunityIcons
+      name="delete"
+      size={20}
+      color={theme.buttonIcon}
+    />
+  );
+};
+const DeleteButton = ({ onPress }) => {
+  return (
+    <CommentButtonContainer onPress={onPress}>
+      <DeleteButtonIcon />
+    </CommentButtonContainer>
+  );
+};
+const EditButtonIcon = () => {
+  return (
+    <MaterialCommunityIcons
+      name="pencil"
+      size={20}
+      color={theme.buttonIcon}
+    />
+  );
+};
+const EditButton = ({ onPress }) => {
+  return (
+    <CommentButtonContainer onPress={onPress}>
+      <EditButtonIcon />
+    </CommentButtonContainer>
+  );
+};
+
 const BoardCommentList = ({ postInfo }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
@@ -38,14 +84,28 @@ const BoardCommentList = ({ postInfo }) => {
     return moment(ts).format('MM/DD');
   };
 
+  // 댓글 수정, 삭제 함수 (수정 필요)
+  const _editComment = () => {
+    alert('edit!');
+  };
+  const _deleteComment = () => {
+    alert('delete!');
+  };
+  
   const renderItem = ({ item }) => {
     return (
       <CommentArea width={width}>
-        <CommentInfo>
+        <CommentHeader>
           <Text style={styles.writerText}>{item.writer.name}</Text>
-          <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
-        </CommentInfo>
+          {/* 조건부 렌더링 필요 => 현재 user가 writer인 댓글에서만 CommentButtonArea를 보여줘야 함 */}
+          <CommentButtonArea>
+            {/* 각 버튼의 onPress에 수정, 삭제 함수를 넣어야 함 */}
+            <EditButton onPress={_editComment}/>
+            <DeleteButton onPress={_deleteComment}/>
+          </CommentButtonArea>
+        </CommentHeader>
         <Text style={styles.contentText}>{item.content}</Text>
+        <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
       </CommentArea>
     );
   };
@@ -72,17 +132,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: theme.text,
-    paddingTop: 6,
+    paddingTop: 1,
   },
   infoText: {
     fontSize: 13,
     color: theme.infoTextComment,
-    paddingBottom: 5,
+    paddingBottom: 1,
   },
   contentText: {
     fontSize: 15,
-    paddingTop: 7,
-    paddingBottom: 7,
+    paddingTop: 4,
+    paddingBottom: 5,
+    lineHeight: 22,
   },
   separator: {
     height: 0.8,
