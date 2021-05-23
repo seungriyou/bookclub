@@ -30,98 +30,72 @@ const List=styled.ScrollView`
     width: ${({width})=>width}px;
 `;
 
-const tempData = {
-
-  "object": [
-    {
-      "itemId": 1,
-      "title": "부유하는 매실",
-      "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-      "author": "나츠메 소세키",
-      "description": "자연과 사람이 함께 살아가는 모습을 꿈꾸는 '채인선×김진만의 환경 다큐 그림책'이 출간되었다. 김진만 피디의 참신한 기획, 채인선 작가의 따뜻한 시선, MBC 다큐멘터리 '남극의 눈물'의 감동적인 황제펭귄 사진이 만나 ‘ 환경 다큐 그림책’을 만들어 냈다."
-    },
-    {
-      "itemId": 2,
-      "title": "잠들지 않는 새벽",
-      "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-      "author": "달그림자",
-      "description": "대부분의 소개글이 윗 칸과 같은 분량을 지니는 것으로 보여 최소높이를 윗 칸 기준으로 잡았습니다."
-    },
-    {
-      "itemId": 3,
-      "title": "가장 차가운 것",
-      "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-      "author": "벽난로",
-      "description": "실제로 알라딘 API를 렌더링한 flatlist를 가져올 경우, 이 공간에는 여백이 자리했다가 '검색하기'버튼을 누른 후에 flatlist가 생성됩니다."
-    },
-    {
-      "itemId": 4,
-      "title": "탈수",
-      "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-      "author": "에비앙",
-      "description": "코로나19가 정말 걸리면 큰일이 나는 위험한 것인가? 코로나19와 가장 밀접한 곳에서 일하고 있는 응급의학과 의사인 저자의 경험담과 생각은, 우리가 코로나19에 대해 아무렇지도 않게 무심코 받아들인 정보들과 상황들이 과연 모두 맞는 건지 의구심을 가지게 한다."
-    },
-    {
-      "itemId": 5,
-      "title": "라일락",
-      "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-      "author": "무지개",
-      "description": "라벤더와 착각하고 있지는 않으신가요?"
-    },
-  ]
-}
-
 const MyClubBookSearch = ({ navigate, route }) => {
+  const id = route.params.id;
   const width= Dimensions.get('window').width;
   const theme = useContext(ThemeContext);
   const [bookname, setBookname] = useState("");
   const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
 
   const _handleSearchButtonPressed = async() => {
-    try {
-      let list = [];
-      const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${ALADIN_SEARCH_API_KEY}&Query=${bookname}`;
-      //console.log(url);
-      await fetch(url)
-      .then(response => response.text())
-      .then(data => {
-        parseString(data, function(err, result) {
-          //console.log(JSON.stringify(result));
-          //console.log(JSON.parse(JSON.stringify(result)));
-          const items = result.object.item;
-          let index = 1;
-          for(const item of items) {
-            let tempDescription = "";
-            if(item.description[0].indexOf("<br/>") != -1){
-              const temp = item.description[0].split("<br/>");
-              tempDescription = decode(temp[1]);
+    if (bookname !== "") {
+      try {
+        let list = [];
+        const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${ALADIN_SEARCH_API_KEY}&Query=${bookname}&QueryType=ItemNewAll&SearchTarget=Book&MaxResults=50&Start=${page}`;
+        //console.log(url);
+        await fetch(url)
+        .then(response => response.text())
+        .then(data => {
+          parseString(data, function(err, result) {
+            //console.log(JSON.stringify(result));
+            //console.log(JSON.parse(JSON.stringify(result)));
+            if (result.object.item === null) {
+              throw "검색 결과가 없습니다.";
             }
-            else{
-              tempDescription = decode(item.description[0]);
+            const items = result.object.item;
+            let index = 1;
+            for(const item of items) {
+              let tempDescription = "";
+              if(item.description[0].indexOf("<br/>") != -1){
+                const temp = item.description[0].split("<br/>");
+                tempDescription = decode(temp[1]);
+              }
+              else{
+                tempDescription = decode(item.description[0]);
+              }
+              const tempData = {
+                itemId: index,
+                title: item.title[0],
+                cover: item.cover[0],
+                author: item.author[0],
+                description: tempDescription,
+                clubId: id,
+              }
+              list.push(tempData);
+              index++;
             }
-            const tempData = {
-              itemId: index,
-              title: item.title[0],
-              cover: item.cover[0],
-              author: item.author[0],
-              description: tempDescription,
-            }
-            list.push(tempData);
-            index++;
-          }
+          });
         });
-      });
-      setItems(list);
-    }
-    catch(e) {
-      Alert.alert("검색 오류", e.message);
+        setItems(list);
+      }
+      catch(e) {
+        Alert.alert("검색 오류", "검색 결과가 존재하지 않습니다.");
+      }
     }
   }
 
-  useState(()=> {
-    console.log("set Complete");
-  }, [items]);
+  const _handleNextSearchButtonPressed = async() => {
+    setPage(page + 1);
+  }
 
+  const _handleResetSearchButtonPressed = async() => {
+    setPage(1);
+  }
+
+  useEffect(() => {
+    _handleSearchButtonPressed();
+  }, [page]);
 
   return (
     <Container width={width}>
@@ -134,10 +108,18 @@ const MyClubBookSearch = ({ navigate, route }) => {
           title="검색하기"
           onPress={_handleSearchButtonPressed}
         />
+        <Button
+          title="다음 검색하기"
+          onPress={_handleNextSearchButtonPressed}
+        />
+        <Button
+          title="처음 검색하기"
+          onPress={_handleResetSearchButtonPressed}
+        />
       </FixBar>
 
       <List width={width}>
-        <BookSearchList bookInfo={items}></BookSearchList>
+        <BookSearchList bookInfo={items} clubid={id}></BookSearchList>
       </List>
     </Container>
   );

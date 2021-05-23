@@ -235,8 +235,11 @@ const MyClubMainInfo_2=({ navigation, route })=>{
         const tempuserlist = [];
         let index = 1;
         for (let member of clubData.members) {
-          const user_rate = member.now_page / tempData.goal;
-          user_rate = user_rate.toFixed(1);
+          let user_rate = 0;
+          if (tempData.goal !== 0) {
+            user_rate = member.now_page / tempData.goal;
+            user_rate = user_rate.toFixed(1);
+          }
           if (member.uid === user.uid) {
             setUserPage(member.now_page);
           }

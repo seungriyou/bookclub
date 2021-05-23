@@ -88,8 +88,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
     ]);
   }
 
-
-
   const getAlbum = async() => {
     try{
       spinner.start();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StatusBar, Image } from 'react-native';
+import { StatusBar, Image, SafeAreaView } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
@@ -12,15 +12,15 @@ import { LogBox } from 'react-native';
 
 LogBox.ignoreAllLogs(); //에러메세지 출력 끄기
 
-const cashImages = images => {
-  return images.map(image => {
-    if (typeof image === 'string') {
-      return Image.prefetch(image);
-    } else {
-      return Asset.fromModule(image).downloadAsync();
-    }
-  });
-};
+// const cashImages = images => {
+//   return images.map(image => {
+//     if (typeof image === 'string') {
+//       return Image.prefetch(image);
+//     } else {
+//       return Asset.fromModule(image).downloadAsync();
+//     }
+//   });
+// };
 
 const cacheFonts = fonts => {
   return fonts.map(font => Font.loadAsync(font));

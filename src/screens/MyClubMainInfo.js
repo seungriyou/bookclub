@@ -176,7 +176,7 @@ const MyClubMainInfo=({ navigation, route })=>{
         const clubRef = DB.collection('clubs').doc(id);
         const clubDoc = await clubRef.get();
         const clubData = clubDoc.data();
-        if (clubData.book_now === {}) {
+        if (clubData.book_now.title === "" && clubData.book_now.cover === "") {
           setIsThereBook(false);
         }
         else {
@@ -196,8 +196,11 @@ const MyClubMainInfo=({ navigation, route })=>{
           const tempuserlist = [];
           let index = 0;
           for (let member of clubData.members) {
-            const user_rate = member.now_page / tempData.goal;
-            user_rate = user_rate.toFixed(1);
+            let user_rate = 0;
+            if (tempData.goal !== 0) {
+              user_rate = member.now_page / tempData.goal;
+              user_rate = user_rate.toFixed(1);
+            }
             if (member.uid === user.uid) {
               setUserPage(member.now_page);
             }
@@ -223,6 +226,10 @@ const MyClubMainInfo=({ navigation, route })=>{
         Alert.alert('메인 페이지 데이터 수신 에러', e.message);
       }
     };
+
+    useEffect(() => {
+      getMainData();
+    }, []);
 
     useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
@@ -277,44 +284,40 @@ const MyClubMainInfo=({ navigation, route })=>{
                 );
             },
         });
-        getMainData();
     }, []);
-
 
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
+        {isThereBook ? (
           <Container>
-            {isThereBook && (
               <MainHeader clubname={mainData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2} />
-            )}
-            
-            {isThereBook && (
+
               <MainProcess
                   booktitle={mainData.booktitle}
                   goalpage={mainData.goal}
                   page={userPage}
                   cover={mainData.bookcover}
               />
-            )}
-            {isThereBook && (
+
               <List width={width}>
                 <UserProcessList userInfo={mainData}></UserProcessList>
               </List>
-            )}
-            {!isThereBook && (
-              <Button
-                title="목표 도서 등록하기"
-                onPress={()=>{console.log("검색창 띄우기")}}
-                color= '#fac8af'
-              />
-            )}
           </Container>
-        </KeyboardAwareScrollView>
+        ) : (
+            <Button
+              title="목표 도서 등록하기"
+              onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookSearch', params: {id: id}})}}
+              color= '#fac8af'
+            />
+        )}
 
+        </KeyboardAwareScrollView>
     );
 };
+
+
 
 export default MyClubMainInfo;

@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Dimensions, Text, StyleSheet, Button, Image, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
-import { DB, Storage, getCurrentUser} from '../utils/firebase';
+import { DB } from '../utils/firebase';
 
 
 const Container = styled.View`
@@ -48,14 +48,50 @@ const Box=styled.View`
 `;
 
 
-
-const BookSearchList = ({navigation, bookInfo}) => {
+const BookSearchList = ({bookInfo, clubid}) => {
     const width = Dimensions.get('window').width;
-    const user = bookInfo;
+    const book = bookInfo;
+    const id = clubid;
 
     const renderItem = ({ item }) => {
         const _handleSelectButtonPressed = () => {
-          alert('이 책을 목표로!')
+          Alert.alert("책 선택하기", `${item.title} 이 책을 선택하시겠습니까?`,
+          [
+            {
+              text: "아니요",
+              style: "cancel"
+            },
+            {
+              text: "예",
+              onPress: async () => {
+                try {
+                  const clubRef = DB.collection('clubs').doc(item.clubId);
+                  const clubDoc = await clubRef.get();
+                  const clubData = clubDoc.data();
+                  console.log(clubData);
+
+                  if (clubData.book_now.title === "" && clubData.book_now.cover === "") {
+                    await DB.runTransaction(async (t) => {
+                      const bookNow = {
+                        title: item.title,
+                        cover: item.cover,
+                        goal: 0,
+                      }
+
+                      t.update(clubRef, {book_now: bookNow});
+                    });
+                    Alert.alert("책 등록 완료", `${item.title} 이 책을 등록하였습니다`);
+                  }
+                  else{
+                    Alert.alert("책 등록 오류", "현재 진행중인 책이 있습니다.");
+                  }
+                }
+                catch(e) {
+                  Alert.alert("글 삭제 오류", e.message);
+                }
+              }
+            }
+          ]);
         }
 
         return (
@@ -70,7 +106,7 @@ const BookSearchList = ({navigation, bookInfo}) => {
                 <Image
                     style={styles.img}
                     source={{uri:item.cover}} />
-                
+
             </Cover>
 
             <ExtInfo width={width}>
@@ -79,7 +115,7 @@ const BookSearchList = ({navigation, bookInfo}) => {
                 <Text style={styles.description}>{item.description}</Text>
             </ExtInfo>
 
-            
+
             </ContainerRow>
         );
 
@@ -88,7 +124,7 @@ const BookSearchList = ({navigation, bookInfo}) => {
         <Container width={width}>
         <FlatList
             keyExtractor={(item) => item.itemId.toString()}
-            data={user}
+            data={book}
             renderItem={renderItem}
             ItemSeparatorComponent={() => {
             return (

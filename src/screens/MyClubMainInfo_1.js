@@ -202,31 +202,56 @@ const MyClubMainInfo_1=({ navigation, route })=>{
     }
 
     const _alertadd= async() =>{
-      try{
-        const clubRef = DB.collection('clubs').doc(id);
-        await DB.runTransaction(async (t) => {
-          const doc = await t.get(clubRef);
-          const data = doc.data();
+      Alert.alert("알림", "책을 완료하고 완료 목록으로 보내시겠습니까?",
+      [
+        {
+          text: "아니요",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: async () => {
+            try{
+              const clubRef = DB.collection('clubs').doc(id);
+              await DB.runTransaction(async (t) => {
+                const doc = await t.get(clubRef);
+                const data = doc.data();
 
-          let bookNow = data.book_now;
-          let bookCompleted = data.bookCompleted;
-          let members = data.members;
-          for(let i = 0; i < members.length; i++) {
-            members[i].now_page = 0;
+                let bookNow = data.book_now;
+                let bookCompleted = data.book_completed;
+                let members = data.members;
+
+                bookNow.members = members;
+                bookCompleted.push(bookNow);
+
+                let newMembers = [];
+
+                for(let i = 0; i < members.length; i++) {
+                  newMembers.push({
+                    name: members[i].name,
+                    now_page: 0,
+                    photoUrl: members[i].photoUrl,
+                    uid: members[i].uid,
+                  });
+                }
+
+                bookNow = {
+                  title: "",
+                  goal: 0,
+                  cover: "",
+                };
+
+                t.update(clubRef, {book_now: bookNow, book_completed: bookCompleted, members: newMembers});
+              });
+              alert('등록을 완료했습니다.');
+              navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});
+            }
+            catch(e) {
+              Alert.alert('책 완료 등록 에러', e.message);
+            }
           }
-
-          bookCompleted.push(bookNow);
-
-          bookNow = {};
-
-          t.update(clubRef, {book_now: bookNow, book_completed: bookCompleted, members: members});
-        });
-        alert('등록을 완료했습니다.');
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});
-      }
-      catch(e) {
-        Alert.alert('책 완료 등록 에러', e.message);
-      }
+        }
+      ]);
     }
 
     const getMainData= async() => {
@@ -249,8 +274,11 @@ const MyClubMainInfo_1=({ navigation, route })=>{
         const tempuserlist = [];
         let index = 0;
         for (let member of clubData.members) {
-          const user_rate = member.now_page / tempData.goal;
-          user_rate = user_rate.toFixed(1);
+          let user_rate = 0;
+          if (tempData.goal !== 0) {
+            user_rate = member.now_page / tempData.goal;
+            user_rate = user_rate.toFixed(1);
+          }
           if (member.uid === user.uid) {
             setUserPage(member.now_page);
           }

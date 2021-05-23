@@ -72,23 +72,13 @@ const MainTab = ({ navigation, route }) => {
         { if (index === 0)
             {
               return (
-              <Layout>
               <MaterialCommunityIcons
                   name="format-list-bulleted"
                   size={30}
                   style={{marginRight:10}}
 
                   onPress={()=>{console.log("navigate to book complete list page")}}   //수정필요-진행완료된 책 화면으로 이동
-
               />
-              <MaterialCommunityIcons
-                  name="magnify"
-                  size={30}
-                  style={{marginRight:10}}
-
-                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookSearch', params: {id: id}})}}  //수정필요-책 추천화면 이동
-              />
-              </Layout>
             )}
           if (index === 1)
             return (
