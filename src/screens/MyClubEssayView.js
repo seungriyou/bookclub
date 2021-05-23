@@ -67,16 +67,21 @@ const MyClubEssayView = ({ navigation, route }) => {
         let newLikeCnt = data.like_cnt;
 
         if(oldLike.hasOwnProperty(user.uid)) {
-          if(oldLike[user.uid] === true) {
+          if(oldLike[user.uid]) {
             newLike[user.uid] = false;
             newLikeCnt = oldLikeCnt - 1;
+          }
+          else {
+            newLike[user.uid] = true;
+            newLikeCnt = oldLikeCnt + 1;
           }
         }
         else {
           newLike[user.uid] = true;
           newLikeCnt = oldLikeCnt + 1;
         }
-
+        console.log("oldLike", oldLike, oldLike[user.uid]);
+        console.log(newLike);
         t.update(essayRef, {like_table: newLike, like_cnt: newLikeCnt});
       });
 
@@ -86,10 +91,9 @@ const MyClubEssayView = ({ navigation, route }) => {
       else {
         Alert.alert("좋아요");
       }
-
     }
     catch (e) {
-      Alert.alert('댓글 작성 오류', e.message);
+      Alert.alert('에세이 좋아요 오류', e.message);
     }
     finally{
       spinner.stop();
@@ -133,6 +137,22 @@ const MyClubEssayView = ({ navigation, route }) => {
 
       if (data.author.uid === user.uid) {
         setIsAuthor(true);
+      }
+
+      const isExist = data.like_table.hasOwnProperty(user.uid);
+      if(isExist) {
+        if(data.like_table[user.uid] === true) {
+          setIsLiked(true);
+          console.log("isLiked", true);
+        }
+        else {
+          setIsLiked(false);
+          console.log("isLiked", false);
+        }
+      }
+      else {
+        setIsLiked(false);
+        console.log("isLiked", false);
       }
 
       const tempData = {
@@ -211,29 +231,9 @@ const MyClubEssayView = ({ navigation, route }) => {
     }
   };
 
-  useLayoutEffect(() => {
-    //console.log(navigation);
+  useEffect(() => {
     getEssay();
   }, []);
-
-  useEffect(() => {
-    getEssay();
-  }, [update]);
-
-  useEffect(() => {
-    const isExist = essayData.like.hasOwnProperty(user.uid);
-    if(isExist) {
-      if(essayData.like[user.uid] == true) {
-        setIsLiked(true);
-      }
-      else {
-        setIsLiked(false);
-      }
-    }
-    else {
-      setIsLiked(false);
-    }
-  }, [essayData]);
 
   useEffect(() => {
     getEssay();
@@ -274,10 +274,9 @@ const MyClubEssayView = ({ navigation, route }) => {
             />
           </View>
         )
-
       ),
     });
-  }, [isLiked, isAuthor]);
+  }, [isAuthor, isLiked, update]);
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.appBackground }}>
