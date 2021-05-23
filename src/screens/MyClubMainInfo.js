@@ -178,6 +178,16 @@ const MyClubMainInfo=({ navigation, route })=>{
         const clubData = clubDoc.data();
         if (clubData.book_now.title === "" && clubData.book_now.cover === "") {
           setIsThereBook(false);
+          const tempData = {
+            clubname: "",
+            booktitle: "",
+            bookcover: "",
+            goal: 0,
+            userlist: []
+          }
+          tempData.clubname = clubData.title;
+          setMainData(tempData);
+          setLeader(clubData.leader);
         }
         else {
           setIsThereBook(true);
@@ -195,6 +205,7 @@ const MyClubMainInfo=({ navigation, route })=>{
           tempData.bookcover = clubData.book_now.cover;
           const tempuserlist = [];
           let index = 0;
+
           for (let member of clubData.members) {
             let user_rate = 0;
             if (tempData.goal !== 0) {
@@ -291,29 +302,30 @@ const MyClubMainInfo=({ navigation, route })=>{
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
-        {isThereBook ? (
           <Container>
               <MainHeader clubname={mainData.clubname} movetoInfo1={movetoInfo1} movetoInfo2={movetoInfo2} />
 
-              <MainProcess
-                  booktitle={mainData.booktitle}
-                  goalpage={mainData.goal}
-                  page={userPage}
-                  cover={mainData.bookcover}
+          {isThereBook ? (
+            <Container>
+                <MainProcess
+                    booktitle={mainData.booktitle}
+                    goalpage={mainData.goal}
+                    page={userPage}
+                    cover={mainData.bookcover}
+                />
+
+                <List width={width}>
+                  <UserProcessList userInfo={mainData}></UserProcessList>
+                </List>
+            </Container>
+          ) : (
+              <Button
+                title="목표 도서 등록하기"
+                onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookSearch', params: {id: id}})}}
+                color= '#fac8af'
               />
-
-              <List width={width}>
-                <UserProcessList userInfo={mainData}></UserProcessList>
-              </List>
+          )}
           </Container>
-        ) : (
-            <Button
-              title="목표 도서 등록하기"
-              onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookSearch', params: {id: id}})}}
-              color= '#fac8af'
-            />
-        )}
-
         </KeyboardAwareScrollView>
     );
 };
