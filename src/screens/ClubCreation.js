@@ -11,20 +11,29 @@ const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 20px;
 `;
 
-const ContainerRow=styled.View`
-    width: ${({width})=>width}px;
-    height: 60px;
-    flex-direction: row;
+const ContainerRegion=styled.View`
+    width: ${({width})=>(width)-40}px;
+    height: 70px;
     background-color: ${({theme})=>theme.background};
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    borderBottom-Width: 1px;
-    borderBottom-Color: ${({theme})=>theme.separator};
+    border-Width: 1px;
+    border-Color: ${({theme})=>theme.inputBorder};
+    padding: 10px 0 10px 0;
+    marginTop: 20px;
+    marginBottom: 10px;
+    border-radius: 5px;
 `;
+
+const Box=styled.View`
+  width: 10px;
+  height: 10px;
+`;
+
 
 const ErrorText = styled.Text`
   align-items: flex-start;
@@ -109,10 +118,10 @@ const ClubCreation = ({ navigation }) => {
           maxLength={40}
         />
 
-        <ContainerRow width={width}>
+        <ContainerRegion width={width}>
           <Picker
               selectedValue={region}
-              style={{ height: 50, width: 200, margin: 10 }}
+              style={{ height: 50, width: 220}}
               onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
               <Picker.Item label="지역을 선택해주세요" value="" />
               <Picker.Item label="강서" value="강서" />
@@ -127,7 +136,7 @@ const ClubCreation = ({ navigation }) => {
               <Picker.Item label="경남" value="경남" />
               <Picker.Item label="제주" value="제주" />
           </Picker>
-        </ContainerRow>
+        </ContainerRegion>
 
         <Input
           ref={maxNumberRef}
@@ -144,6 +153,7 @@ const ClubCreation = ({ navigation }) => {
           keyboardType="number-pad"
         />
         <ErrorText>{errorMessage}</ErrorText>
+        <Box />
         <Button
           title="클럽 생성하기"
           onPress={_handelCreateButtonPress}

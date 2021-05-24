@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { DB, getCurrentUser } from '../utils/firebase';
-import { FlatList, Alert } from 'react-native';
+import { FlatList, Alert, Dimensions } from 'react-native';
 import styled, { ThemeContext } from 'styled-components/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
@@ -35,6 +35,13 @@ const ItemTime = styled.Text`
   color: ${({ theme }) => theme.listTime};
 `;
 
+const Line=styled.View`
+  width: ${({width})=>width}px;
+  height:1px;
+  background-color: ${({ theme }) => theme.separator};
+`;
+
+
 const getDateOrTime = ts => {
   const now = moment().startOf('day');
   const target = moment(ts).startOf('day');
@@ -63,6 +70,9 @@ const Item = React.memo(
 );
 
 const MyClubList = ({ navigation }) => {
+
+  const width= Dimensions.get('window').width;
+
   const [clubIds, setClubIds] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [doc, setDoc] = useState({});
@@ -139,7 +149,7 @@ const MyClubList = ({ navigation }) => {
     <Container>
     <Picker
         selectedValue={region}
-        style={{ height: 50, width: 200, margin: 10 }}
+        style={{ height: 50, width: 220, margin: 10 }}
         onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
         <Picker.Item label="지역을 선택해주세요" value="" />
         <Picker.Item label="강서" value="강서" />
@@ -154,6 +164,7 @@ const MyClubList = ({ navigation }) => {
         <Picker.Item label="경남" value="경남" />
         <Picker.Item label="제주" value="제주" />
     </Picker>
+    <Line width={width} />
       <FlatList
         keyExtractor={item => item['id']}
         data={clubs}
