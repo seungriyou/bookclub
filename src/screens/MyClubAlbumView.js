@@ -88,6 +88,80 @@ const MyClubAlbumView = ({ navigation, route }) => {
     ]);
   }
 
+  const _handleCommentDelete = async (id) => {
+    Alert.alert("경고", "댓글을 삭제하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            const oldComment = albumData.comment;
+            let list = [];
+            for (let com of oldComment) {
+              if(com.id !== id){
+                list.push(com);
+              }
+            }
+
+            const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
+            await DB.runTransaction(async (t) => {
+              t.update(albumRef, {comment: list, comment_cnt: (albumData.comment_cnt - 1)});
+            });
+            setUpdate(update => update + 1);
+          }
+          catch(e) {
+            Alert.alert("댓글 삭제 오류", e.message);
+          }
+        }
+      }
+    ]);
+  }
+
+  const _handleCommentEdit = (id) => {
+    Alert.alert("알림", "댓글을 수정하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            if(!comment) {
+              Alert.alert("댓글 내용을 입력해주세요.");
+            }
+            else{
+              const oldComment = albumData.comment;
+              let list = [];
+              for (let com of oldComment) {
+                if(com.id === id){
+                  com.content = comment;
+                }
+                list.push(com);
+              }
+
+              const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
+              await DB.runTransaction(async (t) => {
+                t.update(albumRef, {comment: list});
+              });
+              setUpdate(update => update + 1);
+            }
+            setComment('');
+          }
+          catch(e) {
+            Alert.alert("댓글 수정 오류", e.message);
+          }
+        }
+      }
+    ]);
+  }
+
+
   const getAlbum = async() => {
     try{
       spinner.start();
@@ -187,10 +261,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
     getAlbum();
   }, [update]);
 
-  useLayoutEffect(() => {
-
-    //console.log(navigation);
-  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -235,7 +305,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
       <KeyboardAwareScrollView extraScrollHeight={20}>
         <Container>
           <AlbumViewPost postInfo={albumData}></AlbumViewPost>
-          {!albumData.comment_cnt || <CommentList postInfo={albumData}></CommentList>}
+          {!albumData.comment_cnt || <CommentList postInfo={albumData} userInfo={user} clubId={clubId} onDelete={_handleCommentDelete} onEdit={_handleCommentEdit}></CommentList>}
         </Container>
       </KeyboardAwareScrollView>
       <CommentForm>

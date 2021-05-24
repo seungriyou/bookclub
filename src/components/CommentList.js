@@ -75,9 +75,10 @@ const EditButton = ({ onPress }) => {
   );
 };
 
-const CommentList = ({ postInfo }) => {
+const CommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
+  const userId = userInfo.uid;
   /*console.log(comments)*/
 
   const getDate = ts => {
@@ -86,31 +87,37 @@ const CommentList = ({ postInfo }) => {
     return moment(ts).format('MM/DD');
   };
 
-  // 댓글 수정, 삭제 함수 (수정 필요)
-  const _editComment = () => {
-    alert('edit!');
+  const _editComment = async(id) => {
+    onEdit(id)
   };
-  const _deleteComment = () => {
-    alert('delete!');
+  const _deleteComment = async(id) => {
+    onDelete(id);
   };
 
   const renderItem = ({ item }) => {
-    return (
+    const isButtonRender = (item.writer.uid == userId);
+
+    return (isButtonRender ? (
+      <CommentArea >
+        <CommentHeader width={width}>
+          <Text style={styles.writerText}>{item.writer.name}</Text>
+          <CommentButtonArea>
+            <EditButton onPress={()=>{_editComment(item.id)}}/>
+            <DeleteButton onPress={()=>{_deleteComment(item.id)}}/>
+          </CommentButtonArea>
+        </CommentHeader>
+        <Text style={styles.contentText}>{item.content}</Text>
+        <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
+      </CommentArea>
+    ) : (
       <CommentArea>
         <CommentHeader width={width}>
           <Text style={styles.writerText}>{item.writer.name}</Text>
-          {/* 조건부 렌더링 필요 => 현재 user가 writer인 댓글에서만 CommentButtonArea를 보여줘야 함 */}
-          <CommentButtonArea>
-            {/* 각 버튼의 onPress에 수정, 삭제 함수를 넣어야 함 */}
-            <EditButton onPress={_editComment}/>
-            <DeleteButton onPress={_deleteComment}/>
-          </CommentButtonArea>
         </CommentHeader>
-        <View style={{ width: width-75 }}>
-          <Text style={styles.contentText}>{item.content}</Text>
-        </View>
+        <Text style={styles.contentText}>{item.content}</Text>
         <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>
       </CommentArea>
+    )
     );
   };
 

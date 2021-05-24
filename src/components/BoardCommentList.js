@@ -95,13 +95,12 @@ const BoardCommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
 
   const renderItem = ({ item }) => {
     const isButtonRender = (item.writer.uid == userId);
+
     return (isButtonRender ? (
       <CommentArea width={width}>
         <CommentHeader>
           <Text style={styles.writerText}>{item.writer.name}</Text>
-          {/* 조건부 렌더링 필요 => 현재 user가 writer인 댓글에서만 CommentButtonArea를 보여줘야 함 */}
           <CommentButtonArea>
-            {/* 각 버튼의 onPress에 수정, 삭제 함수를 넣어야 함 */}
             <EditButton onPress={()=>{_editComment(item.id)}}/>
             <DeleteButton onPress={()=>{_deleteComment(item.id)}}/>
           </CommentButtonArea>
@@ -113,7 +112,6 @@ const BoardCommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
       <CommentArea width={width}>
         <CommentHeader>
           <Text style={styles.writerText}>{item.writer.name}</Text>
-          {/* 조건부 렌더링 필요 => 현재 user가 writer인 댓글에서만 CommentButtonArea를 보여줘야 함 */}
         </CommentHeader>
         <Text style={styles.contentText}>{item.content}</Text>
         <Text style={styles.infoText}>{getDate(item.upload_date)}</Text>

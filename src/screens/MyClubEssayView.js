@@ -129,6 +129,80 @@ const MyClubEssayView = ({ navigation, route }) => {
     ]);
   };
 
+  const _handleCommentDelete = async (id) => {
+    Alert.alert("경고", "댓글을 삭제하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            const oldComment = essayData.comment;
+            let list = [];
+            for (let com of oldComment) {
+              if(com.id !== id){
+                list.push(com);
+              }
+            }
+
+            const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
+            await DB.runTransaction(async (t) => {
+              t.update(essayRef, {comment: list, comment_cnt: (essayData.comment_cnt - 1)});
+            });
+            setUpdate(update => update + 1);
+          }
+          catch(e) {
+            Alert.alert("댓글 삭제 오류", e.message);
+          }
+        }
+      }
+    ]);
+  }
+
+  const _handleCommentEdit = (id) => {
+    Alert.alert("알림", "댓글을 수정하시겠습니까?",
+    [
+      {
+        text: "아니요",
+        style: "cancel"
+      },
+      {
+        text: "예",
+        onPress: async () => {
+          try {
+            if(!comment) {
+              Alert.alert("댓글 내용을 입력해주세요.");
+            }
+            else{
+              const oldComment = essayData.comment;
+              let list = [];
+              for (let com of oldComment) {
+                if(com.id === id){
+                  com.content = comment;
+                }
+                list.push(com);
+              }
+
+              const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
+              await DB.runTransaction(async (t) => {
+                t.update(essayRef, {comment: list});
+              });
+              setUpdate(update => update + 1);
+            }
+            setComment('');
+          }
+          catch(e) {
+            Alert.alert("댓글 수정 오류", e.message);
+          }
+        }
+      }
+    ]);
+  }
+
+
   const getEssay = async() => {
     try{
       spinner.start();
@@ -283,7 +357,7 @@ const MyClubEssayView = ({ navigation, route }) => {
       <KeyboardAwareScrollView extraScrollHeight={20}>
         <Container>
           <EssayViewPost postInfo={essayData}></EssayViewPost>
-          {!essayData.comment_cnt || <EssayCommentList postInfo={essayData}></EssayCommentList>}
+          {!essayData.comment_cnt || <EssayCommentList postInfo={essayData} userInfo={user} clubId={clubId} onDelete={_handleCommentDelete} onEdit={_handleCommentEdit}></EssayCommentList>}
         </Container>
       </KeyboardAwareScrollView>
       <CommentForm>
