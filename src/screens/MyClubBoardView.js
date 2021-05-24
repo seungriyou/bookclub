@@ -80,11 +80,11 @@ const MyClubBoardView=({ navigation, route })=>{
       return moment(ts).format('MM/DD');
     };
 
-    const _handelEditButtonPress = () => {
+    const _handleEditButtonPress = () => {
       navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardEdit', params: {clubId: clubId, boardId: boardId}});
     };
 
-    const _handelDeleteButtonPress = () => {
+    const _handleDeleteButtonPress = () => {
       Alert.alert("경고", "글을 삭제하시겠습니까?",
       [
         {
@@ -106,6 +106,79 @@ const MyClubBoardView=({ navigation, route })=>{
         }
       ]);
     };
+
+    const _handleCommentDelete = async (id) => {
+      Alert.alert("경고", "댓글을 삭제하시겠습니까?",
+      [
+        {
+          text: "아니요",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: async () => {
+            try {
+              const oldComment = boardData.comment;
+              let list = [];
+              for (let com of oldComment) {
+                if(com.id !== id){
+                  list.push(com);
+                }
+              }
+
+              const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
+              await DB.runTransaction(async (t) => {
+                t.update(boardRef, {comment: list, comment_cnt: (boardData.comment_cnt - 1)});
+              });
+              setUpdate(update => update + 1);
+            }
+            catch(e) {
+              Alert.alert("댓글 삭제 오류", e.message);
+            }
+          }
+        }
+      ]);
+    }
+
+    const _handleCommentEdit = (id) => {
+      Alert.alert("알림", "댓글을 수정하시겠습니까?",
+      [
+        {
+          text: "아니요",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: async () => {
+            try {
+              if(!comment) {
+                Alert.alert("댓글 내용을 입력해주세요.");
+              }
+              else{
+                const oldComment = boardData.comment;
+                let list = [];
+                for (let com of oldComment) {
+                  if(com.id === id){
+                    com.content = comment;
+                  }
+                  list.push(com);
+                }
+
+                const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
+                await DB.runTransaction(async (t) => {
+                  t.update(boardRef, {comment: list});
+                });
+                setUpdate(update => update + 1);
+              }
+              setComment('');
+            }
+            catch(e) {
+              Alert.alert("댓글 수정 오류", e.message);
+            }
+          }
+        }
+      ]);
+    }
 
     const getBoard = async() => {
       try{
@@ -221,14 +294,14 @@ const MyClubBoardView=({ navigation, route })=>{
                     size={30}
                     style={{marginRight:13}}
                     color={tintColor}
-                    onPress={_handelEditButtonPress}
+                    onPress={_handleEditButtonPress}
                 />
                 <MaterialCommunityIcons
                     name="trash-can"
                     size={30}
                     style={{marginRight:13}}
                     color={tintColor}
-                    onPress={_handelDeleteButtonPress}
+                    onPress={_handleDeleteButtonPress}
                 />
               </Layout>
             )
@@ -256,7 +329,7 @@ const MyClubBoardView=({ navigation, route })=>{
                 <BoardContent
                     content={boardData.content}
                 />
-                <BoardCommentList postInfo={boardData}></BoardCommentList>
+                <BoardCommentList postInfo={boardData} userInfo={user} clubId={clubId} onDelete={_handleCommentDelete} onEdit={_handleCommentEdit}></BoardCommentList>
             </List>
 
 
