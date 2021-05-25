@@ -47,9 +47,18 @@ const Header=styled.View`
     padding: 0;
 `;
 
+const Box=styled.View`
+  width: 10px;
+  height: 20px;
+`;
+
 const styles = StyleSheet.create({
     clubname: {
       fontSize: 25,
+      color: theme.text,
+    },
+    alim: {
+      fontSize: 18,
       color: theme.text,
     },
   });
@@ -188,7 +197,8 @@ const MyClubScheduleList=({ navigation, route })=>{
             )
             : (
             <Container>
-              <Text>이번달 일정이 없습니다!</Text>
+              <Box/>
+              <Text style={styles.alim}>이번달 일정이 없습니다!</Text>
             </Container>
           )}
 

@@ -9,14 +9,13 @@ const StyledInput=styled.TextInput.attrs(({theme})=>({
     placeholderTextColor: theme.inputPlaceholder,
 }))`
     width: ${({width})=>width-40}px;
-    height: 50px;
+    height: 58px;
     margin: 20px 0;
-    padding: 10px 10px;
+    padding: 10px 15px;
     border-radius: 10px;
     background-color: ${({theme})=>theme.inputBackground};
-    font-size: 20px;
+    font-size: 18px;
     color: ${({theme})=>theme.text};
-    textAlignVertical="top";
 `;
 
 const TitleInput= forwardRef(({placeholder, value, onChangeText, onSubmitEditing},ref)=>{
@@ -25,7 +24,7 @@ const TitleInput= forwardRef(({placeholder, value, onChangeText, onSubmitEditing
     return <StyledInput
         width={width}
         placeholder={placeholder}
-        maxLength={30}
+        maxLength={50}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType= "next"

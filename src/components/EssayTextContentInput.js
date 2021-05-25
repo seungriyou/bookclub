@@ -26,8 +26,8 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   padding-top: 15px;
   padding-bottom: 5px;
   background-color: ${({ theme }) => theme.inputBackground};
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 25px;
   color: ${({ theme }) => theme.text};
 `;
 

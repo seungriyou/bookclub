@@ -139,10 +139,10 @@ const AlbumViewPost = ({ postInfo }) => {
 
 const styles = StyleSheet.create({
   titleText: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: "bold",
     color: theme.text,
-    paddingBottom: 5,
+    paddingBottom: 15,
   },
   infoText: {
     fontSize: 13,
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   contentText: {
-    fontSize: 15,
+    fontSize: 16,
     paddingTop: 30,
     paddingLeft: 5,
     paddingRight: 5,

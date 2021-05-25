@@ -31,8 +31,7 @@ const IntroInput= forwardRef(({placeholder, value, onChangeText, onSubmitEditing
     return <StyledIntroInput
         width={width}
         placeholder={placeholder}
-        maxLength={30}
-        maxLength={1000}
+        maxLength={150}
         multiline={true}
         autoCapitalize="none"
         autoCorrect={false}

@@ -115,7 +115,7 @@ const ClubCreation = ({ navigation }) => {
           onBlur={() => setDescription(description.trim())}
           placeholder="클럽 설명"
           returnKeyType="next"
-          maxLength={40}
+          maxLength={150}
         />
 
         <ContainerRegion width={width}>

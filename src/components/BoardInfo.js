@@ -3,30 +3,37 @@
 
 import React from 'react';
 import styled from 'styled-components/native';
-import PropTypes from 'prop-types';
-import {Dimensions} from 'react-native';
+import {Dimensions, StyleSheet, Text} from 'react-native';
+import { theme } from '../theme';
 
-
-const Containerforinfo=styled.View`
-    width: ${({width})=>width-40}px;
-    height: 40px;
-    margin: 0 0 0 0;
-    padding: 5px 10px;
-    align-items: center;
+const Container=styled.View`
+    width: ${({ width }) => width - 40}px;
+    flex-direction: column;
+    align-items: stretch;
     justify-content: flex-start;
-    border-radius: 0;
-    flex-direction: row;
-    background-color: ${({theme})=>theme.inputBackground};
-    color: ${({theme})=>theme.text};
+    background-color: ${({ theme }) => theme.inputBackground};
+    margin: 20px 0 0 0;
+    padding: 15px 15px;
+    border-radius: 10px;
+`;
+
+const PostInfo = styled.View`
+  width: ${({ width }) => (width - 40) * 0.92}px;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-top: 6px;
+  padding-bottom: 2px;
+  margin: 0px;
+`;
+const PostInfo2 = styled.View`
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 const Containerfortitle=styled.View`
-    width: ${({width})=>width-40}px;
-    margin: 20px 20px 0 0;
-    min-height: 50px;
-    padding: 10px;
+    padding: 5px 0 15px 0;
     border-radius: 0;
-    justify-content: flex-start;
+    justify-content: center;
     multi-line: {true};
     flex-direction: column;
     background-color: ${({theme})=>theme.inputBackground};
@@ -34,10 +41,8 @@ const Containerfortitle=styled.View`
 `;
 
 const Containerforcontent=styled.ScrollView`
-    width: ${({width})=>width-40}px;
-    margin: 0 0 0 0;
     min-height: 300px;
-    padding: 5px 10px 20px 10px;
+    padding: 10px 10px 0 0;
     border-radius: 0;
     multi-line: {true};
     flex-direction: column;
@@ -45,69 +50,53 @@ const Containerforcontent=styled.ScrollView`
     color: ${({theme})=>theme.text};
 `;
 
-const Writer=styled.Text`
-    flex:8;
-    font-size: 15px;
-    color: ${({theme})=>theme.text};
+const Line=styled.View`
+    width: ${({ width }) => (width - 40)*0.92}px;
+    height: 0.9px;
+    background-color: ${({theme})=>theme.separator};
 `;
 
-const WriteDate=styled.Text`
-    flex:2;
-    font-size: 15px;
-    color: ${({theme})=>theme.text};
-`;
 
-const Reply=styled.Text`
-    flex:1;
-    font-size: 15px;
-    color: ${({theme})=>theme.text};
-`;
-
-const Title=styled.Text`
-    flex: 1;
-    font-size: 20px;
-    color: ${({theme})=>theme.text};
-
-`;
-
-const Content=styled.Text`
-    flex: 1;
-    font-size: 20px;
-    flex-direction: column;
-    line-height: 30px;
-    color: ${({theme})=>theme.text};
-`;
-
-const BoardTitle=({title})=>{
-    const width= Dimensions.get('window').width;
+const BoardViewPost=({title, content, writer, writedate, reply})=>{
+    const width=Dimensions.get('window').width;
 
     return(
-        <Containerfortitle width={width}>
-            <Title>{title}</Title>
-        </Containerfortitle>
-    );
-};
+        <Container width={width}>
+            <Containerfortitle>
+                <Text style={styles.titleText}>{title}</Text>
+            </Containerfortitle>
+        <Line width={width} />
+        <PostInfo width={width}>
+            <Text style={styles.infoText}>작성자: {writer}</Text>
+        <PostInfo2>
+            <Text style={styles.infoText}>{writedate}</Text>
+            <Text style={styles.infoText}>   댓글 {reply}</Text>
+        </PostInfo2>
+      </PostInfo>            
+        <Line width={width} />
+            <Containerforcontent>
+            <Text style={styles.contentText}>{content}</Text>
+            </Containerforcontent>
+        </Container>
+    )
+}
 
-const BoardContent=({content})=>{
-    const width= Dimensions.get('window').width;
-    return(
-        <Containerforcontent width={width} >
-            <Content>{content}</Content>
-        </Containerforcontent>
-    );
-};
+const styles = StyleSheet.create({
+    titleText: {
+      fontSize: 18,
+      fontWeight: "bold",
+      color: theme.text,
+    },
+    infoText: {
+      fontSize: 13,
+      color: theme.infoText,
+      paddingBottom: 5,
+    },
+    contentText: {
+      fontSize: 16,
+      lineHeight: 25,
+    },
+});
 
-const BoardInfo=({writer, writedate, reply})=>{
-    const width= Dimensions.get('window').width;
 
-    return(
-        <Containerforinfo width={width}>
-            <Writer>{writer}</Writer>
-            <WriteDate>{writedate}</WriteDate>
-            <Reply>{reply}</Reply>
-
-        </Containerforinfo>
-    );
-};
-
-export { BoardTitle, BoardContent, BoardInfo};
+export { BoardViewPost };

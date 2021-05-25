@@ -5,17 +5,18 @@ import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 
-
+ 
 const StyledInput=styled.TextInput.attrs(({theme})=>({
     placeholderTextColor: theme.inputPlaceholder,
 }))`
     width: ${({width})=>width-40}px;
     height: 500px;
     margin: 0 0;
-    padding: 10px 10px;
+    padding: 10px 15px;
     border-radius: 10px;
     background-color: ${({theme})=>theme.inputBackground};
-    font-size: 20px;
+    font-size: 16px;
+    line-height: 25px;
     color: ${({theme})=>theme.text};
 `;
 

@@ -10,24 +10,26 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
 }))`
   width: ${({ width }) => width - 95}px;
   margin: 8px 0;
-  padding: 3px 10px;
+  padding: 5px 10px;
   border-radius: 10px;
   background-color: ${({ theme }) => theme.search};
-  font-size: 15px;
+  font-size: 16px;
   color: ${({ theme }) => theme.text};
 `;
 
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   background-color: ${({ theme }) => theme.background};
-  padding: 0px 10px;
-  margin: 0 0;
+  padding: 0px 0px;
+  
 `;
 
 const ButtonContainer = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.background};
   padding: 8px 8px;
+  margin: 5px 3px 3px 5px;
   position: absolute;
   right: 0;
   bottom: 0;
@@ -53,7 +55,7 @@ const SearchForm = ({ placeholder, value, onChangeText, onSubmitEditing, onPress
           <MaterialIcons
             name="keyboard-arrow-right"
             size={30}
-            style={{ marginRight: 8 }}
+            style={{ marginRight: 8, marginLeft: 10 }}
             color='#000000'
             onPress={_switchSearch}
           />
@@ -71,8 +73,8 @@ const SearchForm = ({ placeholder, value, onChangeText, onSubmitEditing, onPress
           />
           <MaterialIcons
             name="search"
-            size={27}
-            style={{ marginLeft: 12 }}
+            size={30}
+            style={{ marginLeft: 12, marginRight: 10 }}
             color='#000000'
             onPress={onPress}
           />
@@ -81,7 +83,7 @@ const SearchForm = ({ placeholder, value, onChangeText, onSubmitEditing, onPress
         <ButtonContainer>
           <MaterialIcons
             name="search"
-            size={25}
+            size={30}
             color='#000000'
             onPress={_switchSearch}
           />

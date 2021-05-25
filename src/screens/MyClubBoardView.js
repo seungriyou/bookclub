@@ -1,10 +1,9 @@
 import React, {useLayoutEffect, useState, useContext, useEffect} from 'react';
-import {Dimensions, FlatList, Alert} from 'react-native';
+import {Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import ReplyInput from '../components/ReplyInput';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import {BoardTitle, BoardContent, BoardInfo} from '../components/BoardInfo';
+import {BoardViewPost} from '../components/BoardInfo';
 import BoardCommentList from '../components/BoardCommentList';
 import { ProgressContext } from '../contexts';
 import { DB, getCurrentUser} from '../utils/firebase';
@@ -17,6 +16,13 @@ const Container=styled.View`
     align-items: center;
     padding-bottom: 100px;
     justify-content: flex-start;
+`;
+
+const Container2=styled.View`
+    flex: 1;
+    bottom: 0;
+    background-color: ${({theme})=>theme.background};
+    align-items: center;
 `;
 
 const Containerforreply=styled.View`
@@ -37,9 +43,9 @@ const Listforreply=styled.ScrollView`
     width: ${({width})=>width}px;
 `;
 
-const Line=styled.View`
-    height:2px;
-    background-color: ${({theme})=>theme.line};
+const Box=styled.View`
+    height:20px;
+    width: 10px;
 `;
 
 const Layout=styled.View`
@@ -199,7 +205,7 @@ const MyClubBoardView=({ navigation, route })=>{
           comment_cnt: data.comment_cnt,
         }
         setBoardData(tempData)
-        setCommentCntTxt(`댓 ${data.comment_cnt}`);
+        setCommentCntTxt(`${data.comment_cnt}`);
       }
       catch(e) {
         Alert.alert('게시판 데이터 수신 오류', e.message);
@@ -310,26 +316,18 @@ const MyClubBoardView=({ navigation, route })=>{
     }, [boardData])
 
     return(
-        <KeyboardAwareScrollView
-            contentContainerStyle={{flex: 1}}
-            extraScrollHeight={20}
-        >
+        
         <Container>
             <List width={width}>
-                <BoardTitle
+              <BoardViewPost 
                     title={boardData.title}
-                />
-                <Line />
-                <BoardInfo
                     writer={boardData.writer_name}
                     writedate={getDate(boardData.upload_date)}
                     reply={commentCntTxt}
-                />
-                <Line />
-                <BoardContent
                     content={boardData.content}
-                />
-                <BoardCommentList postInfo={boardData} userInfo={user} clubId={clubId} onDelete={_handleCommentDelete} onEdit={_handleCommentEdit}></BoardCommentList>
+              />
+              <Box />
+              <BoardCommentList postInfo={boardData} userInfo={user} clubId={clubId} onDelete={_handleCommentDelete} onEdit={_handleCommentEdit}></BoardCommentList>
             </List>
 
 
@@ -345,7 +343,7 @@ const MyClubBoardView=({ navigation, route })=>{
             </Listforreply>
         </Containerforreply>
         </Container>
-        </KeyboardAwareScrollView>
+        
     );
 };
 

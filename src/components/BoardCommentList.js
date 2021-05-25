@@ -14,6 +14,7 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.inputBackground};
   margin: 10px 0 0 0;
   padding: 0px 5px;
+  border-radius: 10px;
 `;
 const CommentHeader = styled.View`
   flex-direction: row;

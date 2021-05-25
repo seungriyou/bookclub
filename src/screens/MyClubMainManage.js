@@ -248,17 +248,7 @@ const MyClubMainManage=({ navigation, route })=>{
                     </Fix2>
                 </ContainerRow>
                 <Line width={width}></Line>
-
-                <ContainerRow width={width}>
-                    <Fix1 width={width}>
-                      <Text style={styles.First}>모임형태</Text>
-                    </Fix1>
-                    <Fix2 width={width}>
-                      <Text style={styles.Second}>모임형태의 이름</Text>
-                    </Fix2>
-                </ContainerRow>
-                <Line width={width}></Line>
-
+                
                 <ContainerRow width={width}>
                     <Fix1 width={width}>
                       <Text style={styles.First}>최대인원</Text>
