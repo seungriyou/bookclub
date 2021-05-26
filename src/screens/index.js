@@ -35,5 +35,5 @@ import MyClubScheduleEdit from './MyClubScheduleEdit';
 export { Login, Signup, Club, ClubCreation, ClubList, Profile, CompleteBook, MyClubList,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard, MyClubBoardEdit, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
   MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2, MyClubMainM, MyClubMainManage, MyClubBookSearch, MyClubUserAdmin, MyClubWaitAdmin,
-  MyClubEssayEdit
+  MyClubEssayEdit, MyClubScheduleEdit
  };
