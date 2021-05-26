@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { useWindowDimensions, Text, StyleSheet } from 'react-native';
 import { theme } from '../theme';
+import moment from 'moment';
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -40,6 +41,8 @@ const OCRText = styled.View`
 const EssayViewPost = ({ postInfo }) => {
   const width = useWindowDimensions().width;
 
+  const date = moment(postInfo.upload_date).format('MM/DD');
+
   return (
     <Container width={width}>
       <PostInfo width={width}>
@@ -48,7 +51,7 @@ const EssayViewPost = ({ postInfo }) => {
       <PostInfo width={width}>
         <Text style={styles.infoText}>작성자: {postInfo.writer_name}</Text>
         <PostInfo2>
-          <Text style={styles.infoText}>{postInfo.upload_date}</Text>
+          <Text style={styles.infoText}>{date}</Text>
           <Text style={styles.infoText}>   좋아요 {postInfo.like_cnt}</Text>
           <Text style={styles.infoText}>   댓글 {postInfo.comment_cnt}</Text>
         </PostInfo2>
