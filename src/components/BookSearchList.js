@@ -113,7 +113,7 @@ const BookSearchList = ({bookInfo, clubid}) => {
 
             <ExtInfo width={width}>
                 <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.author}>{item.author} 저</Text>
+                <Text style={styles.author}>{item.author}</Text>
                 <Text style={styles.description}>{item.description}</Text>
             </ExtInfo>
 

@@ -12,30 +12,25 @@ import { DB, Storage, getCurrentUser} from '../utils/firebase';
 const Container = styled.View`
   width: ${({ width }) => width}px;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background-color: ${({ theme }) => theme.inputBackground};
 `;
 
 const ContainerRow=styled.View`
-width: ${({ width }) => width}px;
+  width: ${({ width }) => width}px;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
   background-color: ${({ theme }) => theme.inputBackground};
 `;
 
 const Date = styled.View`
   width: ${({ width }) => (width)*0.2}px;
-  min-height: 90px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   borderRight-Width: 0.8px;
   borderRight-Color: ${({ theme }) => theme.separator};
 `;
 
 const ExtInfo = styled.View`
-    width: ${({ width }) => (width)*0.65}px;
+    width: ${({ width }) => (width)*0.8}px;
     min-height: 70px;
     marginTop: 10px;
     marginBottom: 10px;
@@ -43,13 +38,9 @@ const ExtInfo = styled.View`
 `;
 
 const Icon=styled.View`
-  width: ${({ width }) => (width)*0.15}px;
-  min-height: 90px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  borderLeft-Width: 0.8px;
-  borderLeft-Color: ${({ theme }) => theme.separator};
 `;
 
 
@@ -88,24 +79,28 @@ const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth}) =
         return (
             <ContainerRow width={width}>
             <Date width={width}>
-                <Text style={styles.date}>{item.date}일</Text>
+              <MaterialCommunityIcons
+                  name="delete"
+                  size={25}
+                  style={{marginTop:10, marginBottom: 20}}
+                  color='#ffffff'
+                />
+              <Text style={styles.date}>{item.date}일</Text>
+              <MaterialCommunityIcons
+                  name="delete"
+                  size={25}
+                  style={{marginBottom:10, marginTop: 20}}
+                  color='#000000'
+                  onPress={_handleDeleteButtonPressed}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
+              />
             </Date>
             <ExtInfo width={width}>
-                <Text style={styles.text}>{item.title}</Text>
+                <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.text}>시간: {item.time}</Text>
                 <Text style={styles.text}>장소: {item.place}</Text>
                 <Text style={styles.text}>메모: {item.memo}</Text>
             </ExtInfo>
-            <Icon width={width}>
-
-            <MaterialCommunityIcons
-                name="delete"
-                size={25}
-                style={{marginTop:10}}
-                color='#000000'
-                onPress={_handleDeleteButtonPressed}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
-            />
-            </Icon>
+            
             </ContainerRow>
         );
 
@@ -132,6 +127,15 @@ const styles = StyleSheet.create({
     color: theme.text,
     fontWeight: "bold",
   },
+  title:{
+    fontSize: 16,
+    color: theme.text,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop:2,
+    paddingBottom:10,
+    fontWeight: "bold",
+  },
   text:{
     fontSize: 16,
     color: theme.text,
@@ -142,7 +146,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: theme.seperator,
+    backgroundColor: theme.separator,
   }
 });
 

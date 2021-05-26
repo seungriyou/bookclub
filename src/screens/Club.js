@@ -213,8 +213,6 @@ const Club = ({ navigation, route }) => {
       <Line width={width}></Line>
       <Text style={styles.Second}>지역구:  {region}</Text>
       <Line width={width}></Line>
-      <Text style={styles.Second}>모임형태:  모임형태의 위치입니다.</Text>
-      <Line width={width}></Line>
       <Text style={styles.Second}>인원 수 :  {num}/{maxNumber}</Text>
 
       </AllCon>
