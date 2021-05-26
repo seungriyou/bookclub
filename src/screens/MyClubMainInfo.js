@@ -185,7 +185,7 @@ const MyClubMainInfo=({ navigation, route })=>{
         }
         if (clubData.book_now.title === "" && clubData.book_now.cover === "") {
           setIsThereBook(false);
-          
+
           tempData.clubname = clubData.title;
           setMainData(tempData);
           setLeader(clubData.leader);
@@ -243,53 +243,53 @@ const MyClubMainInfo=({ navigation, route })=>{
       return unsubscribe;
     }, [navigation]);
 
-    useLayoutEffect(()=>{
-        navigation.setOptions({
-            headerBackTitleVisible: false,
-            headerTintColor: '#000000',
-            headerLeft: ({onPress, tintColor})=>{
-                return(
-                    <Layout>
-                    <MaterialCommunityIcons
-                        name="keyboard-backspace"
-                        size={30}
-                        style={{marginLeft:13}}
-                        color={tintColor}
-                        onPress={onPress}   //뒤로가기
-                    />
-                    <MaterialCommunityIcons
-                        name="alert-circle"
-                        size={30}
-                        style={{marginLeft:10}}
-                        color={tintColor}
-                        onPress={()=>navigation.navigate("MyClubMainManage")}   //클럽 정보를 관리하는 MyClubMainManage로 이동
-                    />
-                    </Layout>
-                );
-            },
-            headerRight: ({onPress, tintColor})=>{
-                return(
-                    <Layout>
-                    <MaterialCommunityIcons
-                        name="format-list-bulleted"
-                        size={30}
-                        style={{marginRight:10}}
-                        color={tintColor}
-                        onPress={onPress}   //수정필요-진행완료된 책 화면으로 이동
-
-                    />
-                    <MaterialCommunityIcons
-                        name="magnify"
-                        size={30}
-                        style={{marginRight:10}}
-                        color={tintColor}
-                        onPress={onPress}   //수정필요-책 추천화면 이동
-                    />
-                    </Layout>
-                );
-            },
-        });
-    }, []);
+    // useLayoutEffect(()=>{
+    //     navigation.setOptions({
+    //         headerBackTitleVisible: false,
+    //         headerTintColor: '#000000',
+    //         headerLeft: ({onPress, tintColor})=>{
+    //             return(
+    //                 <Layout>
+    //                 <MaterialCommunityIcons
+    //                     name="keyboard-backspace"
+    //                     size={30}
+    //                     style={{marginLeft:13}}
+    //                     color={tintColor}
+    //                     onPress={onPress}   //뒤로가기
+    //                 />
+    //                 <MaterialCommunityIcons
+    //                     name="alert-circle"
+    //                     size={30}
+    //                     style={{marginLeft:10}}
+    //                     color={tintColor}
+    //                     onPress={()=>navigation.navigate("MyClubMainManage")}   //클럽 정보를 관리하는 MyClubMainManage로 이동
+    //                 />
+    //                 </Layout>
+    //             );
+    //         },
+    //         headerRight: ({onPress, tintColor})=>{
+    //             return(
+    //                 <Layout>
+    //                 <MaterialCommunityIcons
+    //                     name="format-list-bulleted"
+    //                     size={30}
+    //                     style={{marginRight:10}}
+    //                     color={tintColor}
+    //                     onPress={onPress}   //수정필요-진행완료된 책 화면으로 이동
+    //
+    //                 />
+    //                 <MaterialCommunityIcons
+    //                     name="magnify"
+    //                     size={30}
+    //                     style={{marginRight:10}}
+    //                     color={tintColor}
+    //                     onPress={onPress}   //수정필요-책 추천화면 이동
+    //                 />
+    //                 </Layout>
+    //             );
+    //         },
+    //     });
+    // }, []);
 
     return(
         <KeyboardAwareScrollView

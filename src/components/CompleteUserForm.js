@@ -80,20 +80,31 @@ const tempData = {
             "name": "멤버f",
             "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
         },
-    ]    
+    ]
 }
 
 
-
-
-const CompleteUserForm = ({ onPress, clearSearch }) => {
+const CompleteUserForm = ({ onPress, clearSearch, members }) => {
   const width = Dimensions.get('window').width;
   const [isSearch, setIsSearch] = useState(false);
-  
+
   const _switchSearch = () => {
     setIsSearch(!isSearch);
     clearSearch();
   };
+
+  const completeMembers = {
+    member: [],
+  };
+
+  let index = 1;
+
+  for(let member of members) {
+    member.id = index;
+    member.profileimg = member.photoUrl;
+    completeMembers.member.push(member);
+    index = index + 1;
+  }
 
   return (
     <>
@@ -107,8 +118,8 @@ const CompleteUserForm = ({ onPress, clearSearch }) => {
                 onPress={_switchSearch}
             />
             <ScrollView nestedScrollEnabled={true}>
-            <CompleteUserList completeuserInfo={tempData} />
-            </ScrollView>          
+            <CompleteUserList completeuserInfo={completeMembers} />
+            </ScrollView>
         </Container>
         :
         <ButtonContainer>

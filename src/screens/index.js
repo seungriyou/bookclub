@@ -3,6 +3,7 @@ import Signup from './Signup';
 import Club from './Club';
 import ClubCreation from './ClubCreation';
 import ClubList from './ClubList';
+import CompleteBook from './CompleteBook';
 import Profile from './Profile';
 import MyClubList from './MyClubList';
 import MyClubMainInfo from './MyClubMainInfo';
@@ -31,7 +32,7 @@ import MyClubScheduleList from './MyClubScheduleList';
 import MyClubScheduleEdit from './MyClubScheduleEdit';
 
 
-export { Login, Signup, Club, ClubCreation, ClubList, Profile, MyClubList,
+export { Login, Signup, Club, ClubCreation, ClubList, Profile, CompleteBook, MyClubList,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard, MyClubBoardEdit, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
   MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2, MyClubMainM, MyClubMainManage, MyClubBookSearch, MyClubUserAdmin, MyClubWaitAdmin,
   MyClubEssayEdit

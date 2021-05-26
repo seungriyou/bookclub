@@ -115,6 +115,13 @@ const ClubList = ({ navigation }) => {
     getClubList();
   }, [region]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getClubList();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   const _handleItemPress = params => {
     navigation.navigate('Club', params);
   };

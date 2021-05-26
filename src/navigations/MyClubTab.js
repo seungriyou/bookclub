@@ -77,7 +77,7 @@ const MainTab = ({ navigation, route }) => {
                   size={30}
                   style={{marginRight:10}}
 
-                  onPress={()=>{console.log("navigate to book complete list page")}}   //수정필요-진행완료된 책 화면으로 이동
+                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'CompleteBook', params: {id: id}})}}   //수정필요-진행완료된 책 화면으로 이동
               />
             )}
           if (index === 1)

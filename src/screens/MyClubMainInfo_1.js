@@ -10,6 +10,7 @@ import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
 import { DB, getCurrentUser } from '../utils/firebase';
 import { ProgressContext } from '../contexts';
+import moment from 'moment';
 
 const Container=styled.View`
     flex: 1;
@@ -184,7 +185,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
             const data = doc.data();
 
             const bookNow = data.book_now;
-            bookNow.goal = goal;
+            bookNow.goal = parseInt(goal);
 
             t.update(clubRef, {book_now: bookNow});
           });
@@ -221,7 +222,20 @@ const MyClubMainInfo_1=({ navigation, route })=>{
                 let bookCompleted = data.book_completed;
                 let members = data.members;
 
-                bookNow.members = members;
+                const tempDate = moment(Date.now()).format('YYYY/MM/DD');
+                bookNow.completeyear = tempDate.slice(0, 4);
+                bookNow.completemonth = tempDate.slice(5, 7);
+                bookNow.completedate = tempDate.slice(8);
+
+                const completemember = [];
+
+                for (let member of members) {
+                  if (member.now_page >= bookNow.goal) {
+                    completemember.push(member);
+                  }
+                }
+
+                bookNow.members = completemember;
                 bookCompleted.push(bookNow);
 
                 let newMembers = [];
@@ -239,6 +253,8 @@ const MyClubMainInfo_1=({ navigation, route })=>{
                   title: "",
                   goal: 0,
                   cover: "",
+                  createAt: 0,
+                  description: "",
                 };
 
                 t.update(clubRef, {book_now: bookNow, book_completed: bookCompleted, members: newMembers});

@@ -23,7 +23,7 @@ width: ${({ width }) => width}px;
 `;
 
 const Date = styled.View`
-  width: ${({ width }) => (width)*0.2}px;  
+  width: ${({ width }) => (width)*0.2}px;
   flex-direction: column;
   justify-content: space-between;
   paddingTop: 10px;
@@ -31,18 +31,18 @@ const Date = styled.View`
   align-items: center;
   borderRight-Color: ${({ theme }) => theme.separator};
   borderRight-Width: 1px;
-  
+
 `;
 
 const RowFix=styled.View`
-    width: ${({ width }) => (width)*0.2}px;  
+    width: ${({ width }) => (width)*0.2}px;
     flex-direction: row;
     paddingLeft: 10px;
     justify-content: flex-start;
 `;
 
 const ColumnFix=styled.View`
-    width: ${({ width }) => (width)*0.6}px;  
+    width: ${({ width }) => (width)*0.6}px;
     flex-direction: column;
 `;
 
@@ -52,13 +52,10 @@ const Info = styled.View`
     marginTop: 10px;
     marginBottom: 10px;
     marginLeft: 3px;
-    
+
 `;
 
-
-
-
-const CompleteBookList = ({completebookInfo}) => {    
+const CompleteBookList = ({completebookInfo}) => {
     const width = Dimensions.get('window').width;
     const user = completebookInfo.complete;
     const [search, setSearch] = useState('');
@@ -76,23 +73,24 @@ const CompleteBookList = ({completebookInfo}) => {
             </Date>
             <Info width={width}>
                 <RowFix width={width}>
-                    <Image 
+                    <Image
                         style={styles.img}
                         source={{uri:item.cover}} />
                     <ColumnFix width={width}>
-                        <Text style={styles.title}>{item.title}</Text>  
-                        <Text style={styles.author}>{item.author} 저</Text>  
+                        <Text style={styles.title}>{item.title}</Text>
+                        <Text style={styles.author}>{item.author}</Text>
                     </ColumnFix>
                 </RowFix>
-                <Text style={styles.description}>{item.description}</Text>  
+                <Text style={styles.description}>{item.description}</Text>
                 <CompleteUserForm
                     onPress={()=>{}}
                     clearSearch={_clearSearch}
+                    members={item.members}
                 />
             </Info>
             </ContainerRow>
         );
-        
+
     };
     return (
         <Container width={width}>

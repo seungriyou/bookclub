@@ -133,6 +133,13 @@ const MyClubList = ({ navigation }) => {
     getMyClubList();
   }, [clubIds, region]);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getMyClubId();
+    });
+    return unsubscribe;
+  }, [navigation]);
+
   const _handleItemPress = params => {
     const id = params.id;
     const title = params.title;

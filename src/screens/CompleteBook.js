@@ -10,8 +10,8 @@ import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import {Picker} from '@react-native-picker/picker';
 import CompleteBookList from '../components/CompleteBookList';
-
-
+import { DB } from '../utils/firebase';
+import moment from 'moment';
 
 
 const Container=styled.View`
@@ -30,10 +30,10 @@ const ContainerRow=styled.View`
 `;
 
 
-const Header=styled.View` 
+const Header=styled.View`
     width: ${({width})=>width}px;
     height: 120px;
-    background-color: ${({theme})=>theme.background};    
+    background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
     justify-content: center;
@@ -49,9 +49,9 @@ const MainHeader= ({clubname})=>{
 
     return (
         <Header width={width}>
-         
+
         <Text style={styles.clubname}>{clubname}</Text>
-        
+
         </Header>
     )
 };
@@ -92,66 +92,113 @@ const styles = StyleSheet.create({
   },
 });
 
+//
+// const tempData = {
+//     "clubname": "SEORAP",
+//     "complete": [
+//         {
+//             "itemId": 1,
+//             "completemonth": "May",
+//             "completedate": 1,
+//             "title": "책 제목이 제법 길 경우를 상정 및 고려하여 작성된 테스트용 긴 제목",
+//             "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
+//             "author": "나츠메 소세키",
+//             "description": "이 부분은 소개글입니다. 아래 버튼을 눌러 해당 책을 완료한 멤버들의 정보를 불러올 수 있습니다. CompleteUserForm.js, CompleteUserList.js 컴포넌트를 참조해주세요.",
+//         },
+//         {
+//             "itemId": 2,
+//             "completemonth": "May",
+//             "completedate": 5,
+//             "title": "잠들지 않는 새벽",
+//             "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
+//             "author": "달그림자",
+//             "description": "picker을 사용하여 schedulelist 화면과 동일하게 작동함을 예상합니다. 스크롤이 동작합니다.",
+//         },
+//         {
+//             "itemId": 3,
+//             "completemonth": "May",
+//             "completedate": 11,
+//             "title": "가장 차가운 것",
+//             "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
+//             "author": "벽난로",
+//             "description": "현재 flatlist를 표시하는 컴포넌트는 CompleteBookList.js 입니다.",
+//         },
+//         {
+//             "itemId": 4,
+//             "completemonth": "May",
+//             "completedate": 21,
+//             "title": "탈수",
+//             "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
+//             "author": "에비앙",
+//             "description": "실제 책은 이 정도 길이의 소개글이 자리합니다. 코로나19가 정말 걸리면 큰일이 나는 위험한 것인가? 코로나19와 가장 밀접한 곳에서 일하고 있는 응급의학과 의사인 저자의 경험담과 생각은, 우리가 코로나19에 대해 아무렇지도 않게 무심코 받아들인 정보들과 상황들이 과연 모두 맞는 건지 의구심을 가지게 한다.",
+//         },
+//         {
+//             "itemId": 5,
+//             "completemonth": "May",
+//             "completedate": 23,
+//             "title": "라일락",
+//             "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
+//             "author": "무지개",
+//             "description": "라벤더와 착각하고 있지는 않으신가요?",
+//         },
+//     ]
+// }
 
 
+const CompleteBook=({ navigation, route })=>{
 
-const tempData = {
-    "clubname": "SEORAP",
-    "complete": [
-        {
-            "itemId": 1,
-            "completemonth": "May",
-            "completedate": 1,
-            "title": "책 제목이 제법 길 경우를 상정 및 고려하여 작성된 테스트용 긴 제목",
-            "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-            "author": "나츠메 소세키",
-            "description": "이 부분은 소개글입니다. 아래 버튼을 눌러 해당 책을 완료한 멤버들의 정보를 불러올 수 있습니다. CompleteUserForm.js, CompleteUserList.js 컴포넌트를 참조해주세요.",
-        },
-        {
-            "itemId": 2,
-            "completemonth": "May",
-            "completedate": 5,
-            "title": "잠들지 않는 새벽",
-            "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-            "author": "달그림자",
-            "description": "picker을 사용하여 schedulelist 화면과 동일하게 작동함을 예상합니다. 스크롤이 동작합니다.",
-        },
-        {
-            "itemId": 3,
-            "completemonth": "May",
-            "completedate": 11,
-            "title": "가장 차가운 것",
-            "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-            "author": "벽난로",
-            "description": "현재 flatlist를 표시하는 컴포넌트는 CompleteBookList.js 입니다.",
-        },
-        {
-            "itemId": 4,
-            "completemonth": "May",
-            "completedate": 21,
-            "title": "탈수",
-            "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-            "author": "에비앙",
-            "description": "실제 책은 이 정도 길이의 소개글이 자리합니다. 코로나19가 정말 걸리면 큰일이 나는 위험한 것인가? 코로나19와 가장 밀접한 곳에서 일하고 있는 응급의학과 의사인 저자의 경험담과 생각은, 우리가 코로나19에 대해 아무렇지도 않게 무심코 받아들인 정보들과 상황들이 과연 모두 맞는 건지 의구심을 가지게 한다.",
-        },
-        {
-            "itemId": 5,
-            "completemonth": "May",
-            "completedate": 23,
-            "title": "라일락",
-            "cover": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-            "author": "무지개",
-            "description": "라벤더와 착각하고 있지는 않으신가요?",
-        },
-    ]        
-}
-
-
-const CompleteBook=({ navigation })=>{
+    const id = route.params.id;
 
     const width= Dimensions.get('window').width;
-    const [selectedMonth, setSelectedMonth] = useState("05");  
-    const [selectedYear, setSelectedYear] = useState("2021");
+    const [selectedMonth, setSelectedMonth] = useState(moment(Date.now()).format('MM'));
+    const [selectedYear, setSelectedYear] = useState(moment(Date.now()).format('YYYY'));
+    const [bookList, setBookList] = useState({
+        complete: [],
+      });
+    const [clubName, setClubName] = useState("");
+
+    const getCompleteBook = async() => {
+      try{
+        const clubRef = DB.collection('clubs').doc(id);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+        const tempBookList = [];
+
+        setClubName(clubData.title);
+
+        let index = 1;
+
+        for(let book of clubData.book_completed) {
+          console.log("book.completemonth", book.completemonth, "selectedMonth", selectedMonth);
+          console.log("book.completeyear", book.completeyear, "selectedYear", selectedYear);
+          if(book.completeyear == selectedYear && book.completemonth == selectedMonth) {
+            book.itemId = index;
+
+            for(let member of book.members) {
+              member.id = index;
+            }
+            index = index + 1;
+            tempBookList.push(book);
+          }
+        }
+
+        setBookList({
+          complete: tempBookList
+        });
+      }
+      catch(e) {
+        alert("클럽 도서 목록 수신 오류", e.message);
+      }
+
+    }
+
+    useEffect(() => {
+      getCompleteBook();
+    }, [selectedYear, selectedMonth]);
+
+    useEffect(() => {
+      console.log(bookList);
+    }, [bookList]);
 
     useLayoutEffect(()=>{
         navigation.setOptions({
@@ -159,28 +206,28 @@ const CompleteBook=({ navigation })=>{
             headerTintColor: '#000000',
             headerLeft: ({onPress, tintColor})=>{
                 return(
-                    
+
                     <MaterialCommunityIcons
                         name="keyboard-backspace"
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}  
+                        onPress={onPress}
                     />
                 );
             },
         });
-      console.log(navigation);
+        getCompleteBook();
     }, []);
 
-    
+
     return(
         <KeyboardAwareScrollView
             contentContainerStyle={{flex: 1}}
             extraScrollHeight={20}
         >
         <Container>
-            <MainHeader clubname={tempData.clubname}></MainHeader>
+            <MainHeader clubname={clubName}></MainHeader>
             <ContainerRow width={width}>
                 <Picker
                     selectedValue={selectedYear}
@@ -211,7 +258,7 @@ const CompleteBook=({ navigation })=>{
                 </Picker>
           </ContainerRow>
         <List width={width}>
-            <CompleteBookList completebookInfo={tempData} />
+            <CompleteBookList completebookInfo={bookList} />
         </List>
         </Container>
         </KeyboardAwareScrollView>

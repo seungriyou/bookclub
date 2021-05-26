@@ -75,6 +75,8 @@ const BookSearchList = ({bookInfo, clubid}) => {
                       const bookNow = {
                         title: item.title,
                         cover: item.cover,
+                        author: item.author,
+                        description: item.description,
                         goal: 0,
                       }
 
