@@ -241,7 +241,7 @@ const CompleteBook=({ navigation, route })=>{
                 </Picker>
                 <Picker
                     selectedValue={selectedMonth}
-                    style={{ height: 50, width: 100, margin: 10 }}
+                    style={{ height: 50, width: 110, margin: 10 }}
                     onValueChange={(itemValue, itemIndex) => setSelectedMonth(itemValue)}>
                     <Picker.Item label="Jan." value="01" />
                     <Picker.Item label="Feb." value="02" />
