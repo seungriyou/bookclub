@@ -46,7 +46,7 @@ const Icon=styled.View`
 
 //scheduleInfo는 렌더링할 아이템(tempData), selectedYear과 selectedMonth는 각각 picker로 선택된 연도와 월입니다.
 //선택된 연도와 월을 이용해 db에서 특정 schedule만 select하여 가져오는 방법 쪽을 구상하고 만들었습니다.
-const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth}) => {
+const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth, onUpdate}) => {
     const width = Dimensions.get('window').width;
     const user = scheduleInfo.schedule;
 
@@ -67,6 +67,7 @@ const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth}) =
               onPress: async () => {
                 try {
                   const scheduleRef = await DB.collection('clubs').doc(item.clubId).collection('schedule').doc(item.id).delete();
+                  onUpdate();
                   Alert.alert("일정 삭제 완료");
                 }
                 catch(e) {
@@ -100,7 +101,7 @@ const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth}) =
                 <Text style={styles.text}>장소: {item.place}</Text>
                 <Text style={styles.text}>메모: {item.memo}</Text>
             </ExtInfo>
-            
+
             </ContainerRow>
         );
 
@@ -155,7 +156,7 @@ ScheduleList.propTypes = {
 };
 
 export default ScheduleList;
-// 
+//
 // <MaterialCommunityIcons
 //     name="pencil"
 //     size={25}

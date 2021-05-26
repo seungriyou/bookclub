@@ -80,6 +80,7 @@ const MyClubScheduleList=({ navigation, route })=>{
     const id = route.params?.id;
     const clubname = route.params.clubname;
     const width= Dimensions.get('window').width;
+    const [update, setUpdate] = useState(0);
     const [selectedMonth, setSelectedMonth] = useState("05");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....?
     const [selectedYear, setSelectedYear] = useState("2021");  //이부분을 현재 app을 가동한 시간의 year을 통해 월 값을 가져올 수 있을지....?
     const [schedule, setSchedule] = useState([]);
@@ -118,6 +119,10 @@ const MyClubScheduleList=({ navigation, route })=>{
       }
     };
 
+    const onUpdate = () => {
+      setUpdate(update + 1);
+    }
+
     const filterSchedule = async() => {
       const temp = {
         clubname: route.params.title,
@@ -136,6 +141,10 @@ const MyClubScheduleList=({ navigation, route })=>{
       getSchedule();
     }, []);
 
+    useEffect(()=> {
+      getSchedule();
+    }, [update]);
+
     useEffect(() => {
       filterSchedule();
     }, [schedule, selectedYear, selectedMonth]);
@@ -146,10 +155,6 @@ const MyClubScheduleList=({ navigation, route })=>{
       });
       return unsubscribe;
     }, [navigation]);
-
-    useEffect(() => {
-      console.log("filtered", filtered);
-    }, [filtered]);
 
     return (
       <KeyboardAwareScrollView
@@ -192,7 +197,7 @@ const MyClubScheduleList=({ navigation, route })=>{
 
           {filtered.schedule.length > 0 ? (
             <List width={width}>
-              <ScheduleList scheduleInfo={filtered} selectedYear={selectedYear} selectedMonth={selectedMonth}></ScheduleList>
+              <ScheduleList scheduleInfo={filtered} selectedYear={selectedYear} selectedMonth={selectedMonth} onUpdate={onUpdate}></ScheduleList>
             </List>
             )
             : (
