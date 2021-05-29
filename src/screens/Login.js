@@ -64,6 +64,7 @@ const Login = ({ navigation }) => {
 
     } catch (e) {
       Alert.alert('로그인 에러', e.message);
+      console.log(e);
     } finally {
       spinner.stop();
     }

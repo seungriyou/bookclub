@@ -5,6 +5,9 @@ import { Spinner } from '../components';
 import { ProgressContext, UserContext } from '../contexts';
 import MainStack  from './MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CryptoJS from "react-native-crypto-js";
+
+key = "AIzaSyBnpWF-z0x5PFDLYmFrWMntujb9aa_zGdY";
 
 const Navigation = () => {
   const { inProgress } = useContext(ProgressContext);
@@ -12,10 +15,11 @@ const Navigation = () => {
   const { dispatch } = useContext(UserContext);
 
   const getLocalUserData = async() => {
-    let userData = await AsyncStorage.getItem('userData');
+    const userData = await AsyncStorage.getItem('userData');
     if(userData != null) {
-      userData = JSON.parse(userData);
-      dispatch(userData.user);
+      const bytes = CryptoJS.AES.decrypt(userData, key);
+      const originalUserData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+      dispatch(originalUserData);
     }
   }
 

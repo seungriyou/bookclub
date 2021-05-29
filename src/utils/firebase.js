@@ -2,12 +2,14 @@ import firebase from 'firebase';
 import config from '../../firebase.json';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import CryptoJS from "react-native-crypto-js";
 
 const app = firebase.initializeApp(config);
 export const Storage = app.storage();
 
 const Auth = app.auth();
+
+const key = "AIzaSyBnpWF-z0x5PFDLYmFrWMntujb9aa_zGdY";
 
 const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 스토리지에 업로드 하는 함수
   const blob = await new Promise((resolve, reject) => {
@@ -33,12 +35,9 @@ const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 
 
 export const login = async ({ email, password }) => { //파이어베이스로 로그인하는 함수
   const {user} = await Auth.signInWithEmailAndPassword(email, password);
-  AsyncStorage.setItem(
-    'userData',
-    JSON.stringify({
-      user
-    })
-  );
+
+  let encrypted_user = CryptoJS.AES.encrypt(JSON.stringify(user), key).toString();
+  AsyncStorage.setItem('userData', encrypted_user);
   const userData = await AsyncStorage.getItem('userData');
 
   return user;
