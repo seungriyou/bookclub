@@ -61,6 +61,7 @@ const Login = ({ navigation }) => {
       spinner.start();
       const user = await login({ email, password });
       dispatch(user);
+
     } catch (e) {
       Alert.alert('로그인 에러', e.message);
     } finally {

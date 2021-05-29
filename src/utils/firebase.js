@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import config from '../../firebase.json';
 import 'firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const app = firebase.initializeApp(config);
@@ -32,6 +33,14 @@ const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 
 
 export const login = async ({ email, password }) => { //파이어베이스로 로그인하는 함수
   const {user} = await Auth.signInWithEmailAndPassword(email, password);
+  AsyncStorage.setItem(
+    'userData',
+    JSON.stringify({
+      user
+    })
+  );
+  const userData = await AsyncStorage.getItem('userData');
+
   return user;
 };
 
@@ -62,6 +71,7 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
 };
 
 export const logout = async () => {
+  AsyncStorage.removeItem('userData');
   return await Auth.signOut();
 }
 
