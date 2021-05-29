@@ -7,7 +7,7 @@ import MainStack  from './MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CryptoJS from "react-native-crypto-js";
 
-key = "AIzaSyBnpWF-z0x5PFDLYmFrWMntujb9aa_zGdY";
+key = "AIzaSyBnpWFz0fnASDFvasdvAGWdgvbasdnvbax5PFDLYmFrWMntujb9aazGdY";
 
 const Navigation = () => {
   const { inProgress } = useContext(ProgressContext);

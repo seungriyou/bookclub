@@ -9,7 +9,7 @@ export const Storage = app.storage();
 
 const Auth = app.auth();
 
-const key = "AIzaSyBnpWF-z0x5PFDLYmFrWMntujb9aa_zGdY";
+const key = "AIzaSyBnpWFz0fnASDFvasdvAGWdgvbasdnvbax5PFDLYmFrWMntujb9aazGdY";
 
 const uploadImage = async uri => { //프로필 이미지를 파이어 베이스 스토리지에 업로드 하는 함수
   const blob = await new Promise((resolve, reject) => {
