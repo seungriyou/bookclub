@@ -88,7 +88,7 @@ const ClubCreation = ({ navigation }) => {
   const leader = getCurrentUser();
 
   useEffect(() => {
-    setDisabled(!(title && region && !errorMessage));
+    setDisabled(title.trim() === '' || region === '' || isNaN(parseInt(maxNumber)) || description.trim() === '');
   }, [title, description, region, maxNumber, errorMessage]);
 
   const _handelTitleChange = title => {
@@ -97,10 +97,18 @@ const ClubCreation = ({ navigation }) => {
   };
 
   const _maxNumberChanged = maxNumber => {
-    setMaxNumber(maxNumber);
-    if (maxNumber > 100 || maxNumber < 1) {
+
+    if (isNaN(parseInt(maxNumber))) {
+      setErrorMessage('클럽의 최대 인원은 2 ~ 99사이의 숫자로 입력해주세요');
+    }
+    else if (parseInt(maxNumber) > 100 || parseInt(maxNumber) < 1) {
       setErrorMessage('클럽의 최대 인원은 2 ~ 99사이로 입력해주세요');
     }
+    else {
+      setErrorMessage('');
+    }
+    setMaxNumber(parseInt(maxNumber));
+
   }
 
   const _handelCreateButtonPress = async () => {
@@ -142,7 +150,7 @@ const ClubCreation = ({ navigation }) => {
         <Fix>
         <Text>클럽 소개글</Text>
         <ContainerInput width={width}>
-          <CCInput  
+          <CCInput
             placeholder="클럽 소개글"
             maxLength={150}
             multiline={true}
@@ -182,7 +190,7 @@ const ClubCreation = ({ navigation }) => {
           <CCInput
             ref={maxNumberRef}
             value={maxNumber}
-            onChangeText={_maxNumberChanged}
+            onChangeText={(num) => _maxNumberChanged(num)}
             onSubmitEditing={() => {
               _maxNumberChanged();
               _handelCreateButtonPress();
@@ -194,9 +202,9 @@ const ClubCreation = ({ navigation }) => {
           />
         </ContainerInput>
         </Fix>
-      
+
         <ErrorText>{errorMessage}</ErrorText>
-        
+
         <Box />
         <Button
           title="클럽 생성하기"

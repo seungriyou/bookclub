@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Dimensions, Text, StyleSheet, FlatList, Button, Image, Alert } from 'react-native';
 import { theme } from '../theme';
-import { DB } from '../utils/firebase';
+import { DB, getCurrentUser } from '../utils/firebase';
 
 
 
@@ -87,8 +87,13 @@ const UserAdminList = ({onchange, userInfo, clubId}) => {
                     const userDoc = await t.get(userRef);
                     const userData = userDoc.data();
 
-                    const club = userData.club;
-                    delete club.clubId;
+                    const club = {};
+
+                    for (let key in userData.club) {
+                      if(key !== clubId) {
+                          club[key] = userData.club[key]
+                      }
+                    }
 
                     t.update(userRef, {club: club});
                   });

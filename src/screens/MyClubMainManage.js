@@ -7,7 +7,7 @@ import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
-import { DB, getCurrentUser } from '../utils/firebase';
+import { DB, getCurrentUser, Storage } from '../utils/firebase';
 
 const Container=styled.View`
     flex: 1;
@@ -161,6 +161,148 @@ const MyClubMainManage=({ navigation, route })=>{
       }
     }
 
+    const clubMemberOut = async() => {
+      try {
+        const clubRef = DB.collection('clubs').doc(clubId);
+        await DB.runTransaction(async (t) => {
+          const doc = await t.get(clubRef);
+          const data = doc.data();
+
+          let members = data.members;
+          let newMember = members.filter((member) => member.uid !== user.uid);
+
+          t.update(clubRef, {members: newMember});
+        });
+
+        const userRef = DB.collection('users').doc(user.uid);
+        const userDoc = await userRef.get();
+        const userData = userDoc.data();
+
+        let newClubList = userData.club;
+        delete newClubList.clubId;
+
+        userRef.update({club: newClubList});
+
+        navigation.navigate("Clubs");
+
+        Alert.alert("안내", "클럽 탈퇴 완료");
+      }
+      catch(e) {
+        Alert.alert("클럽 탈퇴 오류", e.message);
+      }
+    }
+
+    const clubLeaderOut = async() => {
+      const clubRef = DB.collection('clubs').doc(clubId);
+      const clubDoc = await clubRef.get();
+      const clubData = clubDoc.data();
+
+      if (clubData.members.length === 1) {
+        clubDelete();
+      }
+
+      else {
+        try {
+          const clubRef = DB.collection('clubs').doc(clubId);
+          await DB.runTransaction(async (t) => {
+            const doc = await t.get(clubRef);
+            const data = doc.data();
+
+            let members = data.members;
+            let newMember = members.filter((member) => member.uid !== user.uid);
+            let newLeader = newMember[0];
+
+            delete newLeader.now_page;
+
+            t.update(clubRef, {members: newMember, leader: newLeader});
+          });
+
+          const userRef = DB.collection('users').doc(user.uid);
+          await DB.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const userData = userDoc.data();
+
+            const club = {};
+
+            for (let key in userData.club) {
+              if(key !== clubId) {
+                  club[key] = userData.club[key]
+              }
+            }
+
+            t.update(userRef, {club: club});
+          });
+
+
+          navigation.navigate("Clubs");
+
+          Alert.alert("안내", "클럽 탈퇴 완료");
+        }
+        catch(e) {
+          Alert.alert("클럽 탈퇴 오류", e.message);
+        }
+      }
+    }
+
+    const clubDelete = async() => {
+      try{
+        const storageRef = Storage.ref();
+        const storageAlbumRef = storageRef.child(`clubs/${clubId}/albums`);
+        storageAlbumRef.listAll().then(albumId => {
+          albumId.prefixes.forEach(res => {
+            res.listAll().then(res => {
+              res.items.forEach(itemRef => {
+                itemRef.delete().then(()=>{})
+                .catch(e => {console.log(e.message)});
+              });
+            });
+          });
+        });
+        const clubRef = DB.collection('clubs').doc(clubId);
+        const clubDoc = await clubRef.get();
+        const clubData = clubDoc.data();
+
+        clubData.members.forEach( async(member) => {
+          const userRef = DB.collection('users').doc(member.uid);
+          await DB.runTransaction(async (t) => {
+            const userDoc = await t.get(userRef);
+            const userData = userDoc.data();
+
+            const club = {};
+
+            for (let key in userData.club) {
+              if(key !== clubId) {
+                  club[key] = userData.club[key]
+              }
+            }
+
+            t.update(userRef, {club: club});
+          });
+
+        });
+
+        const collectionList = ['essay', 'board', 'schedule', 'album'];
+
+        collectionList.forEach(async collection => {
+          const ref = DB.collection('clubs').doc(clubId).collection(collection);
+          const snapshot = await ref.get();
+          snapshot.forEach(async (doc) => {
+            const docRef = DB.collection('clubs').doc(clubId).collection(collection).doc(doc.id);
+            await docRef.delete();
+          });
+        });
+
+        await clubRef.delete();
+
+        Alert.alert("클럽 삭제 완료");
+
+        navigation.navigate("Clubs");
+      }
+      catch(e) {
+        Alert.alert("클럽 삭제 오류", e.message);
+      }
+    }
+
     const _handleUserAdminButtonPress = () => {
       if (user.uid === clubData.leader.uid) {
           navigation.navigate("MyClubMainInfoNav", {screen:"MyClubUserAdmin", params: {id: clubId}});
@@ -189,23 +331,69 @@ const MyClubMainManage=({ navigation, route })=>{
       }
     }
 
+    const _handleClubOutButtonPress = () => {
+      Alert.alert("경고", "클럽을 탈퇴하시겠습니까?",
+      [
+        {
+          text: "아니요",
+          style: "cancel"
+        },
+        {
+          text: "예",
+          onPress: () => {
+            if (user.uid === clubData.leader.uid) {
+              Alert.alert("경고", `당신은 클럽장입니다. 탈퇴 시 다른 회원에게 클럽장 권한이 넘어가게 되며, 다른 클럽원이 없을 경우 클럽은 삭제됩니다. 클럽을 탈퇴하시겠습니까?`,
+              [
+                {
+                  text: "아니요",
+                  style: "cancel"
+                },
+                {
+                  text: "예",
+                  onPress:() => {clubLeaderOut()}
+                }
+              ]);
+            }
+            else {
+              clubMemberOut();
+            }
+          }
+        }
+      ]);
+    }
+
+    const _handleClubDeleteButtonPress = () => {
+      if (user.uid === clubData.leader.uid) {
+        Alert.alert("경고", "클럽을 삭제하시겠습니까?",
+        [
+          {
+            text: "아니요",
+            style: "cancel"
+          },
+          {
+            text: "예",
+            onPress: () => {
+              Alert.alert("경고", `클럽에 존재하는 모든 글과 독서상황, 사진이 삭제됩니다. 클럽을 삭제하시겠습니까?`,
+              [
+                {
+                  text: "아니요",
+                  style: "cancel"
+                },
+                {
+                  text: "예",
+                  onPress:() => {clubDelete()}
+                }
+              ]);
+            }
+          }
+        ]);
+      }
+      else {
+        Alert.alert("권한 오류", "클럽 삭제는 클럽 리더만 가능합니다.");
+      }
+    }
+
     useLayoutEffect(()=>{
-        // navigation.setOptions({
-        //     headerBackTitleVisible: false,
-        //     headerTintColor: '#000000',
-        //     headerLeft: ({onPress, tintColor})=>{
-        //         return(
-        //
-        //             <MaterialCommunityIcons
-        //                 name="keyboard-backspace"
-        //                 size={30}
-        //                 style={{marginLeft:13}}
-        //                 color={tintColor}
-        //                 onPress={onPress}   //추후수정-뒤로가기
-        //             />
-        //         );
-        //     },
-        // });
         getClubInfo();
     }, []);
 
@@ -248,7 +436,7 @@ const MyClubMainManage=({ navigation, route })=>{
                     </Fix2>
                 </ContainerRow>
                 <Line width={width}></Line>
-                
+
                 <ContainerRow width={width}>
                     <Fix1 width={width}>
                       <Text style={styles.First}>최대인원</Text>
@@ -278,12 +466,12 @@ const MyClubMainManage=({ navigation, route })=>{
               <Button
                   color= '#fac8af'
                   title="모임 탈퇴"
-                  onPress={()=>alert('탈퇴 함수 필요. 모임을 탈퇴하시겠습니까?')}    //모임 탈퇴 함수가 필요합니다.
+                  onPress={_handleClubOutButtonPress}    //모임 탈퇴 함수가 필요합니다.
               />
               <Button
                   color= '#fac8af'
                   title="모임 삭제"
-                  onPress={()=>alert('삭제 함수 필요. 모임을 삭제하시겠습니까?')}    //모임 탈퇴 함수가 필요합니다.
+                  onPress={_handleClubDeleteButtonPress}    //모임 탈퇴 함수가 필요합니다.
               />
               <Button
                 color= '#fac8af'

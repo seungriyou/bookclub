@@ -102,14 +102,17 @@ const MyClubUserAdmin=({ navigation, route })=>{
 
         let list = []
         for (let member of clubData.members) {
-          const temp = {
-            id: member.uid,
-            user_name: member.name,
-            img_url: member.photoUrl,
-            email: "tempEmail",
+          if(member.uid !== user.uid) {
+            const temp = {
+              id: member.uid,
+              user_name: member.name,
+              img_url: member.photoUrl,
+              user_mail: member.email,
+            }
+            list.push(temp);
           }
-          list.push(temp);
         }
+
         setMemberData({userlist: list});
       }
       catch(e) {
@@ -155,7 +158,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
             <MainHeader clubname={clubData.title}></MainHeader>
 
             <List width={width}>
-              <UserAdminList userInfo={memberData} clubId={clubId} onchange={onUpdate}></UserAdminList>
+              <UserAdminList userInfo={memberData} clubId={clubId} onchange={onUpdate} currentUser={user}></UserAdminList>
             </List>
 
         </Container>

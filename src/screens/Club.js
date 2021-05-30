@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
 import styled from 'styled-components/native';
 import { Alert, Dimensions, FlatList, StyleSheet, Text, Modal } from 'react-native';
 import { getClubInfo, DB, getCurrentUser, clubSignUpWaiting } from '../utils/firebase';
@@ -53,7 +53,7 @@ const Line=styled.View`
 const List = styled.ScrollView`
     flex: 1;
     width: ${({ width }) => (width)}px;
-    
+
 `;
 
 
@@ -82,21 +82,21 @@ const styles = StyleSheet.create({
 
 
 const Club = ({ navigation, route }) => {
+  const clubId = route.params.id;
   const { spinner } = useContext(ProgressContext);
-  const [title, setTitle] = useState('');
-  const [leader, setLeader] = useState({
-    name: "",
-    photoUrl: "",
+  const [clubData, setClubData] = useState({
+    id: clubId,
+    title: "",
+    description: "",
+    leader: {
+      name: "",
+
+    },
+    region: "",
+    maxNumber: 0,
+    members: [],
   });
-  const [members, setMembers] = useState([]);
-  const [region, setRegion] = useState('');
-  const [maxNumber, setMaxNumber] = useState(0);
-  const [id, setId] = useState(0);
-  const [isMember, setIsMember] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [waiting, setWaiting] = useState(false);
-  const [description, setDescription] = useState('');
-  const [num, setNum] = useState(0);
+  const [disabled, setDisabled] = useState(true);
 
   const user = getCurrentUser();
 
@@ -105,46 +105,33 @@ const Club = ({ navigation, route }) => {
 
   const getClub = async () => {
     try {
-      const clubData = await getClubInfo(route.params?.id);
-      setId(route.params?.id);
-      setTitle(clubData.title);
-      setLeader({
-        name: clubData.leader.name,
-        photoUrl: clubData.leader.photoUrl
+      const clubRef = DB.collection('clubs').doc(clubId);
+      const clubDoc = await clubRef.get();
+      const tempClubData = clubDoc.data();
+
+      let temp = false;
+      tempClubData.members.forEach(member => {
+        if (member.uid === user.uid) {
+          temp = true;
+        }
       });
-      setMembers([...members, ...clubData.members]);
-      setRegion(clubData.region);
-      setMaxNumber(clubData.maxNumber);
-      setDescription(clubData.description);
-      setNum(clubData.members.length);
+
+      if(temp == true || parseInt(tempClubData.maxNumber, 10) === tempClubData.members.length) {
+        setDisabled(true);
+      }
+      else {
+        setDisabled(false);
+      }
+
+      setClubData(tempClubData);
     } catch (e) {
       Alert.alert('클럽 데이터 수신 오류', e.message);
     }
   };
 
-  const isDisabled = (members) => {
-      let temp = false;
-      members.forEach(member => {
-        if (member.uid == user.uid) {
-          temp = true;
-        }
-      });
-      if(temp == true) {
-        setDisabled(true);
-      }
-  };
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     getClub();
   }, []);
-
-  useEffect(() => {
-    isDisabled(members);
-  }, [members]);
-
-  useEffect(() => {
-    isDisabled(members);
-  })
 
   const signUpClub = async () => {
     const id = route.params?.id
@@ -158,14 +145,15 @@ const Club = ({ navigation, route }) => {
         const waiting = clubData.waiting;
 
         let flag = true;
-
-        for (const member of waiting) {
-          if (member.id === user.uid) {
-            flag = false;
+        if (waiting.length !== 0) {
+          for (const member of waiting) {
+            if (member.uid === user.uid) {
+              flag = false;
+            }
           }
         }
 
-        if (flag == true) {
+        if (flag === true) {
           waiting.push({
             uid: user.uid,
             email: user.email,
@@ -203,21 +191,21 @@ const Club = ({ navigation, route }) => {
   };
 
   return (
-    
+
     <List width={width}>
     <Container width={width}>
       <TitleCon width={width}>
-        <Text style={styles.First}>{title}</Text>
+        <Text style={styles.First}>{clubData.title}</Text>
       </TitleCon>
       <AllCon width={width}>
 
-      <Text style={styles.Second}>{description}</Text>
+      <Text style={styles.Second}>{clubData.description}</Text>
       <Line width={width}></Line>
-      <Text style={styles.Second}>관리자:  {leader.name}</Text>
+      <Text style={styles.Second}>관리자:  {clubData.leader.name}</Text>
       <Line width={width}></Line>
-      <Text style={styles.Second}>지역구:  {region}</Text>
+      <Text style={styles.Second}>지역구:  {clubData.region}</Text>
       <Line width={width}></Line>
-      <Text style={styles.Second}>인원 수 :  {num}/{maxNumber}</Text>
+      <Text style={styles.Second}>인원 수 :  {clubData.members.length}/{clubData.maxNumber}</Text>
 
       </AllCon>
       <Button

@@ -94,10 +94,9 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   const id = newClubRef.id;
   const members = [];
   const member = {
-    uid: leader.uid,
-    isWaiting: false,
+    ...leader,
     now_page: 0,
-  };
+  }
   const book_now = {
     title: "",
     goal: 0,
@@ -105,7 +104,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   }
   const book_completed = [];
 
-  members.push(member);
+  members.push(leader);
 
   const newClub = {
     id,
@@ -118,6 +117,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
     book_now,
     book_completed,
     createAt: Date.now(),
+    waiting: [],
   };
   await newClubRef.set(newClub);
 

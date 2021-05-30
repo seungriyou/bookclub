@@ -98,8 +98,18 @@ const WaitAdminList = ({onchange ,userInfo, clubId}) => {
                   const userDoc = await t.get(userRef);
                   const userData = userDoc.data();
 
-                  const club = userData.club;
-                  delete club.clubId;
+                  const club = {};
+
+                  for (let key in userData.club) {
+                    if(key !== clubId) {
+                        club[key] = userData.club[key];
+                    }
+                    else {
+                      club[key] = true;
+                    }
+                  }
+
+                  console.log(club);
 
                   t.update(userRef, {club: club});
                 });
@@ -149,8 +159,13 @@ const WaitAdminList = ({onchange ,userInfo, clubId}) => {
                   const userDoc = await t.get(userRef);
                   const userData = userDoc.data();
 
-                  const club = userData.club;
-                  delete club.clubId;
+                  const club = {};
+
+                  for (let key in userData.club) {
+                    if(key !== clubId) {
+                        club[key] = userData.club[key];
+                    }
+                  }
 
                   t.update(userRef, {club: club});
                 });
