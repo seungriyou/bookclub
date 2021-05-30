@@ -104,7 +104,6 @@ const Club = ({ navigation, route }) => {
   const user = getCurrentUser();
 
   const width = Dimensions.get('window').width;
-  const height = Dimensions.get('window').height;
 
 
   const getClub = async () => {
