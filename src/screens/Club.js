@@ -7,16 +7,20 @@ import { ProgressContext } from '../contexts';
 import { theme } from '../theme';
 
 const Container = styled.View`
-  flex: 1;
   background-color: ${({ theme }) => theme.background};
+  width: ${({ width }) => width}px;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: ${({ width }) => width}px;
   borderTop-Width: 3px;
   borderTop-Color: ${({ theme }) => theme.appBackground};
   paddingTop: 40px;
   paddingBottom: 60px;
+`;
+
+const Con=styled.View`
+flex: 1;
+background-color: ${({theme})=>theme.background};
 `;
 
 
@@ -53,7 +57,6 @@ const Line=styled.View`
 const List = styled.ScrollView`
     flex: 1;
     width: ${({ width }) => (width)}px;
-
 `;
 
 
@@ -101,6 +104,7 @@ const Club = ({ navigation, route }) => {
   const user = getCurrentUser();
 
   const width = Dimensions.get('window').width;
+  const height = Dimensions.get('window').height;
 
 
   const getClub = async () => {
@@ -191,30 +195,31 @@ const Club = ({ navigation, route }) => {
   };
 
   return (
-
+    <Con>
     <List width={width}>
     <Container width={width}>
-      <TitleCon width={width}>
-        <Text style={styles.First}>{clubData.title}</Text>
-      </TitleCon>
-      <AllCon width={width}>
+        <TitleCon width={width}>
+          <Text style={styles.First}>{clubData.title}</Text>
+        </TitleCon>
+        <AllCon width={width}>
 
-      <Text style={styles.Second}>{clubData.description}</Text>
-      <Line width={width}></Line>
-      <Text style={styles.Second}>관리자:  {clubData.leader.name}</Text>
-      <Line width={width}></Line>
-      <Text style={styles.Second}>지역구:  {clubData.region}</Text>
-      <Line width={width}></Line>
-      <Text style={styles.Second}>인원 수 :  {clubData.members.length}/{clubData.maxNumber}</Text>
+        <Text style={styles.Second}>{clubData.description}</Text>
+        <Line width={width}></Line>
+        <Text style={styles.Second}>관리자:  {clubData.leader.name}</Text>
+        <Line width={width}></Line>
+        <Text style={styles.Second}>지역구:  {clubData.region}</Text>
+        <Line width={width}></Line>
+        <Text style={styles.Second}>인원 수 :  {clubData.members.length}/{clubData.maxNumber}</Text>
 
-      </AllCon>
-      <Button
-        title="가입신청"
-        onPress={signUpClub}
-        disabled={disabled}
-      />
+        </AllCon>
+        <Button
+          title="가입신청"
+          onPress={signUpClub}
+          disabled={disabled}
+        />
     </Container>
     </List>
+    </Con>
   );
 };
 

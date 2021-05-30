@@ -13,14 +13,21 @@ const List = styled.ScrollView`
     width: ${({width})=>width}px;
 `;
 
+const Con=styled.View`
+flex: 1;
+background-color: ${({theme})=>theme.background};
+`;
+
 const Container=styled.View`
   flex: 1;
   width: ${({width})=>(width)}px;
+  
   flex-direction: column;
   align-items: center;
   justify-content: center;
   background-color: ${({theme})=>theme.background};
   paddingTop: 40px;
+  paddingLeft: 0px;
 `;
 
 const Fix=styled.View`
@@ -128,8 +135,10 @@ const ClubCreation = ({ navigation }) => {
       contentContainerStyle={{ flex: 1 }}
       extraScrollHeight = {30}
     >
+      <Con>
       <List width={width}>
       <Container width={width}>
+      
         <Fix>
         <Text>클럽 이름</Text>
         <ContainerInput width={width}>
@@ -212,8 +221,10 @@ const ClubCreation = ({ navigation }) => {
           disabled={disabled}
         />
         <BigBox />
+        
       </Container>
       </List>
+      </Con>
     </KeyboardAwareScrollView>
   );
 };
