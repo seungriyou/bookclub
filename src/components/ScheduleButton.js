@@ -1,27 +1,28 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { Dimensions } from 'react-native';
+import { Dimensions, View, Pressable } from 'react-native';
 
 const TRANSPARENT = 'transparent';
+
+
 
 const Container = styled.Pressable`
   background-color: ${({ theme, isFilled }) =>
     isFilled ? theme.background : TRANSPARENT};
   align-items: center;
   border-radius: 4px;
-  width: ${({ width }) => width - 40}px;;
-  padding: 20px;
+  width: ${({ width }) => width - 40}px;
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   height: 60px;
 `;
 
 const Title = styled.Text`
   height: 30px;
-  line-height: 25px;
   font-size: 20px;
   color: ${({ theme, isFilled }) =>
     isFilled ? theme.buttonBackground : theme.background};
+  marginTop: 13px;
 `;
 
 const Button = ({ containerStyle, title, onPress, isFilled, disabled }) => {

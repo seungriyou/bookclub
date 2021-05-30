@@ -1,18 +1,45 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { Alert, Dimensions, Text } from 'react-native';
+import { Alert, Dimensions, TextInput, Text } from 'react-native';
 import { Input, Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ProgressContext } from '../contexts';
 import { createClub, getCurrentUser } from '../utils/firebase';
 import {Picker} from '@react-native-picker/picker';
+import CCInput from '../components/CCInput';
 
-const Container = styled.View`
+const List = styled.ScrollView`
+    flex: 1;
+    width: ${({width})=>width}px;
+`;
+
+const Container=styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.background};
+  width: ${({width})=>(width)}px;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: flex-start;
-  padding: 0 20px;
+  background-color: ${({theme})=>theme.background};
+  paddingTop: 40px;
+`;
+
+const Fix=styled.View`
+  flex-direction: column;
+  justify-content: flex-start;
+`;
+
+const ContainerInput=styled.View`
+    width: ${({width})=>(width)-40}px;
+    min-height: 70px;
+    background-color: ${({theme})=>theme.background};
+    align-items: flex-start;
+    justify-content: center;
+    border-Width: 0.8px;
+    border-Color: ${({theme})=>theme.text};
+    padding: 10px 0px 10px 10px;
+    marginTop: 10px;
+    marginBottom: 25px;
+    border-radius: 5px;
 `;
 
 const ContainerRegion=styled.View`
@@ -21,11 +48,11 @@ const ContainerRegion=styled.View`
     background-color: ${({theme})=>theme.background};
     align-items: flex-start;
     justify-content: center;
-    border-Width: 1px;
-    border-Color: ${({theme})=>theme.inputBorder};
+    border-Width: 0.8px;
+    border-Color: ${({theme})=>theme.text};
     padding: 10px 0 10px 0;
-    marginTop: 20px;
-    marginBottom: 10px;
+    marginTop: 10px;
+    marginBottom: 30px;
     border-radius: 5px;
 `;
 
@@ -34,10 +61,14 @@ const Box=styled.View`
   height: 10px;
 `;
 
+const BigBox=styled.View`
+  width: 10px;
+  height: 40px;
+`;
 
 const ErrorText = styled.Text`
-  align-items: flex-start;
-  width: 100%
+  color: ${({theme})=>theme.errorText};
+  paddingBottom: 10px;
 `;
 
 const ClubCreation = ({ navigation }) => {
@@ -87,41 +118,48 @@ const ClubCreation = ({ navigation }) => {
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flex: 1 }}
-      extraScrollHeight = {20}
+      extraScrollHeight = {30}
     >
-      <Container>
-        <Input
-          label="클럽 이름"
-          value={title}
-          onChangeText={_handelTitleChange}
-          onSubmitEditing={() => {
-            setTitle(title.trim());
-            descriptionRef.current.focus();
-          }}
-          onBlur={() => setTitle(title.trim())}
-          placeholder="클럽 이름"
-          returnKeyType="next"
-          maxLength={20}
-        />
-        <Input
-          ref={descriptionRef}
-          label="클럽 설명"
-          value={description}
-          onChangeText={text => setDescription(text)}
-          onSubmitEditing={() => {
-            setDescription(description.trim());
-            maxNumberRef.current.focus();
-          }}
-          onBlur={() => setDescription(description.trim())}
-          placeholder="클럽 설명"
-          returnKeyType="next"
-          maxLength={150}
-        />
-
+      <List width={width}>
+      <Container width={width}>
+        <Fix>
+        <Text>클럽 이름</Text>
+        <ContainerInput width={width}>
+          <CCInput
+            value={title}
+            onChangeText={_handelTitleChange}
+            onSubmitEditing={() => {
+              setTitle(title.trim());
+              descriptionRef.current.focus();
+            }}
+            onBlur={() => setTitle(title.trim())}
+            placeholder="클럽 이름"
+            returnKeyType="next"
+            maxLength={20}
+          />
+        </ContainerInput>
+        </Fix>
+        <Fix>
+        <Text>클럽 소개글</Text>
+        <ContainerInput width={width}>
+          <CCInput  
+            placeholder="클럽 소개글"
+            maxLength={150}
+            multiline={true}
+            returnKeyType= "next"
+            ref={descriptionRef}
+            value={description}
+            onBlur={() => setDescription(description.trim())}
+            onChangeText={text=>setDescription(text)}
+          />
+        </ContainerInput>
+        </Fix>
+        <Fix>
+        <Text>클럽 지역</Text>
         <ContainerRegion width={width}>
           <Picker
               selectedValue={region}
-              style={{ height: 50, width: 220}}
+              style={{ height: 50, width: 220, marginLeft: 5}}
               onValueChange={(itemValue, itemIndex) => setRegion(itemValue)}>
               <Picker.Item label="지역을 선택해주세요" value="" />
               <Picker.Item label="강서" value="강서" />
@@ -137,29 +175,37 @@ const ClubCreation = ({ navigation }) => {
               <Picker.Item label="제주" value="제주" />
           </Picker>
         </ContainerRegion>
-
-        <Input
-          ref={maxNumberRef}
-          label="클럽 최대 인원"
-          value={maxNumber}
-          onChangeText={_maxNumberChanged}
-          onSubmitEditing={() => {
-            _maxNumberChanged();
-            _handelCreateButtonPress();
-          }}
-          placeholder="클럽 최대 인원"
-          returnKeyType="done"
-          maxLength={5}
-          keyboardType="number-pad"
-        />
+        </Fix>
+        <Fix>
+        <Text>클럽 최대 인원</Text>
+        <ContainerInput width={width}>
+          <CCInput
+            ref={maxNumberRef}
+            value={maxNumber}
+            onChangeText={_maxNumberChanged}
+            onSubmitEditing={() => {
+              _maxNumberChanged();
+              _handelCreateButtonPress();
+            }}
+            placeholder="클럽 최대 인원"
+            returnKeyType="done"
+            maxLength={5}
+            keyboardType="number-pad"
+          />
+        </ContainerInput>
+        </Fix>
+      
         <ErrorText>{errorMessage}</ErrorText>
+        
         <Box />
         <Button
           title="클럽 생성하기"
           onPress={_handelCreateButtonPress}
           disabled={disabled}
         />
+        <BigBox />
       </Container>
+      </List>
     </KeyboardAwareScrollView>
   );
 };

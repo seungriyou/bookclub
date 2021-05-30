@@ -6,18 +6,17 @@ import { Button } from '../components';
 import { ProgressContext } from '../contexts';
 import { theme } from '../theme';
 
-
-
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 0 20px;
   width: ${({ width }) => width}px;
-  border-Width: 3px;
-  border-Color: ${({ theme }) => theme.appBackground};
-
+  borderTop-Width: 3px;
+  borderTop-Color: ${({ theme }) => theme.appBackground};
+  paddingTop: 40px;
+  paddingBottom: 60px;
 `;
 
 
@@ -38,9 +37,6 @@ const AllCon=styled.View`
   border-Width: 2.5px;
   border-Color: ${({ theme }) => theme.appBackground};
   width: ${({ width }) => (width)*0.85}px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
   paddingLeft: 10px;
   paddingRight: 10px;
   paddingBottom: 7px;
@@ -53,6 +49,13 @@ const Line=styled.View`
   height: 0.8px;
   width: ${({ width }) => ((width)*0.8)-10}px;
 `;
+
+const List = styled.ScrollView`
+    flex: 1;
+    width: ${({ width }) => (width)}px;
+    
+`;
+
 
 const styles = StyleSheet.create({
   First: {
@@ -200,8 +203,9 @@ const Club = ({ navigation, route }) => {
   };
 
   return (
+    
+    <List width={width}>
     <Container width={width}>
-
       <TitleCon width={width}>
         <Text style={styles.First}>{title}</Text>
       </TitleCon>
@@ -222,7 +226,7 @@ const Club = ({ navigation, route }) => {
         disabled={disabled}
       />
     </Container>
-
+    </List>
   );
 };
 

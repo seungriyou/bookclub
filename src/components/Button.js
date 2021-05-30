@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
+import {Dimensions} from 'react-native';
 
 const TRANSPARENT = 'transparent';
 
@@ -9,7 +10,7 @@ const Container = styled.Pressable`
     isFilled ? theme.buttonBackground : TRANSPARENT};
   align-items: center;
   border-radius: 4px;
-  width: 100%;
+  width: ${({width})=>(width)-40}px;
   padding: 10px;
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
 `;
@@ -23,8 +24,10 @@ const Title = styled.Text`
 `;
 
 const Button = ({ containerStyle, title, onPress, isFilled, disabled }) => {
+  const width = Dimensions.get('window').width;
+
   return (
-    <Container
+    <Container width={width}
       style={containerStyle}
       onPress={onPress}
       isFilled={isFilled}

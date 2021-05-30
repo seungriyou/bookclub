@@ -10,15 +10,14 @@ const StyledTextInput = styled.TextInput.attrs(({ theme }) => ({
   background-color: ${({ theme }) => theme.background};
   color: ${({ theme }) => theme.text};
   padding: 10px 10px;
-  font-size: 20px;
+  font-size: 18px;
   border-radius: 4px;
   width: ${({ width }) => width - 40}px;
-  textAlignVertical = "top";
   margin-bottom: 20px;
-  height: 50px;
+  min-height: 60px;
 `;
 
-const ScheduleInput = forwardRef(({ value, onChangeText, onSubmitEditing, placeholder, disabled }, ref ) => {
+const ScheduleInput = forwardRef(({ value, onChangeText, multiline, onSubmitEditing, placeholder, disabled }, ref ) => {
     const width = Dimensions.get('window').width;
 
     return (
@@ -29,7 +28,7 @@ const ScheduleInput = forwardRef(({ value, onChangeText, onSubmitEditing, placeh
           onChangeText={onChangeText}
           onSubmitEditing={onSubmitEditing}
           editable={!disabled}
-
+          multiline={multiline}
           placeholder={placeholder}
           returnKeyType="next"
           autoCapitalize="none"
@@ -47,6 +46,7 @@ ScheduleInput.propTypes = {
   onSubmitEditing: PropTypes.func,
   placeholder: PropTypes.string,
   disabled: PropTypes.bool,
+  multiline: PropTypes.string,
 };
 
 export default ScheduleInput;

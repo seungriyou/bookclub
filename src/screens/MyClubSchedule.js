@@ -23,37 +23,50 @@ import { Alert, Platform, Dimensions } from 'react-native';
 import { DB, getCurrentUser } from '../utils/firebase';
 import { ProgressContext } from '../contexts';
 
+
 const Container = styled.View`
     flex: 1;
-    justify-content: center;
-    align-items: center;
+    width: ${({width})=>width}px;
+    flex-direction: column;
+    align-items: center
     background-color: ${({ theme }) => theme.buttonBackground};
-    padding: 20px;
+    paddingTop: 40px;
+`;
+
+const Fix=styled.View`
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: ${({width})=>(width)-60}px;
 `;
 
 const ErrorText = styled.Text`
     align-items: flex-start;
-    height: 20px;
-    margin-bottom: 20px;
-    line-height: 20px;
+    height: 40px;
+    margin-bottom: 40px;
     color: ${({ theme }) => theme.errorText};
     font-size: 15px;
 `;
 
 const DateText = styled.Text`
-    color: ${({ theme }) => theme.label};
-    font-size: 20px;
+    color: ${({ theme }) => theme.text};
+    font-size: 18px;
     margin-bottom: 20px;
+`;
+
+const Box = styled.View`
+    width=10px;
+    height: 60px;
 `;
 
 const List = styled.ScrollView`
     flex: 1;
-    width: ${({width})=>width-40}px;
+    width: ${({width})=>width}px;
 `;
 
 const DateButton = styled.TouchableOpacity`
+    width: ${({width})=>(width)-40}px;
     background-color: ${({ theme }) => theme.background};
-    font-size: 20px;
+    font-size: 18px;
     height: 50px;
     border-radius: 4px;
     margin-bottom: 20;
@@ -62,8 +75,8 @@ const DateButton = styled.TouchableOpacity`
 `;
 
 const DateButtonText = styled.Text`
-    color: ${({ theme }) => theme.buttonBackground};
-    font-size: 20px;
+    color: ${({ theme }) => theme.appBackground};
+    font-size: 18px;
     align-items: center;
 `;
 
@@ -132,7 +145,7 @@ const ScheduleCreation = ({navigation, route}) => {
             if (!title) {
                 _errorMessage = '일정명을 입력하세요.';
             }  else if (!site) {
-                _errorMessage = '장소(모임형태)를 입력하세요.';
+                _errorMessage = '장소를 입력하세요.';
             } else if (date <= tempTime) {
                 _errorMessage = '일정 시간을 확인해주세요.';
             } else {
@@ -197,8 +210,9 @@ const ScheduleCreation = ({navigation, route}) => {
             contentContainerStyle={{ flex: 1 }}
             extraScrollHeight={20}
         >
-            <Container>
-                <List width={width}>
+            <List width={width}>
+            <Container width={width}>
+                
                     <ScheduleInput // 일정명 입력 받기
                         value={title}
                         onChangeText={_handleTitleChange}
@@ -206,17 +220,19 @@ const ScheduleCreation = ({navigation, route}) => {
                         placeholder="일정명"
                         returnKeyType="next"
                     />
-                    <DateButton onPress={showDatepicker}>
+                    <DateButton width={width} onPress={showDatepicker}>
                         <DateButtonText>날짜 선택</DateButtonText>
                     </DateButton>
-                    <DateButton onPress={showTimepicker}>
+                    <DateButton width={width} onPress={showTimepicker}>
                         <DateButtonText>시간 선택</DateButtonText>
                     </DateButton>
+                    <Fix width={width}>
                     <DateText>선택 시간{"\n"}{date.toLocaleString()}</DateText>
+                    </Fix>
                     <ScheduleInput // 장소 입력 받기
                         value={site}
                         onChangeText={_handleSiteChange}
-                        placeholder="장소(모임형태)"
+                        placeholder="장소"
                         returnKeyType="next"
                     />
                     <ScheduleInput // 메모 입력 받기
@@ -224,14 +240,16 @@ const ScheduleCreation = ({navigation, route}) => {
                         onChangeText={_handleMemoChange}
                         placeholder="메모"
                         returnKeyType="done"
+                        multiline={true}
                     />
+                    <Fix width={width}>
                     <ErrorText>{errorMessage}</ErrorText>
+                    </Fix>
                     <ScheduleButton // 일정 등록 버튼
                         title="일정 등록"
                         onPress={_handleCreationButtonPress}
                         disabled={disabled}
                     />
-                </List>
                 { show && (
                     <DateTimePicker
                         testID="dateTimePicker"
@@ -243,7 +261,9 @@ const ScheduleCreation = ({navigation, route}) => {
                     />
                 )
             }
+            <Box/>
             </Container>
+            </List>
         </KeyboardAwareScrollView>
     );
 };

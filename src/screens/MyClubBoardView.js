@@ -11,11 +11,12 @@ import moment from 'moment';
 
 const Container=styled.View`
     flex: 1;
+    width: ${({width})=>width}px;
     flex-direction: column;
     background-color: ${({theme})=>theme.appBackground};
     align-items: center;
     padding-bottom: 100px;
-    justify-content: flex-start;
+    justify-content: center;
 `;
 
 const Container2=styled.View`
@@ -35,7 +36,8 @@ const Containerforreply=styled.View`
 
 const List=styled.ScrollView`
     flex: 1;
-    width: ${({width})=>width-40}px;
+    width: ${({width})=>width}px;
+    paddingLeft: 20px;
 `;
 
 const Listforreply=styled.ScrollView`
@@ -317,7 +319,7 @@ const MyClubBoardView=({ navigation, route })=>{
 
     return(
         
-        <Container>
+        <Container width={width}>
             <List width={width}>
               <BoardViewPost 
                     title={boardData.title}

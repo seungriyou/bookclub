@@ -47,7 +47,7 @@ const MyClubBoardNav = () => {
       headerMode="screen"
     >
       <Stack.Screen name="MyClubBoard" component={MyClubBoard} options={{title: "게시판 글 작성"}}/>
-      <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} options={{title: "게시판"}}/>
+      <Stack.Screen name="MyClubBoardView" component={MyClubBoardView} options={{title: "게시판 조회"}}/>
       <Stack.Screen name="MyClubBoardEdit" component={MyClubBoardEdit} options={{title: "게시판 글 수정"}}/>
     </Stack.Navigator>
   );
@@ -103,7 +103,7 @@ const MyClubScheduleNav = ({navigate, route}) => {
       }}
       headerMode="screen"
     >
-      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} options={{title: "일정"}}/>
+      <Stack.Screen name="MyClubSchedule" component={MyClubSchedule} options={{title: "일정 작성"}}/>
       <Stack.Screen name="MyClubScheduleEdit" component={MyClubScheduleEdit} options={{title: "일정 수정"}}/>
     </Stack.Navigator>
   );

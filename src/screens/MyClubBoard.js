@@ -16,7 +16,8 @@ const Container=styled.View`
 
 const List=styled.ScrollView`
     flex: 1;
-    width: ${({width})=>width-40}px;
+    width: ${({width})=>width}px;
+    paddingLeft: 20px;
 `;
 
 
