@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "bookclub",
+    "name": "Bookclub in Drawer ",
     "slug": "bookclub",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -17,12 +17,17 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "com.teamDrawer.bookclubInDrawer",
+      "supportsTablet": false
     },
     "android": {
+      "package": "com.teamDrawer.bookclubInDrawer",
+      "permissions" : ["CAMERA"],
+      "versionCode" : 1,
+      "icon" : "./assets/icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/icon_foreground.png",
+        "backgroundColor": "#fac8af"
       }
     },
     "web": {
