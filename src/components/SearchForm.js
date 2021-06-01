@@ -31,8 +31,8 @@ const ButtonContainer = styled.TouchableOpacity`
   padding: 8px 8px;
   margin: 5px 3px 3px 5px;
   position: absolute;
-  right: 0;
-  bottom: 0;
+  right: 13;
+  bottom: 13;
   border-radius: 30px;
   border-width: 0.9px;
   border-color: ${({ theme }) => theme.separator};
