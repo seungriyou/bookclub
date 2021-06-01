@@ -14,13 +14,24 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
+const StyledInput = styled.TextInput.attrs(({ theme }) => ({
+  placeholderTextColor: theme.inputPlaceholder,
+}))`
+  width: ${({ width }) => width - 80}px;
+  margin: 10px 10px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background-color: ${({ theme }) => theme.search};
+  font-size: 17px;
+  color: ${({ theme }) => theme.text};
+`;
 const FixBar=styled.View`
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   width: ${({width})=>width}px;
   background-color: ${({ theme }) => theme.background};
-  padding: 0px 20px 15px 20px;
+  padding: 15px 20px 15px 20px;
   borderBottom-color: ${({theme})=>theme.separator};
   borderBottom-width: 1px;
 `;
@@ -33,7 +44,6 @@ const ButtonContainer = styled.TouchableOpacity`
   height: 40px;
   justify-content: center;
   align-items: center;
-  margin-top: 5px;
 `;
 const PageButtonContainer = styled.TouchableOpacity`
   width: ${({width})=>width/2}px;
@@ -45,7 +55,7 @@ const PageButtonContainer = styled.TouchableOpacity`
 `;
 const PageButtonArea = styled.View`
   flex-direction: row;
-  padding: 10px;
+  padding: 7px;
   justify-content: space-between;
   borderTop-color: ${({theme})=>theme.separator};
   borderTop-width: 1px;
@@ -166,8 +176,14 @@ const MyClubBookSearch = ({ navigate, route }) => {
   return (
     <Container width={width}>
       <FixBar width={width}>
-        <Input
+        <StyledInput
+          width={width}
           placeholder="책 이름을 검색해주세요"
+          maxLength={30}
+          multiline={false}
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyType="done"
           onChangeText={(text)=>setBookname(text)}
         />
         <SearchButton onPress={_handleSearchButtonPressed} />
