@@ -7,28 +7,94 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { parseString } from 'react-native-xml2js';
 import BookSearchList from '../components/BookSearchList';
 import {decode} from 'html-entities';
-
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
+  align-items: center;
 `;
-
 const FixBar=styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: ${({width})=>width}px;
   background-color: ${({ theme }) => theme.background};
-  padding: 0px 20px 40px 20px;
+  padding: 0px 20px 15px 20px;
   borderBottom-color: ${({theme})=>theme.separator};
   borderBottom-width: 1px;
 `;
-
 const List=styled.ScrollView`
     flex: 1;
     width: ${({width})=>width}px;
 `;
+const ButtonContainer = styled.TouchableOpacity`
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+`;
+const PageButtonContainer = styled.TouchableOpacity`
+  width: ${({width})=>width/2}px;
+  height: 50px;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: ${({ theme }) => theme.background};
+`;
+const PageButtonArea = styled.View`
+  flex-direction: row;
+  padding: 10px;
+  justify-content: space-between;
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 1px;
+`;
+const SearchButtonIcon = () => {
+  return (
+    <MaterialIcons
+      name="search"
+      size={35}
+    />
+  );
+};
+const SearchButton = ({ onPress }) => {
+  return (
+    <ButtonContainer onPress={onPress} >
+      <SearchButtonIcon />
+    </ButtonContainer>
+  );
+};
+const ResetPageButtonIcon = () => {
+  return (
+    <MaterialCommunityIcons
+      name="chevron-double-left"
+      size={40}
+    />
+  );
+};
+const ResetPageButton = ({ onPress, width }) => {
+  return (
+    <PageButtonContainer onPress={onPress} width={width} >
+      <ResetPageButtonIcon />
+    </PageButtonContainer>
+  );
+};
+const NextPageButtonIcon = () => {
+  return (
+    <MaterialCommunityIcons
+      name="chevron-right"
+      size={40}
+    />
+  );
+};
+const NextPageButton = ({ onPress, width }) => {
+  return (
+    <PageButtonContainer onPress={onPress} width={width}>
+      <NextPageButtonIcon />
+    </PageButtonContainer>
+  );
+};
 
 const MyClubBookSearch = ({ navigate, route }) => {
   const id = route.params.id;
@@ -104,23 +170,15 @@ const MyClubBookSearch = ({ navigate, route }) => {
           placeholder="책 이름을 검색해주세요"
           onChangeText={(text)=>setBookname(text)}
         />
-        <Button
-          title="검색하기"
-          onPress={_handleSearchButtonPressed}
-        />
-        <Button
-          title="다음 검색하기"
-          onPress={_handleNextSearchButtonPressed}
-        />
-        <Button
-          title="처음 검색하기"
-          onPress={_handleResetSearchButtonPressed}
-        />
+        <SearchButton onPress={_handleSearchButtonPressed} />
       </FixBar>
-
       <List width={width}>
         <BookSearchList bookInfo={items} clubid={id}></BookSearchList>
       </List>
+      <PageButtonArea>
+        <ResetPageButton onPress={_handleResetSearchButtonPressed} width={width} />
+        <NextPageButton onPress={_handleNextSearchButtonPressed} width={width} />
+      </PageButtonArea>
     </Container>
   );
 };
