@@ -31,7 +31,7 @@ const FixBar=styled.View`
   justify-content: center;
   width: ${({width})=>width}px;
   background-color: ${({ theme }) => theme.background};
-  padding: 15px 20px 15px 20px;
+  padding: 10px 20px 10px 20px;
   borderBottom-color: ${({theme})=>theme.separator};
   borderBottom-width: 1px;
 `;
@@ -44,6 +44,7 @@ const ButtonContainer = styled.TouchableOpacity`
   height: 40px;
   justify-content: center;
   align-items: center;
+  margin-left: 5px;
 `;
 const PageButtonContainer = styled.TouchableOpacity`
   width: ${({width})=>width/2}px;
