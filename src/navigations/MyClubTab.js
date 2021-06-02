@@ -1,4 +1,6 @@
 import React, { useContext, useEffect } from 'react';
+import {View, StatusBar} from 'react-native';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MyClubMainInfo, MyClubAlbumList, MyClubBoardList, MyClubEssayList, MyClubScheduleList } from '../screens';
 import { MaterialIcons, Ionicons } from '@expo/vector-icons';
@@ -72,13 +74,20 @@ const MainTab = ({ navigation, route }) => {
         { if (index === 0)
             {
               return (
+              <Layout>
+              <MaterialCommunityIcons
+                  name="magnify"
+                  size={30}
+                  style={{marginRight:10}}
+                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookRC', params: {id: id}})}}   //검색화면으로 이동할 예정 
+              />
               <MaterialCommunityIcons
                   name="format-list-bulleted"
                   size={30}
-                  style={{marginRight:10}}
-
+                  style={{marginRight:13}}
                   onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'CompleteBook', params: {id: id}})}}   //수정필요-진행완료된 책 화면으로 이동
               />
+              </Layout>
             )}
           if (index === 1)
             return (

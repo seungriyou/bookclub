@@ -30,9 +30,9 @@ import MyClubEssayLikeList from './MyClubEssayLikeList'
 import MyClubSchedule from './MyClubSchedule';
 import MyClubScheduleList from './MyClubScheduleList';
 import MyClubScheduleEdit from './MyClubScheduleEdit';
+import MyClubBookRC from './MyClubBookRC';
 
-
-export { Login, Signup, Club, ClubCreation, ClubList, Profile, CompleteBook, MyClubList,
+export { Login, Signup, Club, ClubCreation, ClubList, Profile, CompleteBook, MyClubBookRC,MyClubList,
   MyClubBoardList, MyClubAlbumList, MyClubEssayList, MyClubScheduleList, MyClubBoard, MyClubBoardEdit, MyClubSchedule, MyClubAlbum, MyClubAlbumSelectPhoto, MyClubAlbumView,
   MyClubBoardView, MyClubEssay, MyClubEssayView, MyClubEssayLikeList, MyClubMainInfo, MyClubMainInfo_1, MyClubMainInfo_2, MyClubMainM, MyClubMainManage, MyClubBookSearch, MyClubUserAdmin, MyClubWaitAdmin,
   MyClubEssayEdit, MyClubScheduleEdit

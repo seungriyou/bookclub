@@ -6,7 +6,7 @@ import { Club, ClubCreation, MyClubBoard,MyClubBoardEdit,
   MyClubAlbumSelectPhoto, MyClubAlbumView, MyClubEssay,
   MyClubEssayView, MyClubEssayLikeList, MyClubEssayEdit, MyClubMainInfo_1,
   MyClubMainInfo_2, MyClubMainM, MyClubMainManage,
-  MyClubUserAdmin, MyClubWaitAdmin, MyClubBookSearch, CompleteBook } from '../screens';
+  MyClubUserAdmin, MyClubWaitAdmin, MyClubBookSearch, MyClubBookRC, CompleteBook } from '../screens';
 import MainTab from './MainTab';
 import MyClubTab from './MyClubTab';
 
@@ -29,7 +29,8 @@ const MyClubMainInfoNav = () => {
       <Stack.Screen name="MyClubMainManage" component={MyClubMainManage} options={{title: "클럽 정보"}}/>
       <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} options={{title: "클럽원 목록"}}/>
       <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} options={{title: "가입 대기중인 회원"}}/>
-      <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} options={{title: "도서 검색"}}/>
+      <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} options={{title: "도서 등록"}}/>
+      <Stack.Screen name="MyClubBookRC" component={MyClubBookRC} options={{title: "도서 추천"}}/>
       <Stack.Screen name="CompleteBook" component={CompleteBook} options={{title: "완료한 도서 목록"}}/>
     </Stack.Navigator>
   );

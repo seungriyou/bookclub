@@ -281,13 +281,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
         isAuthor && (
           <Layout>
             <MaterialCommunityIcons
-                name="pencil"
-                size={30}
-                style={{marginRight:13}}
-                color={tintColor}
-                onPress={_handelEditButtonPress}
-            />
-            <MaterialCommunityIcons
                 name="trash-can"
                 size={30}
                 style={{marginRight:13}}
