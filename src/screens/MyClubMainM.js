@@ -171,6 +171,7 @@ const ButtonFix2=styled.View`
   align-items: center;
   marginTop: 50px;
   marginBottom: 50px;
+  padding: 10px;
 `;
 
 const List=styled.ScrollView`
@@ -228,6 +229,16 @@ const MyClubMainM=({ navigation, route })=>{
     const [newRegion, setNewRegion]=useState('');
     //const [newType, setNewType]=useState('');
     const [newMaxnum, setNewMaxnum]=useState('');
+    const [leader, setLeader] = useState({});
+    const [newLeader, setNewLeader] = useState({
+      name: '',
+      uid: ''
+    });
+    const [members, setMembers]=useState([{
+      name: '',
+      uid: ''}
+    ]);
+    const [oldLeader, setOldLeader] = useState({});
 
     const getClubData = async() => {
       try{
@@ -235,15 +246,32 @@ const MyClubMainM=({ navigation, route })=>{
         const clubDoc = await clubRef.get();
         const clubData = clubDoc.data();
 
+        const leaderIndex = clubData.members.findIndex(member => member.uid === clubData.leader.uid);
+        let temp = clubData.members[leaderIndex];
+        clubData.members.splice(leaderIndex, 1);
+        clubData.members.unshift(temp);
+
+        console.log(clubData.members);
+
         setClubname(clubData.title);
         setAdmin(clubData.leader.name);
         setNewRegion(clubData.region);
         setNewMaxnum(clubData.maxNumber);
         setNewIntro(clubData.description);
+        setMembers(clubData.members);
+        setNewLeader(clubData.leader);
+        setOldLeader(clubData.leader);
+
       }
       catch(e){
         Alert.alert("클럽 수신 데이터 오류", e.message);
       }
+    }
+
+    const renderMemberList = () => {
+      return members.map((member) => {
+        return <Picker.Item label = {member.name} value={member} />
+      })
     }
 
     const _handleIntroChange = text => {
@@ -255,17 +283,61 @@ const MyClubMainM=({ navigation, route })=>{
     };
 
     const _handelEditButtonPress = async() => {
-      try{
-        const clubRef = DB.collection('clubs').doc(id);
-        await DB.runTransaction(async (t) => {
-          t.update(clubRef, {description: newIntro, region: newRegion, maxNumber: newMaxnum});
-        });
+      if(oldLeader.uid !== newLeader.uid) {
+        Alert.alert("경고", `모임장을 ${newLeader.name}님으로 변경하시겠습니까?`,
+        [
+          {
+            text: "아니요",
+            style: "cancel"
+          },
+          {
+            text: "예",
+            onPress: async() => {
+              try{
+                const clubRef = DB.collection('clubs').doc(id);
 
-        Alert.alert('클럽 정보 수정 완료');
-        navigation.navigate('MyClubMainInfoNav', {screen:"MyClubMainManage", params:{id: id}});
+                const tempLeader = {
+                  email: newLeader.email,
+                  name: newLeader.name,
+                  photoUrl: newLeader.photoUrl,
+                  uid: newLeader.uid
+                }
+
+                await DB.runTransaction(async (t) => {
+                  t.update(clubRef, {description: newIntro, region: newRegion, maxNumber: newMaxnum, leader: tempLeader});
+                });
+
+                Alert.alert('클럽 정보 수정 완료');
+                navigation.navigate('MyClubMainInfoNav', {screen:"MyClubMainManage", params:{id: id}});
+              }
+              catch (e) {
+                Alert.alert('클럽 정보 수정 오류', e.message);
+              }
+            }
+          }
+        ]);
       }
-      catch (e) {
-        Alert.alert('클럽 정보 수정 오류', e.message);
+      else {
+        try{
+          const clubRef = DB.collection('clubs').doc(id);
+
+          const tempLeader = {
+            email: newLeader.email,
+            name: newLeader.name,
+            photoUrl: newLeader.photoUrl,
+            uid: newLeader.uid
+          }
+
+          await DB.runTransaction(async (t) => {
+            t.update(clubRef, {description: newIntro, region: newRegion, maxNumber: newMaxnum, leader: tempLeader});
+          });
+
+          Alert.alert('클럽 정보 수정 완료');
+          navigation.navigate('MyClubMainInfoNav', {screen:"MyClubMainManage", params:{id: id}});
+        }
+        catch (e) {
+          Alert.alert('클럽 정보 수정 오류', e.message);
+        }
       }
     }
 
@@ -314,7 +386,12 @@ const MyClubMainM=({ navigation, route })=>{
                       <Text style={styles.Second}>관리자</Text>
                     </Fix1>
                     <Fix2 width={width}>
-                        <Text style={styles.Second}>{admin}</Text>
+                    <Picker
+                        selectedValue={newLeader}
+                        style={{ height: 50, width: 200, margin: 10 }}
+                        onValueChange={(itemValue, itemIndex) => setNewLeader(itemValue)}>
+                        {renderMemberList()}
+                    </Picker>
                     </Fix2>
                 </ContainerRow>
                 <Line width={width}></Line>

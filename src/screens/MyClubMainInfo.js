@@ -218,6 +218,7 @@ const MyClubMainInfo=({ navigation, route })=>{
               user_name: member.name,
               img_url: member.photoUrl,
               user_rate: user_rate,
+
             }
             tempData.userlist.push(tempuser);
           }
