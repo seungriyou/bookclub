@@ -246,6 +246,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
                     now_page: 0,
                     photoUrl: members[i].photoUrl,
                     uid: members[i].uid,
+                    email: members[i].email
                   });
                 }
 

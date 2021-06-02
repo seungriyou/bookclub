@@ -104,7 +104,7 @@ export const createClub = async ({ title, description, leader, region, maxNumber
   }
   const book_completed = [];
 
-  members.push(leader);
+  members.push(member);
 
   const newClub = {
     id,
