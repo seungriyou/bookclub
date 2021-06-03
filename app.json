@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Bookclub in Drawer ",
+    "name": "서랍속책방",
     "slug": "bookclub",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "com.teamDrawer.bookclubInDrawer",
-      "permissions" : ["CAMERA"],
+      "permissions" : ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
       "versionCode" : 1,
       "icon" : "./assets/icon.png",
       "adaptiveIcon": {

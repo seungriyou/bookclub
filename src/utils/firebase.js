@@ -3,6 +3,7 @@ import config from '../../firebase.json';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CryptoJS from "react-native-crypto-js";
+import { Alert } from 'react-native';
 
 const app = firebase.initializeApp(config);
 export const Storage = app.storage();
@@ -85,6 +86,39 @@ export const updateUserPhoto = async photoUrl => {
     ? photoUrl
     : await uploadImage(photoUrl);
   await user.updateProfile({ photoURL: storageUrl });
+
+  try{
+    const userRef = DB.collection('users').doc(user.uid);
+    await DB.runTransaction(async (t) => {
+      const doc = await t.get(userRef);
+      const data = doc.data();
+
+      const clubList = data.club;
+      for (let club in clubList) {
+        if(clubList[club] === true) {
+          const clubRef = DB.collection('clubs').doc(club);
+          await DB.runTransaction(async (t) => {
+            const doc = await t.get(userRef);
+            const data = doc.data();
+
+            for (let member in data.members) {
+              if (member.uid === user.uid) {
+                member.photoUrl = user.photoURL;
+              }
+            }
+
+            t.update(clubRef, {members: data.members})
+          });
+
+        }
+      }
+      t.update(userRef, {photoUrl: user.photoURL});
+    });
+    }
+  catch(e) {
+    Alert.alert("프로필 사진 업데이트 에러", e.message);
+  }
+
   return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
 };
 
