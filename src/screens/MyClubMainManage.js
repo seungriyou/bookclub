@@ -8,6 +8,8 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import { DB, getCurrentUser, Storage } from '../utils/firebase';
+import RCButton from '../components/RCButton';
+
 
 const Container=styled.View`
     flex: 1;
@@ -90,7 +92,7 @@ const ButtonFix1=styled.View`
 const ButtonFix2=styled.View`
   width: ${({ width }) => (width)}px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   marginTop: 60px;
   marginBottom: 50px;
@@ -463,17 +465,17 @@ const MyClubMainManage=({ navigation, route })=>{
             </ButtonFix1>
 
             <ButtonFix2 width={width}>
-              <Button
+              <RCButton
                   color= '#fac8af'
                   title="모임 탈퇴"
                   onPress={_handleClubOutButtonPress}    //모임 탈퇴 함수가 필요합니다.
               />
-              <Button
+              <RCButton
                   color= '#fac8af'
                   title="모임 삭제"
                   onPress={_handleClubDeleteButtonPress}    //모임 탈퇴 함수가 필요합니다.
               />
-              <Button
+              <RCButton
                 color= '#fac8af'
                 title="정보 수정"
                 onPress={_handleMainManageButtonPress}  //모임 정보 수정 화면으로 이동할 예정

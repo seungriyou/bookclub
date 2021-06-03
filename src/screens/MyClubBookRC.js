@@ -1,34 +1,53 @@
-import React, { useContext, useState, useEffect } from 'react';
-import styled, { ThemeContext } from 'styled-components/native';
-import { Dimensions, Alert } from 'react-native';
-import { Input, Button } from '../components';
-import {ALADIN_SEARCH_API_KEY} from '../../secret';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import styled from 'styled-components/native';
+import { Dimensions, Text } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import BookRCList from '../components/BookRCList';
+import RCButton from '../components/RCButton';
 
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
-  align-items: center;
 `;
 
-const ButtonContainer = styled.TouchableOpacity`
-  width: 40px;
-  height: 40px;
-  justify-content: center;
+const Containerrow = styled.View`
+  background-color: ${({ theme }) => theme.background};
+  flex-direction: row;
+`;
+
+
+const Container2 = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.background};
   align-items: center;
-  margin-left: 5px;
+  paddingTop: 20px;
+`;
+
+
+
+const FixSource=styled.View`
+  width: ${({ width }) => width}px;
+  height: 40px;
+  background-color: ${({ theme }) => theme.background};
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 1px;
+  position: absolute;
+  bottom: 0;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 `;
 
 const FixBar=styled.View`
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: ${({width})=>width}px;
   background-color: ${({ theme }) => theme.background};
   padding: 10px 20px 10px 20px;
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 1px;
   borderBottom-color: ${({theme})=>theme.separator};
   borderBottom-width: 1px;
 `;
@@ -41,7 +60,7 @@ const List=styled.ScrollView`
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
 }))`
-  width: ${({ width }) => width - 80}px;
+  width: ${({ width }) => width - 40}px;
   margin: 10px 10px;
   padding: 10px 10px;
   border-radius: 10px;
@@ -50,46 +69,16 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   color: ${({ theme }) => theme.text};
 `;
 
-const SearchButton = ({ onPress }) => {
-  return (
-    <ButtonContainer onPress={onPress} >
-      <MaterialIcons
-        name="search"
-        size={35}
-      />
-    </ButtonContainer>
-  );
-};
-
-
-const tempData = {
-  "searchlist" : [
-    {
-      "id": 1,
-      "title": "사과 아래에서 보내는 시간",
-      "author": "헤르만 헤세 스티븐 호킹",
-      "rating": 9.5,
-      "image": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-    },
-    {
-      "id": 2,
-      "title": "햇살 좋은 날 보는 별",
-      "author": "별든날",
-      "rating": "NaN",
-      "image": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4",
-    },
-  ]
-}
-
-
 
 
 
 const MyClubBookRC = ({ navigate, route }) => {
   const width = Dimensions.get('window').width;
-  const [searchword, setsearchword] = useState("");
+  const [searchword, setSearchword] = useState("");
+  const [items, setItems] = useState([]);
 
   const id = route.params.id;
+
 
 //책 제목 기반 추천
 const recommendByTitle = () => {
@@ -104,45 +93,52 @@ const recommendByTitle = () => {
 	      },
 	      method: 'POST',
 	      body: JSON.stringify({
-	        input: 'searchword'
+	        input: searchword
 	      })
 	    }).then((response) => {
-	      console.log(JSON.stringify(response));
+	      //console.log(JSON.stringify(response));
 	      return response.json();
 	    }).then((responseJson) => {
-	      console.log(responseJson);
+	      //console.log(responseJson);
+        const items = responseJson;
+        setItems(responseJson);
+        console.log(items);
 	    });
+
 	  } catch (error) {
 	    console.log(error);
-	  }
+    }
 }
 
-//저자, 카테고리, 키워드 기반 추천
-const recommendByKeyword = () => {
-	try {
-	  fetch (
-	    'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/keyword',
-	    {
-	      headers: {
-	        Accept: 'application/json',
-	        'Content-Type': 'application/json'
-	      },
-	      method: 'POST',
-	      body: JSON.stringify({
-	        input: 'searchword'
-	      })
-	    }).then((response) => {
-	      console.log(JSON.stringify(response));
-	      return response.json();
-	    }).then((responseJson) => {
-	      console.log(responseJson);
-	    });
-	  } catch (error) {
-	    console.log(error);
-	  }
+//책 키워드 기반 추천
+const recommendByKeyword=()=>{
+  console.log(searchword);
+
+    try {
+      fetch (
+        'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/keyword',
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          method: 'POST',
+          body: JSON.stringify({
+            input: searchword
+          })
+        }).then((response) => {
+          //console.log(JSON.stringify(response));
+          return response.json();
+        }).then((responseJson) => {
+          //console.log(responseJson);
+          const items = responseJson;
+          setItems(responseJson);
+          console.log(items);
+        });
+      } catch (error) {
+        console.log(error);    
+      }
 }
-
-
 
     return (
         <Container width={width}>
@@ -155,13 +151,33 @@ const recommendByKeyword = () => {
               autoCapitalize="none"
               autoCorrect={false}
               returnKeyType="done"
-              onChangeText={(text)=>setsearchword(text)}
+              onChangeText={(text)=>setSearchword(text)}
             />
-            <SearchButton onPress={recommendByTitle} />
+            <Containerrow>
+              <RCButton 
+                title="제목으로 검색하기"
+                onPress={recommendByTitle} />
+              <RCButton 
+                title="키워드로 검색하기"
+                onPress={recommendByKeyword} />
+            </Containerrow>
         </FixBar>
+
+          {items.length > 0 ? (
           <List width={width}>
-          <BookRCList bookInfo={tempData} clubid={id}></BookRCList>
+          <BookRCList bookInfo={items} clubid={id}></BookRCList>
           </List>
+          ) :(
+            <Container2>
+
+              <Text>데이터에 없는 검색어가 입력될 시 책 추천이 불가합니다.</Text>
+              <Text>유의하여 검색하여주세요.</Text>
+            </Container2>
+          )
+          }
+        <FixSource width={width}>
+          <Text>데이터 출처: Yes24</Text>
+        </FixSource>
         </Container>
       );
 }

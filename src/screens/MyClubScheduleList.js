@@ -81,7 +81,7 @@ const MyClubScheduleList=({ navigation, route })=>{
     const clubname = route.params.clubname;
     const width= Dimensions.get('window').width;
     const [update, setUpdate] = useState(0);
-    const [selectedMonth, setSelectedMonth] = useState("05");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....?
+    const [selectedMonth, setSelectedMonth] = useState("06");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....?
     const [selectedYear, setSelectedYear] = useState("2021");  //이부분을 현재 app을 가동한 시간의 year을 통해 월 값을 가져올 수 있을지....?
     const [schedule, setSchedule] = useState([]);
     const [filtered, setFiltered] = useState({

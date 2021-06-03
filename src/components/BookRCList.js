@@ -11,6 +11,7 @@ const Container = styled.View`
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => theme.inputBackground};
+  paddingBottom: 40px;
 `;
 
 const ContainerRow=styled.View`
@@ -37,9 +38,11 @@ const ExtInfo = styled.View`
     flex-direction: column;
 `;
 
+
+
 const BookRCList = ({bookInfo, clubid}) => {
     const width = Dimensions.get('window').width;
-    const book = bookInfo.searchlist;
+    const book = bookInfo;
     const id = clubid;
 
     const renderItem = ({ item }) => {
@@ -64,7 +67,6 @@ const BookRCList = ({bookInfo, clubid}) => {
     return (
         <Container width={width}>
         <FlatList
-            keyExtractor={(item) => item.id.toString()}
             data={book}
             renderItem={renderItem}
             ItemSeparatorComponent={() => {

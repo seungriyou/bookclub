@@ -9,6 +9,9 @@ import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
 import { DB, getCurrentUser } from '../utils/firebase';
 import { ProgressContext } from '../contexts';
+import RCButton from '../components/RCButton';
+
+
 
 const Container=styled.View`
     flex: 1;
@@ -29,7 +32,7 @@ const Header=styled.View`
     background-color: ${({theme})=>theme.background};
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     borderTop-color: ${({theme})=>theme.appBackground};
     borderTop-width: 3px;
     padding: 0;
@@ -96,16 +99,16 @@ const MainHeader= ({clubname, movetoInfo1, movetoInfo2})=>{
 
     return (
         <Header width={width}>
-          <Button
+          <RCButton
            title="목표 수정"
            onPress={movetoInfo1}
-           color= '#fac8af'
+          
           />
           <Text style={styles.clubname}>{clubname}</Text>
-          <Button
+          <RCButton
             title="진행 수정"
             onPress={movetoInfo2}
-            color= '#fac8af'
+           
           />
         </Header>
     )

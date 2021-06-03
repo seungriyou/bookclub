@@ -1,8 +1,3 @@
-// 클럽 정보를 수정하는 화면
-// 각 input의 placeholder은 기존의 값을 가져오면 될 것 같습니다.
-// 정보 수정 완료 함수가 필요합니다.
-
-
 import React, {useLayoutEffect, useState, useEffect, useRef, forwardRef} from 'react';
 import {StyleSheet, Dimensions, Text, Button, Image, Alert} from 'react-native';
 import styled from 'styled-components/native';
@@ -12,6 +7,7 @@ import { theme } from '../theme';
 import PropTypes from 'prop-types';
 import { DB, getCurrentUser } from '../utils/firebase';
 import {Picker} from '@react-native-picker/picker';
+
 
 const StyledIntroInput=styled.TextInput.attrs(({theme})=>({
     placeholderTextColor: theme.inputPlaceholder,
