@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Dimensions, Text } from 'react-native';
+import { Dimensions, Text, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import BookRCList from '../components/BookRCList';
 import RCButton from '../components/RCButton';
@@ -82,7 +82,7 @@ const MyClubBookRC = ({ navigate, route }) => {
 
 //책 제목 기반 추천
 const recommendByTitle = () => {
-  console.log(searchword);
+  //console.log(searchword);
 	try {
 	  fetch (
 	    'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/title',
@@ -95,27 +95,28 @@ const recommendByTitle = () => {
 	      body: JSON.stringify({
 	        input: searchword
 	      })
-	    }).then((response) => {
+	    })
+      .then((response) => {
 	      //console.log(JSON.stringify(response));
 	      return response.json();
 	    }).then((responseJson) => {
 	      //console.log(responseJson);
         const items = responseJson;
         setItems(responseJson);
-        console.log(items);
+        //console.log(items);
 	    });
 
 	  } catch (error) {
-	    console.log(error);
+	    Alert.alert("오류", error);
     }
 }
 
 //책 키워드 기반 추천
-const recommendByKeyword=()=>{
-  console.log(searchword);
+const recommendByKeyword= async () =>{
+  //console.log(searchword);
 
     try {
-      fetch (
+      const res = await fetch (
         'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/keyword',
         {
           headers: {
@@ -133,10 +134,11 @@ const recommendByKeyword=()=>{
           //console.log(responseJson);
           const items = responseJson;
           setItems(responseJson);
-          console.log(items);
+          //console.log(items);
         });
-      } catch (error) {
-        console.log(error);    
+      }
+      catch (error) {
+        Alert.alert("오류", error);
       }
 }
 
@@ -154,10 +156,10 @@ const recommendByKeyword=()=>{
               onChangeText={(text)=>setSearchword(text)}
             />
             <Containerrow>
-              <RCButton 
+              <RCButton
                 title="제목으로 검색하기"
                 onPress={recommendByTitle} />
-              <RCButton 
+              <RCButton
                 title="키워드로 검색하기"
                 onPress={recommendByKeyword} />
             </Containerrow>

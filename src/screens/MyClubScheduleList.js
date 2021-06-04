@@ -80,9 +80,11 @@ const MyClubScheduleList=({ navigation, route })=>{
     const id = route.params?.id;
     const clubname = route.params.clubname;
     const width= Dimensions.get('window').width;
+    const today_date = moment(Date.now()).format('MM');
+    const today_year = moment(Date.now()).format('YYYY');
     const [update, setUpdate] = useState(0);
-    const [selectedMonth, setSelectedMonth] = useState("06");  //이부분을 현재 app을 가동한 시간의 date를 통해 월 값을 가져올 수 있을지....?
-    const [selectedYear, setSelectedYear] = useState("2021");  //이부분을 현재 app을 가동한 시간의 year을 통해 월 값을 가져올 수 있을지....?
+    const [selectedMonth, setSelectedMonth] = useState(today_date);
+    const [selectedYear, setSelectedYear] = useState(today_year);
     const [schedule, setSchedule] = useState([]);
     const [filtered, setFiltered] = useState({
       clubname: "",
@@ -109,7 +111,7 @@ const MyClubScheduleList=({ navigation, route })=>{
             title: data.title,
             memo: data.memo,
           }
-          console.log(moment(data.date.toDate()).format('YYYY MM DD HH:mm'));
+          //console.log(moment(data.date.toDate()).format('YYYY MM DD HH:mm'));
           list.push(tempschedule);
         })
         setSchedule(list);
