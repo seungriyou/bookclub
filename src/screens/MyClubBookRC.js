@@ -178,7 +178,7 @@ const recommendByKeyword= async () =>{
           )
           }
         <FixSource width={width}>
-          <Text>데이터 출처: Yes24</Text>
+          <Text>제공되는 데이터는 Yes24에 출처를 두고 있습니다</Text>
         </FixSource>
         </Container>
       );

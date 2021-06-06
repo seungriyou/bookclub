@@ -60,9 +60,6 @@ const Profile = () => {
         onPress={_handleLogoutButtonPress}
         containerStyle={{ marginTop: 30, backgroundColor: theme.buttonLogout }}
       />
-      <Text>Essay에 적용된 리디바탕 폰트는 리디주식회사에서
-      제공한 리디바탕 글꼴이 사용되어 있습니다. </Text>
-      <Text>책 검색에는 알라딘에서 제공되는 알라딘 API가 적용되어 있습니다</Text>
     </Container>
   );
 };

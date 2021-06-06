@@ -12,6 +12,7 @@ const Container = styled.View`
   align-items: center;
   justify-content: center;
   background-color: ${({ theme }) => theme.inputBackground};
+  padding-Bottom: 40px;
 `;
 
 const ContainerRow=styled.View`

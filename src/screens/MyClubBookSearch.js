@@ -35,6 +35,20 @@ const FixBar=styled.View`
   borderBottom-color: ${({theme})=>theme.separator};
   borderBottom-width: 1px;
 `;
+
+const FixSource=styled.View`
+  width: ${({ width }) => width}px;
+  height: 40px;
+  background-color: ${({ theme }) => theme.background};
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 1px;
+  position: absolute;
+  bottom: 65;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
+
 const List=styled.ScrollView`
     flex: 1;
     width: ${({width})=>width}px;
@@ -192,6 +206,9 @@ const MyClubBookSearch = ({ navigate, route }) => {
       <List width={width}>
         <BookSearchList bookInfo={items} clubid={id}></BookSearchList>
       </List>
+      <FixSource width={width}>
+        <Text>알라딘에서 제공되는 알라딘 API가 적용되어 있습니다</Text>
+      </FixSource>
       <PageButtonArea>
         <ResetPageButton onPress={_handleResetSearchButtonPressed} width={width} />
         <NextPageButton onPress={_handleNextSearchButtonPressed} width={width} />

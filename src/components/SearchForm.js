@@ -9,7 +9,7 @@ import {Picker} from '@react-native-picker/picker';
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
 }))`
-  width: ${({ width }) => width - 150}px;
+  width: ${({ width }) => width - 95}px;
   margin: 8px 0;
   padding: 5px 10px;
   border-radius: 10px;
@@ -24,7 +24,17 @@ const Container = styled.View`
   justify-content: center;
   background-color: ${({ theme }) => theme.background};
   padding: 0px 0px;
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 0.8px;
+`;
 
+const Container2 = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: ${({ theme }) => theme.background};
+  borderTop-color: ${({theme})=>theme.separator};
+  borderTop-width: 0.8px;
 `;
 
 const ButtonContainer = styled.TouchableOpacity`
@@ -58,14 +68,15 @@ const SearchForm = ({ placeholder, value, onChangeText, onChangeSearchOption, on
     <>
       {isSearch
         ?
-        <Container>
-          <Picker
+        <Container2>
+        <Picker
               selectedValue={searchOption}
-              style={{ height: 50, width: 110, margin: 10 }}
+              style={{ height: 30, width: 110, margin: 10 }}
               onValueChange={(itemValue, itemIndex) => _handleSearchOptionChange(itemValue)}>
               <Picker.Item label="제목" value="title" />
               <Picker.Item label="작성자" value="author" />
           </Picker>
+        <Container>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={30}
@@ -93,6 +104,7 @@ const SearchForm = ({ placeholder, value, onChangeText, onChangeSearchOption, on
             onPress={onPress}
           />
         </Container>
+        </Container2>
         :
         <ButtonContainer>
           <MaterialIcons

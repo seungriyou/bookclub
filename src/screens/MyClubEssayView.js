@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme } from '../theme';
-import { View, Alert } from 'react-native';
+import { View, Alert, Dimensions, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EssayViewPost from '../components/EssayViewPost';
@@ -16,7 +16,7 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.appBackground};
   align-items: center;
   justify-content: flex-start;
-  padding-bottom: 100px;
+  padding-bottom: 140px;
 `;
 
 const CommentForm = styled.View`
@@ -26,6 +26,18 @@ const CommentForm = styled.View`
   align-items: center;
 `;
 
+const FixSource=styled.View`
+  width: ${({ width }) => width}px;
+  height: 40px;
+  background-color: ${({ theme }) => theme.background};
+  borderTop-color: ${({theme})=>theme.appBackground};
+  borderTop-width: 1px;
+  borderBottom-color: ${({theme})=>theme.separator};
+  borderBottom-width: 1px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 const MyClubEssayView = ({ navigation, route }) => {
   const { spinner } = useContext(ProgressContext);
@@ -48,6 +60,8 @@ const MyClubEssayView = ({ navigation, route }) => {
   const [isAuthor, setIsAuthor] = useState(false);
   const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
+
+  const width = Dimensions.get('window').width;
 
   const _handleReplyChange = text => {
     setComment(text);
@@ -361,6 +375,9 @@ const MyClubEssayView = ({ navigation, route }) => {
         </Container>
       </KeyboardAwareScrollView>
       <CommentForm>
+      <FixSource width={width}>
+        <Text>리디주식회사에서 제공한 리디바탕 글꼴이 사용되어 있습니다. </Text>
+      </FixSource>
         <ReplyInput
           placeholder="댓글을 입력하세요."
           value={comment}

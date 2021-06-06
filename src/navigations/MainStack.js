@@ -30,7 +30,7 @@ const MyClubMainInfoNav = () => {
       <Stack.Screen name="MyClubUserAdmin" component={MyClubUserAdmin} options={{title: "클럽원 목록"}}/>
       <Stack.Screen name="MyClubWaitAdmin" component={MyClubWaitAdmin} options={{title: "가입 대기중인 회원"}}/>
       <Stack.Screen name="MyClubBookSearch" component={MyClubBookSearch} options={{title: "도서 등록"}}/>
-      <Stack.Screen name="MyClubBookRC" component={MyClubBookRC} options={{title: "도서 추천"}}/>
+      <Stack.Screen name="MyClubBookRC" component={MyClubBookRC} options={{title: "책 둘러보기"}}/>
       <Stack.Screen name="CompleteBook" component={CompleteBook} options={{title: "완료한 도서 목록"}}/>
     </Stack.Navigator>
   );
