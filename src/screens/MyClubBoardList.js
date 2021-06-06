@@ -72,7 +72,7 @@ const MyClubBoardList = ({navigation, route}) => {
   const [boards, setBoards] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
-
+  const [searchOption, setSearchOption] = useState('title');
 
   const id = route.params?.id;
   const title = route.params?.title;
@@ -104,13 +104,25 @@ const MyClubBoardList = ({navigation, route}) => {
       const boardRef = DB.collection('clubs').doc(id).collection('board');
       const boardDoc = await boardRef.orderBy('createAt', 'desc').get();
       const list = [];
-      boardDoc.forEach(doc => {
-        const data = doc.data();
-        if(data.title.includes(search)){
-          data['clubId'] = id;
-          list.push(data);
-        }
-      })
+      if(searchOption === 'title') {
+        boardDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.title.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+      else if(searchOption === 'author') {
+        boardDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.author.name.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+
       setBoards(list);
 
       setRefreshing(false);
@@ -143,10 +155,10 @@ const MyClubBoardList = ({navigation, route}) => {
 
   const _searchPost = () => {
     if (!search) {
-      alert("검색어를 입력해주세요.");
+      Alert.alert('오류', "검색어를 입력해주세요.");
     }
     else {
-      alert(`검색합니다: ${search}`);
+      Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getBoardSearchData();
       //setSearch('');
     }
@@ -173,9 +185,10 @@ const MyClubBoardList = ({navigation, route}) => {
         placeholder="검색어를 입력하세요."
         value={search}
         onChangeText={_handleSearchChange}
-        onSubmitEditing={() => { }}
+        onSubmitEditing={_searchPost}
         onPress={_searchPost}
         clearSearch={_clearSearch}
+        onChangeSearchOption={(value) => {setSearchOption(value)}}
       />
     </Container>
   );

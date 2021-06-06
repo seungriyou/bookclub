@@ -77,7 +77,7 @@ const MyClubAlbumList = ({navigation, route}) => {
   const [albums, setAlbums] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
-
+  const [searchOption, setSearchOption] = useState('title');
 
   const id = route.params?.id;
   const title = route.params?.title;
@@ -109,13 +109,32 @@ const MyClubAlbumList = ({navigation, route}) => {
       const albumRef = DB.collection('clubs').doc(id).collection('album');
       const albumDoc = await albumRef.orderBy('createAt', 'desc').get();
       const list = [];
-      albumDoc.forEach(doc => {
-        const data = doc.data();
-        if(data.title.includes(search)) {
-          data['clubId'] = id;
-          list.push(data);
-        }
-      })
+
+      if(searchOption === 'title') {
+        albumDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.title.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+      else if(searchOption === 'author') {
+        albumDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.author.name.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+      // albumDoc.forEach(doc => {
+      //   const data = doc.data();
+      //   if(data.title.includes(search)) {
+      //     data['clubId'] = id;
+      //     list.push(data);
+      //   }
+      // })
       setAlbums(list);
       setRefreshing(false);
     }
@@ -147,10 +166,10 @@ const MyClubAlbumList = ({navigation, route}) => {
 
   const _searchPost = () => {
     if (!search) {
-      alert("검색어를 입력해주세요.");
+      Alert.alert('오류', "검색어를 입력해주세요.");
     }
     else {
-      alert(`검색합니다: ${search}`);
+      Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getAlbumSearchData();
       //setSearch('');
     }
@@ -178,9 +197,10 @@ const MyClubAlbumList = ({navigation, route}) => {
         placeholder="검색어를 입력하세요."
         value={search}
         onChangeText={_handleSearchChange}
-        onSubmitEditing={() => { }}
+        onSubmitEditing={_searchPost}
         onPress={_searchPost}
         clearSearch={_clearSearch}
+        onChangeSearchOption={(value) => {setSearchOption(value)}}
       />
     </Container>
   );

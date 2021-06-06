@@ -73,7 +73,7 @@ const MyClubEssayList = ({navigation, route}) => {
   const [essays, setEssays] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
-
+  const [searchOption, setSearchOption] = useState('title');
 
   const id = route.params?.id;
 
@@ -104,13 +104,33 @@ const MyClubEssayList = ({navigation, route}) => {
       const essayRef = DB.collection('clubs').doc(id).collection('essay');
       const essayDoc = await essayRef.orderBy('createAt', 'desc').get();
       const list = [];
-      essayDoc.forEach(doc => {
-        const data = doc.data();
-        if(data.title.includes(search)){
-          data['clubId'] = id;
-          list.push(data);
-        }
-      })
+
+      if(searchOption === 'title') {
+        essayDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.title.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+      else if(searchOption === 'author') {
+        essayDoc.forEach(doc => {
+          const data = doc.data();
+          if(data.author.name.includes(search.trim())){
+            data['clubId'] = id;
+            list.push(data);
+          }
+        })
+      }
+      //
+      // essayDoc.forEach(doc => {
+      //   const data = doc.data();
+      //   if(data.title.includes(search)){
+      //     data['clubId'] = id;
+      //     list.push(data);
+      //   }
+      // })
       setEssays(list);
 
       setRefreshing(false);
@@ -140,13 +160,13 @@ const MyClubEssayList = ({navigation, route}) => {
   const _handleSearchChange = text => {
     setSearch(text);
   };
-  
+
   const _searchPost = () => {
     if (!search) {
-      alert("검색어를 입력해주세요.");
+      Alert.alert('오류', "검색어를 입력해주세요.");
     }
     else {
-      alert(`검색합니다: ${search}`);
+      Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getEssaySearchData();
       //setSearch('');
     }
@@ -173,9 +193,10 @@ const MyClubEssayList = ({navigation, route}) => {
         placeholder="검색어를 입력하세요."
         value={search}
         onChangeText={_handleSearchChange}
-        onSubmitEditing={() => { }}
+        onSubmitEditing={_searchPost}
         onPress={_searchPost}
         clearSearch={_clearSearch}
+        onChangeSearchOption={(value) => {setSearchOption(value)}}
       />
     </Container>
   );

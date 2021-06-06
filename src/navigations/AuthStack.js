@@ -19,12 +19,19 @@ const AuthStack = () => {
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{ headerShown: false }}
+        options={{
+          headerShown: false,
+          title: "로그인"
+
+         }}
       />
       <Stack.Screen
         name="Signup"
         component={Signup}
-        options={{ headerBackTitleVisible: false }}
+        options={{
+          headerBackTitleVisible: false,
+          title: "회원가입"
+         }}
       />
     </Stack.Navigator>
   );

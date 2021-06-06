@@ -135,7 +135,7 @@ const Signup = () => {
         />
         <ErrorText>{errorMessage}</ErrorText>
         <Button
-          title="Signup"
+          title="회원가입"
           onPress={_handleSignupButtonPress}
           disabled={disabled}
         />

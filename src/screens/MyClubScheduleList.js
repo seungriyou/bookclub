@@ -106,7 +106,7 @@ const MyClubScheduleList=({ navigation, route })=>{
             year: moment(data.date.toDate()).format('YYYY'),
             month: moment(data.date.toDate()).format('MM'),
             date: moment(data.date.toDate()).format('DD'),
-            time: moment(data.date.toDate()).format('hh:mm'),
+            time: moment(data.date.toDate()).format('hh:mm a'),
             place: data.site,
             title: data.title,
             memo: data.memo,

@@ -3,12 +3,13 @@ import styled from 'styled-components/native';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { MaterialIcons } from '@expo/vector-icons';
+import {Picker} from '@react-native-picker/picker';
 
 
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
 }))`
-  width: ${({ width }) => width - 95}px;
+  width: ${({ width }) => width - 150}px;
   margin: 8px 0;
   padding: 5px 10px;
   border-radius: 10px;
@@ -23,7 +24,7 @@ const Container = styled.View`
   justify-content: center;
   background-color: ${({ theme }) => theme.background};
   padding: 0px 0px;
-  
+
 `;
 
 const ButtonContainer = styled.TouchableOpacity`
@@ -38,20 +39,33 @@ const ButtonContainer = styled.TouchableOpacity`
   border-color: ${({ theme }) => theme.separator};
 `;
 
-const SearchForm = ({ placeholder, value, onChangeText, onSubmitEditing, onPress, clearSearch }) => {
+const SearchForm = ({ placeholder, value, onChangeText, onChangeSearchOption, onSubmitEditing, onPress, clearSearch }) => {
   const width = Dimensions.get('window').width;
   const [isSearch, setIsSearch] = useState(false);
-  
+  const [searchOption, setSearchOption] = useState('title');
+
   const _switchSearch = () => {
     setIsSearch(!isSearch);
     clearSearch();
   };
+
+  const _handleSearchOptionChange = (itemValue) => {
+    onChangeSearchOption(itemValue);
+    setSearchOption(itemValue);
+  }
 
   return (
     <>
       {isSearch
         ?
         <Container>
+          <Picker
+              selectedValue={searchOption}
+              style={{ height: 50, width: 110, margin: 10 }}
+              onValueChange={(itemValue, itemIndex) => _handleSearchOptionChange(itemValue)}>
+              <Picker.Item label="제목" value="title" />
+              <Picker.Item label="작성자" value="author" />
+          </Picker>
           <MaterialIcons
             name="keyboard-arrow-right"
             size={30}
