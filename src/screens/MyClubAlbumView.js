@@ -122,7 +122,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
   }
 
   const _handleCommentEdit = (id) => {
-    Alert.alert("알림", "댓글을 수정하시겠습니까?",
+    Alert.alert("알림", "댓글창에 수정 내용이 입력되어 있어야 합니다. 댓글을 수정하시겠습니까?",
     [
       {
         text: "아니요",
@@ -133,7 +133,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
         onPress: async () => {
           try {
             if(!comment) {
-              Alert.alert("댓글 내용을 입력해주세요.");
+              Alert.alert("댓글창을 확인해주세요.");
             }
             else{
               const oldComment = albumData.comment;
