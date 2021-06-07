@@ -56,7 +56,7 @@ const BookSearchList = ({bookInfo, clubid}) => {
 
     const renderItem = ({ item }) => {
         const _handleSelectButtonPressed = () => {
-          Alert.alert("책 선택하기", `${item.title} 이 책을 선택하시겠습니까?`,
+          Alert.alert("알림", `${item.title} 이 책을 선택하시겠습니까?`,
           [
             {
               text: "아니요",
@@ -83,10 +83,10 @@ const BookSearchList = ({bookInfo, clubid}) => {
 
                       t.update(clubRef, {book_now: bookNow});
                     });
-                    Alert.alert("책 등록 완료", `${item.title} 이 책을 등록하였습니다`);
+                    Alert.alert("알림", `${item.title} 이 책을 등록하였습니다`);
                   }
                   else{
-                    Alert.alert("책 등록 오류", "현재 진행중인 책이 있습니다.");
+                    Alert.alert("경고", "현재 진행중인 책이 있습니다.");
                   }
                 }
                 catch(e) {

@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
       dispatch(user);
 
     } catch (e) {
-      Alert.alert('로그인 에러', e.message);
+      Alert.alert('로그인 오류', e.message);
       console.log(e);
     } finally {
       spinner.stop();

@@ -93,7 +93,7 @@ const MyClubBoardList = ({navigation, route}) => {
       setRefreshing(false);
     }
     catch(e){
-      Alert.alert('게시판 list set error', e.message);
+      Alert.alert('게시판 리스트 수신 오류', e.message);
       setRefreshing(false);
     }
   }
@@ -128,7 +128,7 @@ const MyClubBoardList = ({navigation, route}) => {
       setRefreshing(false);
     }
     catch(e){
-      Alert.alert('게시판 search error', e.message);
+      Alert.alert('게시판 검색 오류', e.message);
       setRefreshing(false);
     }
   }
@@ -158,7 +158,7 @@ const MyClubBoardList = ({navigation, route}) => {
       Alert.alert('오류', "검색어를 입력해주세요.");
     }
     else {
-      Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
+      //Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getBoardSearchData();
       //setSearch('');
     }

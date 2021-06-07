@@ -39,7 +39,7 @@ const Profile = () => {
       const updateUser = await updateUserPhoto(url);
       setPhotoUrl(updateUser.photoUrl);
     } catch (e) {
-      Alert.alert('사진 수정 에러', e.message);
+      Alert.alert('사진 수정 오류', e.message);
     } finally {
       spinner.stop();
     }

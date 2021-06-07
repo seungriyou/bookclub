@@ -116,7 +116,7 @@ const MyClubList = ({ navigation }) => {
       setRefreshing(false);
     }
     catch (e) {
-      Alert.alert('클럽 list set error', e.message);
+      Alert.alert('클럽 리스트 수신 오류', e.message);
       setRefreshing(false);
     }
   };

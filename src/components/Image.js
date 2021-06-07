@@ -55,13 +55,13 @@ const Image = ({ url, imageStyle, rounded, showButton, onChangeImage }) => { //�
           );
           if (status !== 'granted') {
             Alert.alert(
-              '사진 권한',
+              '알림',
               '사진첩에 접근할 권한이 필요합니다'
             );
           }
         }
       } catch (e) {
-        Alert.alert('사진 권한 에러', e.message);
+        Alert.alert('사진 권한 오류', e.message);
       }
     })();
   }, []);

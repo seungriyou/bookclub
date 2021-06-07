@@ -194,10 +194,10 @@ const ScheduleCreation = ({navigation, route}) => {
           spinner.start();
           await myClubScheduleWrite();
           navigation.navigate('MyClubTab', {screen: 'MyClubScheduleList'});
-          Alert.alert('등록이 완료되었습니다.');
+          Alert.alert('일정 등록이 완료되었습니다.');
         }
         catch(e) {
-          Alert.alert('글 업로드 오류', e.message);
+          Alert.alert('일정 업로드 오류', e.message);
         }
         finally {
           spinner.stop();

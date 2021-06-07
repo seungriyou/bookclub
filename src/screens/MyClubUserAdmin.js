@@ -116,7 +116,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
         setMemberData({userlist: list});
       }
       catch(e) {
-        Alert.alert('클럽 데이터 수신 에러', e.message);
+        Alert.alert('클럽 데이터 수신 오류', e.message);
       }
     }
 

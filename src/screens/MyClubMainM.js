@@ -260,7 +260,7 @@ const MyClubMainM=({ navigation, route })=>{
 
       }
       catch(e){
-        Alert.alert("클럽 수신 데이터 오류", e.message);
+        Alert.alert("클럽 데이터 수신 오류", e.message);
       }
     }
 

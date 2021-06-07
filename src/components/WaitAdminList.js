@@ -57,7 +57,7 @@ const WaitAdminList = ({onchange ,userInfo, clubId}) => {
     const renderItem = ({ item, onPress }) => {
 
       const _handleApproveButtonPress = () => {
-        Alert.alert("가입 승인", `${item.user_name} 회원의 가입을 승인하시겠습니까?`,
+        Alert.alert("알림", `${item.user_name} 회원의 가입을 승인하시겠습니까?`,
         [
           {
             text: "아니요",
@@ -126,7 +126,7 @@ const WaitAdminList = ({onchange ,userInfo, clubId}) => {
       }
 
       const _handleCancleButtonPressed = () => {
-        Alert.alert("가입 승인", `${item.user_name} 회원의 가입을 거절하시겠습니까?`,
+        Alert.alert("알림", `${item.user_name} 회원의 가입을 거절하시겠습니까?`,
         [
           {
             text: "아니요",

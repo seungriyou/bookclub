@@ -232,7 +232,7 @@ const MyClubMainInfo=({ navigation, route })=>{
 
       }
       catch(e) {
-        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
+        Alert.alert('메인 페이지 데이터 수신 오류', e.message);
       }
     };
 

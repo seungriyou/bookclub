@@ -222,7 +222,7 @@ const MyClubBoardView=({ navigation, route })=>{
         Alert.alert("댓글을 입력해주세요.");
       }
       else {
-        Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
+        //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
 
         try{
           const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);

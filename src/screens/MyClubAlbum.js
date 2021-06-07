@@ -123,7 +123,7 @@ const MyClubAlbum = ({ navigation, route }) => {
         spinner.start();
         await uploadAlbumImage();
         navigation.navigate('MyClubTab', { screen: 'MyClubAlbumList' });
-        Alert.alert('등록이 완료되었습니다.');
+        Alert.alert('앨범 등록이 완료되었습니다.');
       }
       catch (e) {
         Alert.alert('사진 업로드 오류', e.message);

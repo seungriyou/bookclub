@@ -98,7 +98,7 @@ const MyClubAlbumList = ({navigation, route}) => {
       setRefreshing(false);
     }
     catch(e){
-      Alert.alert('앨범 list set error', e.message);
+      Alert.alert('앨범 리스트 수신 오류', e.message);
       setRefreshing(false);
     }
   }

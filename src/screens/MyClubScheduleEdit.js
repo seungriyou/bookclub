@@ -179,7 +179,7 @@ const ScheduleCreation = ({navigation, route}) => {
           Alert.alert('수정이 완료되었습니다.');
         }
         catch(e) {
-          Alert.alert('수정된 글 업로드 오류', e.message);
+          Alert.alert('일정 수정 오류', e.message);
         }
         finally {
           spinner.stop();

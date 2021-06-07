@@ -117,7 +117,7 @@ const MyClubScheduleList=({ navigation, route })=>{
         setSchedule(list);
       }
       catch(e) {
-        Alert.alert("스케쥴 수신 에러", e.message);
+        Alert.alert("일정 수신 오류", e.message);
       }
     };
 

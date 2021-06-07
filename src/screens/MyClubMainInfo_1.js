@@ -194,7 +194,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
           navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
         }
         catch(e) {
-          Alert.alert("목표 페이지 수정 에러", e.message);
+          Alert.alert("목표 페이지 수정 오류", e.message);
         }
       }
       else{
@@ -203,7 +203,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
     }
 
     const _alertadd= async() =>{
-      Alert.alert("알림", "책을 완료하고 완료 목록으로 보내시겠습니까?",
+      Alert.alert("알림", "책을 완료하시겠습니까?",
       [
         {
           text: "아니요",
@@ -260,11 +260,11 @@ const MyClubMainInfo_1=({ navigation, route })=>{
 
                 t.update(clubRef, {book_now: bookNow, book_completed: bookCompleted, members: newMembers});
               });
-              alert('등록을 완료했습니다.');
+              alert('책이 완료되었습니다.');
               navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});
             }
             catch(e) {
-              Alert.alert('책 완료 등록 에러', e.message);
+              Alert.alert('책 완료 등록 오류', e.message);
             }
           }
         }
@@ -316,7 +316,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
         setMainData(tempData);
       }
       catch(e) {
-        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
+        Alert.alert('메인 페이지 데이터 수신 오류', e.message);
       }
     };
 

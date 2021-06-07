@@ -100,10 +100,10 @@ const MyClubEssayView = ({ navigation, route }) => {
       });
 
       if(isLiked === true) {
-        Alert.alert("좋아요 취소");
+        //Alert.alert("좋아요 취소");
       }
       else {
-        Alert.alert("좋아요");
+        //Alert.alert("좋아요");
       }
     }
     catch (e) {
@@ -121,7 +121,7 @@ const MyClubEssayView = ({ navigation, route }) => {
   };
 
   const _handelDeleteButtonPress = () => {
-    Alert.alert("경고", "글을 삭제하시겠습니까?",
+    Alert.alert("경고", "에세이를 삭제하시겠습니까?",
     [
       {
         text: "아니요",
@@ -133,10 +133,10 @@ const MyClubEssayView = ({ navigation, route }) => {
           try {
             const essay = await DB.collection('clubs').doc(clubId).collection('essay').doc(essayId).delete();
             navigation.navigate("MyClubTab", {screen: "MyClubEssayList", params: {id: clubId}});
-            Alert.alert("글 삭제 완료");
+            Alert.alert("에세이 삭제 완료");
           }
           catch(e) {
-            Alert.alert("글 삭제 오류", e.message);
+            Alert.alert("에세이 삭제 오류", e.message);
           }
         }
       }
@@ -269,7 +269,7 @@ const MyClubEssayView = ({ navigation, route }) => {
       Alert.alert("댓글을 입력해주세요.");
     }
     else {
-      Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
+      //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
       console.log(`Comment: ${comment}`);
       try{
         const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);

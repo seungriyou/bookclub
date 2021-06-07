@@ -159,7 +159,7 @@ const MyClubMainManage=({ navigation, route })=>{
         setClubData(clubData);
       }
       catch(e) {
-        Alert.alert('클럽 데이터 수신 에러', e.message);
+        Alert.alert('클럽 데이터 수신 오류', e.message);
       }
     }
 
@@ -187,7 +187,7 @@ const MyClubMainManage=({ navigation, route })=>{
 
         navigation.navigate("Clubs");
 
-        Alert.alert("안내", "클럽 탈퇴 완료");
+        Alert.alert("알림", "클럽 탈퇴 완료");
       }
       catch(e) {
         Alert.alert("클럽 탈퇴 오류", e.message);
@@ -238,7 +238,7 @@ const MyClubMainManage=({ navigation, route })=>{
 
           navigation.navigate("Clubs");
 
-          Alert.alert("안내", "클럽 탈퇴 완료");
+          Alert.alert("알림", "클럽 탈퇴 완료");
         }
         catch(e) {
           Alert.alert("클럽 탈퇴 오류", e.message);
@@ -344,7 +344,7 @@ const MyClubMainManage=({ navigation, route })=>{
           text: "예",
           onPress: () => {
             if (user.uid === clubData.leader.uid) {
-              Alert.alert("경고", `당신은 클럽장입니다. 탈퇴 시 다른 회원에게 클럽장 권한이 넘어가게 되며, 다른 클럽원이 없을 경우 클럽은 삭제됩니다. 클럽을 탈퇴하시겠습니까?`,
+              Alert.alert("경고", `모임장이 탈퇴 시 다른 회원에게 클럽장 권한이 넘어가게 되며, 다른 클럽원이 없을 경우 클럽은 삭제됩니다. 클럽을 탈퇴하시겠습니까?`,
               [
                 {
                   text: "아니요",

@@ -103,7 +103,7 @@ const MyClubBoard=({ navigation, route })=>{
           spinner.start();
           await myClubBoardWrite();
           navigation.navigate('MyClubTab', {screen: 'MyClubBoardList'});
-          Alert.alert('등록이 완료되었습니다.');
+          Alert.alert('글 등록이 완료되었습니다.');
         }
         catch(e) {
           Alert.alert('글 업로드 오류', e.message);

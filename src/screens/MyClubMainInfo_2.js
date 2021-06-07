@@ -201,16 +201,16 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           });
         }
         catch(e) {
-          Alert.alert('Page 갱신 오류', e.message);
+          Alert.alert('페이지 갱신 오류', e.message);
         }
         finally{
           spinner.stop();
         }
-        alert('수정을 완료했습니다.');
+        alert('수정이 완료되었습니다.');
         navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
       }
       else {
-        Alert.alert('Page값 에러', errorMessage);
+        Alert.alert('페이지 값 오류', errorMessage);
       }
     }
 
@@ -261,7 +261,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
 
       }
       catch(e) {
-        Alert.alert('메인 페이지 데이터 수신 에러', e.message);
+        Alert.alert('메인 페이지 데이터 수신 오류', e.message);
       }
       finally {
         spinner.stop();

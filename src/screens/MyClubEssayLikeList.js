@@ -94,7 +94,7 @@ const MyClubEssayList = ({navigation, route}) => {
         setRefreshing(false);
       }
       catch(e){
-        Alert.alert('에세이 list set error', e.message);
+        Alert.alert('에세이 리스트 수신 오류', e.message);
         setRefreshing(false);
       }
     }

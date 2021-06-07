@@ -183,7 +183,7 @@ const Club = ({ navigation, route }) => {
         t.update(userRef, {club: club});
       });
 
-      Alert.alert('가입신청 완료');
+      Alert.alert('가입신청이 완료되었습니다.');
     } catch (e) {
       Alert.alert('클럽 가입신청 오류', e.message);
     } finally {

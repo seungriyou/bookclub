@@ -58,7 +58,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
   }
 
   const _handelDeleteButtonPress = async () => {
-    Alert.alert("경고", "글을 삭제하시겠습니까?",
+    Alert.alert("경고", "앨범을 삭제하시겠습니까?",
     [
       {
         text: "아니요",
@@ -205,7 +205,7 @@ const MyClubAlbumView = ({ navigation, route }) => {
       Alert.alert("댓글을 입력해주세요.");
     }
     else {
-      Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용: ${comment}`);
+      //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용: ${comment}`);
       try{
         const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
         await DB.runTransaction(async (t) => {
