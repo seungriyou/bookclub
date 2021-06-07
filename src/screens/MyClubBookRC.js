@@ -11,6 +11,14 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
 `;
 
+const Fortext = styled.View`
+  width: ${({ width }) => (width)-60}px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.background};
+`;
+
 const Containerrow = styled.View`
   background-color: ${({ theme }) => theme.background};
   flex-direction: row;
@@ -143,7 +151,7 @@ const recommendByKeyword= async () =>{
 }
 
     return (
-        <Container width={width}>
+        <Container>
           <FixBar width={width}>
             <StyledInput
               width={width}
@@ -174,6 +182,22 @@ const recommendByKeyword= async () =>{
 
               <Text>데이터에 없는 검색어가 입력될 시 책 추천이 불가합니다.</Text>
               <Text>유의하여 검색하여주세요.</Text>
+              <Text>   </Text>
+              <Text>책 검색 규칙은 아래와 같습니다.</Text>
+              <Fortext width={width}>
+              <Text>   </Text>
+
+                <Text style={{fontSize: 14}} >1. 제목 검색의 경우, 검색어와 책 제목을 비교하여 검색합니다.</Text>
+                <Text style={{fontSize: 14}}>1-1. 검색어와 책 제목이 일치할 경우, 해당 책은 추천 결과에서 제외되며 해당 책과 유사한 책을 출력합니다.</Text>
+                <Text style={{fontSize: 14}}>1-2. 검색어가 책 제목과 일치하지 않으나 포함될 경우, 해당 책을 포함하여 유사한 책을 출력합니다.</Text>
+              <Text>   </Text>
+                
+                <Text style={{fontSize: 14}}>2. 키워드 검색의 경우, 검색어와 데이터 내 저자/카테고리/태그/키워드 를 비교하여 검색합니다.</Text>
+                <Text style={{fontSize: 14}}>2-1. 해당 검색어가 포함된 책들 중 한 권을 랜덤하게 선택하고, 유사한 책을 출력합니다.</Text>
+                <Text>   </Text>
+                <Text style={{fontSize: 14}}>3. 모든 검색은 책 10권을 출력합니다.</Text>
+              
+              </Fortext>
             </Container2>
           )
           }
