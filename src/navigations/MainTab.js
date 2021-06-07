@@ -45,7 +45,7 @@ const MainTab = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="Clubs"
+          name="클럽 목록"
           component={ClubList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -56,7 +56,7 @@ const MainTab = ({ navigation, route }) => {
           }}
         />
         <Tab.Screen
-          name="MyClubList"
+          name="가입한 클럽"
           component={MyClubList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -68,7 +68,7 @@ const MainTab = ({ navigation, route }) => {
         />
 
         <Tab.Screen
-          name="Profile"
+          name="프로필"
           component={Profile}
           options={{
             tabBarIcon: ({ focused }) =>

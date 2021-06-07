@@ -79,7 +79,7 @@ const MainTab = ({ navigation, route }) => {
                   name="magnify"
                   size={30}
                   style={{marginRight:10}}
-                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookRC', params: {id: id}})}}   //검색화면으로 이동할 예정 
+                  onPress={()=>{navigation.navigate('MyClubMainInfoNav', {screen:'MyClubBookRC', params: {id: id}})}}   //검색화면으로 이동할 예정
               />
               <MaterialCommunityIcons
                   name="format-list-bulleted"
@@ -145,7 +145,7 @@ const MainTab = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="Books"
+          name="메인 페이지"
           component={MyClubMainInfo}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -157,7 +157,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="Board"
+          name="게시판"
           component={MyClubBoardList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -169,7 +169,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="Album"
+          name="앨범"
           component={MyClubAlbumList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -181,7 +181,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="Essay"
+          name="에세이"
           component={MyClubEssayList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -193,7 +193,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="Schedule"
+          name="일정"
           component={MyClubScheduleList}
           options={{
             tabBarIcon: ({ focused }) =>
