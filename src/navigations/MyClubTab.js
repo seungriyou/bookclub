@@ -145,7 +145,7 @@ const MainTab = ({ navigation, route }) => {
         }}
       >
         <Tab.Screen
-          name="메인 페이지"
+          name="Books"
           component={MyClubMainInfo}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -157,7 +157,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="게시판"
+          name="Board"
           component={MyClubBoardList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -169,7 +169,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="앨범"
+          name="Album"
           component={MyClubAlbumList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -181,7 +181,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="에세이"
+          name="Essay"
           component={MyClubEssayList}
           options={{
             tabBarIcon: ({ focused }) =>
@@ -193,7 +193,7 @@ const MainTab = ({ navigation, route }) => {
           initialParams={route.params}
         />
         <Tab.Screen
-          name="일정"
+          name="Schedule"
           component={MyClubScheduleList}
           options={{
             tabBarIcon: ({ focused }) =>
