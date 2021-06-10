@@ -1,4 +1,5 @@
-//변경사항 -> theme.js에 따른 컬러 변경 + 오타 수정
+//게시판 작성 화면에서 사용되는 styled이 적용된 제목 input 컴포넌트
+//타 게시판(앨범/에세이)화면에서 사용되느 제목 input 컴포넌트와 동일하게 동작합니다.
 
 import React, {forwardRef} from 'react';
 import styled from 'styled-components/native';

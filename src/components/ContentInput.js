@@ -1,4 +1,5 @@
-//변경사항 -> theme.js에 따른 컬러 변경 + 오타 수정
+//게시판 작성 화면에서 사용되는 내용 항목 input 컴포넌트
+//여러줄 입력이 가능하며, 타 작성 게시판(앨범/에세이)에서 사용되는 input 컴포넌트와 동작 동일합니다.
 
 import React, {forwardRef} from 'react';
 import styled from 'styled-components/native';

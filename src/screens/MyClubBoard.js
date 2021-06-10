@@ -1,3 +1,6 @@
+//게시판 글 작성 화면
+//제목, 내용을 입력하여 글을 등록합니다.
+
 import React, {useLayoutEffect, useEffect, useState, useRef, useContext} from 'react';
 import {Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
@@ -62,7 +65,7 @@ const MyClubBoard=({ navigation, route })=>{
                     size={30}
                     style={{marginRight:11}}
                     color={tintColor}
-                    onPress={_handelCompleteButtonPress} //글 등록 버튼 함수(이벤트 추가 필요)
+                    onPress={_handelCompleteButtonPress} 
                 />
             ),
         });
@@ -94,7 +97,7 @@ const MyClubBoard=({ navigation, route })=>{
 
     }
 
-    const _handelCompleteButtonPress= async() => { //상단바 글 등록 버튼에 사용되는 함수 -> 이벤트 처리 필요
+    const _handelCompleteButtonPress= async() => { 
       if (title == '' || content == '') {
         alert(`제목 또는 글 내용이 없습니다.`);
       }

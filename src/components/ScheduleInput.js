@@ -1,4 +1,5 @@
-//focus, forwardRef가 있는 입력창 컴포넌트
+//일정 작성 화면에서 사용되는 styled가 적용된 input 컴포넌트
+
 import React, { forwardRef } from 'react';
 import { Dimensions } from 'react-native'
 import styled from 'styled-components/native';

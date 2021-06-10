@@ -1,9 +1,11 @@
+//모임장만이 접근 가능한 도서 등록 화면
+//제공되는 데이터는 알라딘에서 제공한 알라딘 API에 출처를 두고 있으며, 해당 출처는 화면에 표기되었습니다.
+
+
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
 import { Text, Dimensions, Alert } from 'react-native';
-import { Input, Button } from '../components';
 import {ALADIN_SEARCH_API_KEY} from '../../secret';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { parseString } from 'react-native-xml2js';
 import BookSearchList from '../components/BookSearchList';
 import {decode} from 'html-entities';
@@ -53,6 +55,7 @@ const List=styled.ScrollView`
     flex: 1;
     width: ${({width})=>width}px;
 `;
+
 const ButtonContainer = styled.TouchableOpacity`
   width: 40px;
   height: 40px;
@@ -60,6 +63,7 @@ const ButtonContainer = styled.TouchableOpacity`
   align-items: center;
   margin-left: 5px;
 `;
+
 const PageButtonContainer = styled.TouchableOpacity`
   width: ${({width})=>width/2}px;
   height: 50px;
@@ -68,6 +72,7 @@ const PageButtonContainer = styled.TouchableOpacity`
   align-items: center;
   background-color: ${({ theme }) => theme.background};
 `;
+
 const PageButtonArea = styled.View`
   flex-direction: row;
   padding: 7px;
@@ -75,6 +80,7 @@ const PageButtonArea = styled.View`
   borderTop-color: ${({theme})=>theme.separator};
   borderTop-width: 1px;
 `;
+
 const SearchButtonIcon = () => {
   return (
     <MaterialIcons
@@ -83,6 +89,7 @@ const SearchButtonIcon = () => {
     />
   );
 };
+
 const SearchButton = ({ onPress }) => {
   return (
     <ButtonContainer onPress={onPress} >
@@ -90,6 +97,7 @@ const SearchButton = ({ onPress }) => {
     </ButtonContainer>
   );
 };
+
 const ResetPageButtonIcon = () => {
   return (
     <MaterialCommunityIcons
@@ -98,6 +106,7 @@ const ResetPageButtonIcon = () => {
     />
   );
 };
+
 const ResetPageButton = ({ onPress, width }) => {
   return (
     <PageButtonContainer onPress={onPress} width={width} >
@@ -105,6 +114,7 @@ const ResetPageButton = ({ onPress, width }) => {
     </PageButtonContainer>
   );
 };
+
 const NextPageButtonIcon = () => {
   return (
     <MaterialCommunityIcons
@@ -113,6 +123,7 @@ const NextPageButtonIcon = () => {
     />
   );
 };
+
 const NextPageButton = ({ onPress, width }) => {
   return (
     <PageButtonContainer onPress={onPress} width={width}>
@@ -120,6 +131,7 @@ const NextPageButton = ({ onPress, width }) => {
     </PageButtonContainer>
   );
 };
+
 
 const MyClubBookSearch = ({ navigate, route }) => {
   const id = route.params.id;
@@ -134,13 +146,10 @@ const MyClubBookSearch = ({ navigate, route }) => {
       try {
         let list = [];
         const url = `http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?ttbkey=${ALADIN_SEARCH_API_KEY}&Query=${bookname}&QueryType=ItemNewAll&SearchTarget=Book&MaxResults=50&Start=${page}`;
-        //console.log(url);
         await fetch(url)
         .then(response => response.text())
         .then(data => {
           parseString(data, function(err, result) {
-            //console.log(JSON.stringify(result));
-            //console.log(JSON.parse(JSON.stringify(result)));
             if (result.object.item === null) {
               throw "검색 결과가 없습니다.";
             }

@@ -1,3 +1,6 @@
+//게시판 조회 화면
+//댓글 기능(입력,수정,삭제)을 수행할 수 있습니다.
+
 import React, {useLayoutEffect, useState, useContext, useEffect} from 'react';
 import {Dimensions, Alert} from 'react-native';
 import styled from 'styled-components/native';
@@ -17,13 +20,6 @@ const Container=styled.View`
     align-items: center;
     padding-bottom: 100px;
     justify-content: center;
-`;
-
-const Container2=styled.View`
-    flex: 1;
-    bottom: 0;
-    background-color: ${({theme})=>theme.background};
-    align-items: center;
 `;
 
 const Containerforreply=styled.View`
@@ -65,7 +61,7 @@ const MyClubBoardView=({ navigation, route })=>{
 
     const width= Dimensions.get('window').width;
 
-    const [update, setUpdate] = useState(0); //새로고침을 위한 변수
+    const [update, setUpdate] = useState(0); 
     const [comment, setComment] = useState('');
     const [commentCntTxt, setCommentCntTxt] = useState('');
     const [boardData, setBoardData] = useState({
@@ -222,8 +218,6 @@ const MyClubBoardView=({ navigation, route })=>{
         Alert.alert("댓글을 입력해주세요.");
       }
       else {
-        //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
-
         try{
           const boardRef = DB.collection('clubs').doc(clubId).collection('board').doc(boardId);
           await DB.runTransaction(async (t) => {

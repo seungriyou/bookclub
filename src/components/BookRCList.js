@@ -1,7 +1,10 @@
+//책 둘러보기 화면에서 사용되는 리스트 컴포넌트
+//검색결과를 받아온 후 api가 연결되면 결과값을 출력한다 - 책 제목/저자/별점/이미지
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { View, Dimensions, Text, StyleSheet, Button, Image, FlatList, Alert } from 'react-native';
+import { View, Dimensions, Text, StyleSheet, Image, FlatList} from 'react-native';
 import { theme } from '../theme';
 
 

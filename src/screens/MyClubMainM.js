@@ -1,11 +1,15 @@
-import React, {useLayoutEffect, useState, useEffect, useRef, forwardRef} from 'react';
-import {StyleSheet, Dimensions, Text, Button, Image, Alert} from 'react-native';
+//모임장만이 접근 가능한 클럽 정보 수정 페이지
+//클럽의 소개글, 관리자, 지역구, 최대인원의 수정이 가능합니다.
+
+
+import React, {useLayoutEffect, useState, useRef, forwardRef} from 'react';
+import {StyleSheet, Dimensions, Text, Button, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import PropTypes from 'prop-types';
-import { DB, getCurrentUser } from '../utils/firebase';
+import { DB} from '../utils/firebase';
 import {Picker} from '@react-native-picker/picker';
 
 
@@ -223,7 +227,6 @@ const MyClubMainM=({ navigation, route })=>{
     const [newIntro, setNewIntro]=useState('');
     const [admin, setAdmin]=useState('');
     const [newRegion, setNewRegion]=useState('');
-    //const [newType, setNewType]=useState('');
     const [newMaxnum, setNewMaxnum]=useState('');
     const [leader, setLeader] = useState({});
     const [newLeader, setNewLeader] = useState({
@@ -349,7 +352,7 @@ const MyClubMainM=({ navigation, route })=>{
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}   //추후수정-뒤로가기
+                        onPress={onPress}  
                     />
                 );
             },
@@ -439,7 +442,7 @@ const MyClubMainM=({ navigation, route })=>{
               <Button
                 color= '#fac8af'
                 title="정보 수정 완료"
-                onPress={_handelEditButtonPress}    //수정 완료 함수 필요
+                onPress={_handelEditButtonPress}    
               />
             </ButtonFix2>
         </List>
@@ -449,20 +452,5 @@ const MyClubMainM=({ navigation, route })=>{
     );
 };
 
-// <ContainerRow width={width}>
-//     <Fix1 width={width}>
-//       <Text style={styles.First}>모임형태</Text>
-//     </Fix1>
-//     <Fix2 width={width}>
-//         <Input
-//             ref={reftype}
-//             placeholder="새로운 모임형태를 입력해주세요."
-//             value={newType}
-//             onChangeText={_handleTypeChange}
-//             onSubmitEditing={()=>refmaxnum.current.focus()}
-//         />
-//     </Fix2>
-// </ContainerRow>
-// <Line width={width}></Line>
 
 export default MyClubMainM;

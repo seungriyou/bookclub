@@ -1,5 +1,5 @@
-//클릭 시 해당 책을 완료한 사람들의 썸네일/이름이 나오도록 하는 Form입니다.
-//CompleteUserList.js 컴포넌트를 이용하여 사람들의 정보를 리스트로 받아옵니다.
+//버튼을 클릭 시 해당 책을 완료한 사람들의 프로필이미지/이름이 나오도록 하는 컴포넌트
+//완료한 책 목록 리스트를 출력하는 리스트에서 사용되며 CompleteUserList 컴포넌트를 추가로 렌더링 
 
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
@@ -36,52 +36,6 @@ const ButtonContainer = styled.TouchableOpacity`
   border-color: ${({ theme }) => theme.separator};
 `;
 
-
-
-const tempData = {
-    "member": [
-        {
-            "id": 1,
-            "name": "Michale Jenkinson Violetta",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 2,
-            "name": "네글자름",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 3,
-            "name": "멤버B",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 4,
-            "name": "멤버B",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 5,
-            "name": "멤버B",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 6,
-            "name": "멤버B",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 7,
-            "name": "멤버B",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-        {
-            "id": 8,
-            "name": "멤버f",
-            "profileimg": "http://drive.google.com/uc?export=view&id=1lpkydEo7ARg5hSUF400140g8ePrUR3O4"
-        },
-    ]
-}
 
 
 const CompleteUserForm = ({ onPress, clearSearch, members }) => {

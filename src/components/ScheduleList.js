@@ -1,4 +1,7 @@
-//MyClubScheduleListT.js 에서 사용하는 스케줄 목록 컴포넌트
+//일정 조회 화면에서 사용되는 일정 리스트 컴포넌트
+//picker을 통해 연/월을 선택, 해당하는 일정들을 골라 시간순 출력합니다.
+//출력 대상 - 날짜/이름/시간/장소/메모
+//일정의 제거 가능
 
 import React from 'react';
 import styled from 'styled-components/native';
@@ -6,7 +9,7 @@ import PropTypes from 'prop-types';
 import { View, Dimensions, Text, StyleSheet, FlatList, Alert } from 'react-native';
 import { theme } from '../theme';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
-import { DB, Storage, getCurrentUser} from '../utils/firebase';
+import { DB} from '../utils/firebase';
 
 
 const Container = styled.View`
@@ -44,17 +47,12 @@ const Icon=styled.View`
 `;
 
 
-//scheduleInfo는 렌더링할 아이템(tempData), selectedYear과 selectedMonth는 각각 picker로 선택된 연도와 월입니다.
-//선택된 연도와 월을 이용해 db에서 특정 schedule만 select하여 가져오는 방법 쪽을 구상하고 만들었습니다.
+
 const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth, onUpdate}) => {
     const width = Dimensions.get('window').width;
     const user = scheduleInfo.schedule;
 
     const renderItem = ({ item }) => {
-        const _handleEditButtonPressed = () => {
-          navigation.navigate('MyClubScheduleNav', {screen: 'MyClubScheduleEdit', params: item});
-        }
-
         const _handleDeleteButtonPressed = () => {
           Alert.alert("경고", "일정을 삭제하시겠습니까?",
           [
@@ -92,7 +90,7 @@ const ScheduleList = ({navigation, scheduleInfo, selectedYear, selectedMonth, on
                   size={25}
                   style={{marginBottom:10, marginTop: 20}}
                   color='#000000'
-                  onPress={_handleDeleteButtonPressed}       //일정 삭제 함수 필요(데이터베이스에서 삭제)
+                  onPress={_handleDeleteButtonPressed}      
               />
             </Date>
             <ExtInfo width={width}>
@@ -156,11 +154,3 @@ ScheduleList.propTypes = {
 };
 
 export default ScheduleList;
-//
-// <MaterialCommunityIcons
-//     name="pencil"
-//     size={25}
-//     style={{marginBottom: 10}}
-//     color='#000000'
-//     onPress={_handleEditButtonPressed}        //일정 수정 view로 이동하는 함수 필요
-// />

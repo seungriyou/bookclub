@@ -1,12 +1,16 @@
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
+//일정 조회 화면
+//picker로 연/월을 선택하여 해당하는 일정을 시간순으로 조회 가능합니다.
+//출력할 일정이 없을 경우 '이번달 일정이 없습니다!' 텍스트를 출력합니다.
+
+
+import React, { useState, useEffect} from 'react';
 import {StyleSheet, Dimensions, Text, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import {Picker} from '@react-native-picker/picker';
 import ScheduleList from '../components/ScheduleList';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
+
 import moment from 'moment';
 
 
@@ -111,7 +115,7 @@ const MyClubScheduleList=({ navigation, route })=>{
             title: data.title,
             memo: data.memo,
           }
-          //console.log(moment(data.date.toDate()).format('YYYY MM DD HH:mm'));
+         
           list.push(tempschedule);
         })
         setSchedule(list);

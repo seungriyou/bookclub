@@ -1,11 +1,13 @@
-//클럽을 총괄 관리하는 화면
-//모임 탈퇴 함수가 필요합니다.
+//클럽의 정보를 조회 가능한 클럽 정보 화면
+//클럽 소개글, 관리자 닉네임, 지역구, 최대인원을 확인 가능합니다.
+//멤버의 경우, 모임 탈퇴 기능을 실행 가능합니다.
+//모임장의 경우, 모임 탙퇴, 모임 삭제, 모임 정보 수정, 회원 목록 조회, 승인 대기중인 멤버 조회가 가능합니다.
 
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
-import {StyleSheet, Dimensions, Text, Button, Image, Alert} from 'react-native';
+
+import React, {useLayoutEffect, useState, useEffect} from 'react';
+import {StyleSheet, Dimensions, Text, Button, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import { DB, getCurrentUser, Storage } from '../utils/firebase';
 import RCButton from '../components/RCButton';
@@ -468,17 +470,17 @@ const MyClubMainManage=({ navigation, route })=>{
               <RCButton
                   color= '#fac8af'
                   title="모임 탈퇴"
-                  onPress={_handleClubOutButtonPress}    //모임 탈퇴 함수가 필요합니다.
+                  onPress={_handleClubOutButtonPress}   
               />
               <RCButton
                   color= '#fac8af'
                   title="모임 삭제"
-                  onPress={_handleClubDeleteButtonPress}    //모임 탈퇴 함수가 필요합니다.
+                  onPress={_handleClubDeleteButtonPress}   
               />
               <RCButton
                 color= '#fac8af'
                 title="정보 수정"
-                onPress={_handleMainManageButtonPress}  //모임 정보 수정 화면으로 이동할 예정
+                onPress={_handleMainManageButtonPress} 
               />
             </ButtonFix2>
         </List>

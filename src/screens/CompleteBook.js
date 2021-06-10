@@ -1,6 +1,7 @@
-//스크린 페이지-책 완료 화면 입니다.
-//picker을 통해 연/월을 지정, 날짜별로 클럽이 완료한 책이 등록합니다.
-//알라딘api에서 필요 정보는 책 커버/책 제목/책 저자/책 소개글 입니다.
+//클럽이 완료한 책 목록을 조회하는 완료한 도서 목록 화면
+//picker을 통해 연/월을 지정, 날짜별로 클럽이 완료한 책이 등록됩니다.
+//기존 도서 등록 시 사용되었던 알라딘 api가 그대로 연결되어 data가 출력됩니다.
+
 
 import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
 import {StyleSheet, Dimensions, Text, Alert} from 'react-native';

@@ -1,3 +1,7 @@
+//모임장만이 접근 가능한 클럽에 가입 요청한 대기자들의 리스트 조회 컴포넌트
+//멤버의 프로필사진/닉네임/가입ID(이메일 형식의)을 조회 가능합니다.
+//가입 승인, 가입 거부 기능을 실행할 수 있습니다.
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -198,14 +202,14 @@ const WaitAdminList = ({onchange ,userInfo, clubId}) => {
             <ButtonFix width={width}>
                 <Button
                     title="승인"
-                    onPress={_handleApproveButtonPress}        //회원 승인 함수가 필요합니다.
+                    onPress={_handleApproveButtonPress}        
                     color= '#fac8af'
                 />
             </ButtonFix>
             <ButtonFix width={width}>
                 <Button
                     title="거절"
-                    onPress={_handleCancleButtonPressed}        //회원 거절 함수가 필요합니다.
+                    onPress={_handleCancleButtonPressed}       
                     color= '#fac8af'
                 />
                 </ButtonFix>

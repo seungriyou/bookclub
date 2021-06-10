@@ -1,9 +1,13 @@
+//모임장만이 접근 가능한 클럽 멤버 리스트 조회 컴포넌트
+//멤버의 프로필사진/닉네임/가입ID(이메일 형식의)을 조회 가능합니다.
+//강퇴 기능을 실행할 수 있습니다.
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Dimensions, Text, StyleSheet, FlatList, Button, Image, Alert } from 'react-native';
 import { theme } from '../theme';
-import { DB, getCurrentUser } from '../utils/firebase';
+import { DB } from '../utils/firebase';
 
 
 
@@ -124,7 +128,7 @@ const UserAdminList = ({onchange, userInfo, clubId}) => {
             <ButtonFix width={width}>
                 <Button
                     title="강퇴"
-                    onPress={_handleUserDeleteButton}        //강제 탈퇴 함수가 필요합니다.
+                    onPress={_handleUserDeleteButton}        
                     color= '#fac8af'
                 />
                 </ButtonFix>

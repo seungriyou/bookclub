@@ -1,13 +1,12 @@
-//개인이 개인의 진행중인 페이지를 수정하는 화면
-//조작 부분 외 다른 부분의 클릭을 막는 방법 필요
+//클럽 내 멤버가 자신의 진행 페이지를 수정하는 화면
 
-import React, {useLayoutEffect, useState, useEffect, useRef, useContext} from 'react';
+
+import React, {useLayoutEffect, useState,useContext} from 'react';
 import {StyleSheet, Dimensions, Text, Image, Button, TextInput, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
-import UserProcessList from '../components/UserProcessList';
 import { DB, getCurrentUser} from '../utils/firebase';
 import { ProgressContext } from '../contexts';
 
@@ -16,12 +15,6 @@ const Container=styled.View`
     flex-direction: column;
     background-color: ${({theme})=>theme.background};
     align-items: center;
-`;
-
-const Layout=styled.View`
-    background-color: ${({theme})=>theme.background};
-    align-items: center;
-    flex-direction: row;
 `;
 
 const Header=styled.View`
@@ -107,7 +100,7 @@ const MainHeader= ({clubname, onPress})=>{
 
     return (
         <Header width={width}>
-        <MaterialCommunityIcons         //비율 맞추기 용도 (배경과 같은 색 설정, 사용X)
+        <MaterialCommunityIcons        
             name="keyboard-backspace"
             size={30}
             style={{marginLeft:13}}
@@ -207,7 +200,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           spinner.stop();
         }
         alert('수정이 완료되었습니다.');
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   
       }
       else {
         Alert.alert('페이지 값 오류', errorMessage);
@@ -232,7 +225,6 @@ const MyClubMainInfo_2=({ navigation, route })=>{
         tempData.booktitle = clubData.book_now.title;
         tempData.goal = clubData.book_now.goal;
         tempData.bookcover = clubData.book_now.cover;
-        const tempuserlist = [];
         let index = 1;
         for (let member of clubData.members) {
           let user_rate = 0;

@@ -7,13 +7,11 @@
 
 // 추가할 component
 // ScheduleInput: label이 가로에 위치하도록 기존 Input 수정
-// ScheduleButton: 버튼 색상 수정
+//일정 작성 화면
+//일정명, 날짜 및 시간, 장소, 메모를 picker와 input 컴포넌트를 통해 입력받고 등록합니다.
 
 
-// 제가 개발 시 Stack Navigation을 따로 제작하여 만들었기 때문에 존재하는 오류사항이 있다면 말씀해주시길 바랍니다. 감사합니다.
-
-
-import React, { useLayoutEffect, useState, useRef, useEffect, useContext } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import ScheduleInput from '../components/ScheduleInput';
 import ScheduleButton from '../components/ScheduleButton';
@@ -85,9 +83,9 @@ const ScheduleCreation = ({navigation, route}) => {
     const [title, setTitle] = useState('');
     const [id, setId] = useState(0);
     const today = new Date();
-    const [date, setDate] = useState(new Date(today)); // datetimepicker 이용해 시간 입력받기
-    const [mode, setMode] = useState('date'); // datetimepicker 관련
-    const [show, setShow] = useState(false);  // datetimepicker 관련
+    const [date, setDate] = useState(new Date(today)); 
+    const [mode, setMode] = useState('date'); 
+    const [show, setShow] = useState(false);  
     const [site, setSite] = useState('');
     const [memo, setMemo] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -97,7 +95,7 @@ const ScheduleCreation = ({navigation, route}) => {
 
     const didMountRef = useRef();
 
-    // 날짜 관련
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios' && 'android');
@@ -117,18 +115,18 @@ const ScheduleCreation = ({navigation, route}) => {
     }
 
 
-    // show mode 변경하기
+
     const showMode = (currentMode) => {
         setShow(true);
         setMode(currentMode);
     };
 
-    // mode를 date로 변경 -> datepicker가 뜨게
+
     const showDatepicker = () => {
         showMode('date');
     };
 
-    // mode를 time으로 변경 -> timepicker가 뜨게
+ 
     const showTimepicker = () => {
         showMode('time');
     };
@@ -137,7 +135,7 @@ const ScheduleCreation = ({navigation, route}) => {
       setId(route.params?.id);
     }, []);
 
-    // 일정명이나 장소가 비었을 때 error 메시지 송출
+
     useEffect(() => {
         if (didMountRef.current) {
             const tempTime = new Date();
@@ -184,7 +182,7 @@ const ScheduleCreation = ({navigation, route}) => {
       return true
     }
 
-    // firebase 연동할 부분, 이전에는 콘솔 로그로 출력하게 두었습니다.
+
     const _handleCreationButtonPress = async() => {
         console.log(title);
         console.log(date);
@@ -213,7 +211,7 @@ const ScheduleCreation = ({navigation, route}) => {
             <List width={width}>
             <Container width={width}>
                 
-                    <ScheduleInput // 일정명 입력 받기
+                    <ScheduleInput 
                         value={title}
                         onChangeText={_handleTitleChange}
                         onSubmitEditing={() => {}}
@@ -229,13 +227,13 @@ const ScheduleCreation = ({navigation, route}) => {
                     <Fix width={width}>
                     <DateText>선택 시간{"\n"}{date.toLocaleString()}</DateText>
                     </Fix>
-                    <ScheduleInput // 장소 입력 받기
+                    <ScheduleInput 
                         value={site}
                         onChangeText={_handleSiteChange}
                         placeholder="장소"
                         returnKeyType="next"
                     />
-                    <ScheduleInput // 메모 입력 받기
+                    <ScheduleInput 
                         value={memo}
                         onChangeText={_handleMemoChange}
                         placeholder="메모"
@@ -245,7 +243,7 @@ const ScheduleCreation = ({navigation, route}) => {
                     <Fix width={width}>
                     <ErrorText>{errorMessage}</ErrorText>
                     </Fix>
-                    <ScheduleButton // 일정 등록 버튼
+                    <ScheduleButton 
                         title="일정 등록"
                         onPress={_handleCreationButtonPress}
                         disabled={disabled}

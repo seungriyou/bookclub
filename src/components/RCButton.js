@@ -1,3 +1,5 @@
+//책 둘러보기 화면에서 사용되는 styled가 적용된 버튼 컴포넌트
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';

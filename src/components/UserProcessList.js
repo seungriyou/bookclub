@@ -1,9 +1,13 @@
+//클럽의 메인 페이지(진행상황)에서 사용하는 클럽의 목표 책에 대한 멤버들의 진행상황을 표시하는 리스트 컴포넌트
+//각 멤버가 입력한 자신의 진행 페이지를 숫자로 받아오면 '목표 페이지에 대한 진행 페이지'를 퍼센트 표기로 바꾸어 게이지 형식으로 구현
+//멤버의 프로필이미지/닉네임/진행게이지/진행퍼센트표기 가 출력됩니다.
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Dimensions, Text, StyleSheet, FlatList, Image } from 'react-native';
 import { theme } from '../theme';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+
 
 
 const Container = styled.View`

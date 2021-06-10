@@ -1,5 +1,4 @@
-//MyClubBoardView화면의 제목, 작성자 및 일자, 내용 component
-//파이어베이스 연동이 되어있지 않습니다.
+//게시판 조회 화면에서 사용되는 컴포넌트 - 작성자, 작성날짜, 댓글 수, 제목, 내용 표기
 
 import React from 'react';
 import styled from 'styled-components/native';
@@ -25,6 +24,7 @@ const PostInfo = styled.View`
   padding-bottom: 2px;
   margin: 0px;
 `;
+
 const PostInfo2 = styled.View`
   flex-direction: row;
   justify-content: flex-end;

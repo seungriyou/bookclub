@@ -1,8 +1,7 @@
-//클럽의 회원 목록을 조회하는 화면
-//모임장의 멤버 강퇴 함수가 필요합니다.
+//모임장만 진입 가능한 클럽의 회원 목록을 조회하는 화면
 
 
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
+import React, {useLayoutEffect, useState, useEffect } from 'react';
 import {StyleSheet, Dimensions, Text} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -136,7 +135,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}   //추후수정-뒤로가기
+                        onPress={onPress}   
                     />
                 );
             },

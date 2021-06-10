@@ -1,7 +1,12 @@
+//책 둘러보기 화면
+//검색어를 입력한 후 제목으로 검색하기, 키워드로 검색하기 버튼을 별개로 이용 가능합니다.
+//검색어 입력 전 및 잘못된 검색어 입력 시에는 결과 리스트가 아닌 안내 및 알고리즘 설명 텍스트가 표기됩니다.
+//제공되는 데이터는 YES24에 출처를 두고 있으며, 해당 출처는 화면에 표기되었습니다.
+
+
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
 import { Dimensions, Text, Alert } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
 import BookRCList from '../components/BookRCList';
 import RCButton from '../components/RCButton';
 
@@ -90,7 +95,6 @@ const MyClubBookRC = ({ navigate, route }) => {
 
 //책 제목 기반 추천
 const recommendByTitle = () => {
-  //console.log(searchword);
 	try {
 	  fetch (
 	    'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/title',
@@ -105,13 +109,10 @@ const recommendByTitle = () => {
 	      })
 	    })
       .then((response) => {
-	      //console.log(JSON.stringify(response));
 	      return response.json();
 	    }).then((responseJson) => {
-	      //console.log(responseJson);
         const items = responseJson;
         setItems(responseJson);
-        //console.log(items);
 	    });
 
 	  } catch (error) {
@@ -121,8 +122,6 @@ const recommendByTitle = () => {
 
 //책 키워드 기반 추천
 const recommendByKeyword= async () =>{
-  //console.log(searchword);
-
     try {
       const res = await fetch (
         'http://ec2-3-14-126-126.us-east-2.compute.amazonaws.com:5000/keyword',
@@ -136,13 +135,10 @@ const recommendByKeyword= async () =>{
             input: searchword
           })
         }).then((response) => {
-          //console.log(JSON.stringify(response));
           return response.json();
         }).then((responseJson) => {
-          //console.log(responseJson);
           const items = responseJson;
           setItems(responseJson);
-          //console.log(items);
         });
       }
       catch (error) {

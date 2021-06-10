@@ -1,7 +1,9 @@
+//일정 작성 화면에서 사용되는 styled가 적용된 버튼 컴포넌트
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { Dimensions, View, Pressable } from 'react-native';
+import { Dimensions} from 'react-native';
 
 const TRANSPARENT = 'transparent';
 

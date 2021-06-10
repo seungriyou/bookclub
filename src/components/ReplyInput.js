@@ -1,8 +1,8 @@
-//MyClubBoardView화면에서 사용될 댓글 input component
-//파이어베이스 연동이 되어있지 않습니다.
+//게시판 조회 화면에서 사용되는 댓글 리스트 컴포넌트
+//타 게시판(앨범/에세이)에서 사용되는 댓글 리스트 컴포넌트와 동일하게 동작합니다.
 
 
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
 import PropTypes from 'prop-types';

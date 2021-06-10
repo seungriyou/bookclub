@@ -1,7 +1,11 @@
-import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
+//클럽 목록 탭에서 특정 클럽을 클릭했을 때 클럽 정보를 조회하는 화면
+//클럽 이름/클럽 소개글/관리자닉네임/지역구/인원 수(현재/총) 를 표기합니다.
+//가입 신청 기능을 실행 가능하며, 이미 신청되었을 경우 알림을 띄웁니다.
+
+import React, { useContext, useState, useLayoutEffect } from 'react';
 import styled from 'styled-components/native';
-import { Alert, Dimensions, FlatList, StyleSheet, Text, Modal } from 'react-native';
-import { getClubInfo, DB, getCurrentUser, clubSignUpWaiting } from '../utils/firebase';
+import { Alert, Dimensions, StyleSheet, Text} from 'react-native';
+import { DB, getCurrentUser} from '../utils/firebase';
 import { Button } from '../components';
 import { ProgressContext } from '../contexts';
 import { theme } from '../theme';

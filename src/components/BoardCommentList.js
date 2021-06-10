@@ -1,3 +1,5 @@
+// 게시판에서 사용될 댓글 리스트를 불러오는 컴포넌트
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -29,10 +31,11 @@ const CommentArea = styled.View`
   padding: 5px 5px;
 `;
 
-// 삭제, 수정 버튼
+
 const CommentButtonArea = styled.View`
   flex-direction: row;
 `;
+
 const CommentButtonContainer = styled.TouchableOpacity`
   width: 30px;
   height: 25px;
@@ -41,6 +44,7 @@ const CommentButtonContainer = styled.TouchableOpacity`
   padding-right: 1px;
   padding-left: 3px;
 `;
+
 const DeleteButtonIcon = () => {
   return (
     <MaterialCommunityIcons
@@ -50,6 +54,7 @@ const DeleteButtonIcon = () => {
     />
   );
 };
+
 const DeleteButton = ({ onPress }) => {
   return (
     <CommentButtonContainer onPress={onPress}>
@@ -57,6 +62,7 @@ const DeleteButton = ({ onPress }) => {
     </CommentButtonContainer>
   );
 };
+
 const EditButtonIcon = () => {
   return (
     <MaterialCommunityIcons
@@ -66,6 +72,7 @@ const EditButtonIcon = () => {
     />
   );
 };
+
 const EditButton = ({ onPress }) => {
   return (
     <CommentButtonContainer onPress={onPress}>
@@ -74,11 +81,11 @@ const EditButton = ({ onPress }) => {
   );
 };
 
+
 const BoardCommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
   const userId = userInfo.uid;
-  /*console.log(comments)*/
 
   const getDate = ts => {
     const now = moment().startOf('day');
@@ -86,7 +93,7 @@ const BoardCommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
     return moment(ts).format('MM/DD');
   };
 
-  // 댓글 수정, 삭제 함수 (수정 필요)
+
   const _editComment = async(id) => {
     onEdit(id)
   };

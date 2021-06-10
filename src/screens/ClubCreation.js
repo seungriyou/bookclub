@@ -1,7 +1,11 @@
+//새로운 클럽을 생성하는 클럽 생성 화면
+//클럽 이름/소개글/지역/최대인원을 picker 또는 input 컴포넌트로 입력 가능하며, 입력 누락 시 클럽 생성 버튼이 비활성화됩니다.
+//모든 값을 입력 후 버튼을 눌러 클럽을 생성합니다.
+
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { Alert, Dimensions, TextInput, Text } from 'react-native';
-import { Input, Button } from '../components';
+import { Alert, Dimensions, Text } from 'react-native';
+import { Button } from '../components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ProgressContext } from '../contexts';
 import { createClub, getCurrentUser } from '../utils/firebase';

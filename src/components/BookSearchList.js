@@ -1,3 +1,7 @@
+//모임장이 책 등록 이전 책 검색을 할 때 사용되는 검색 결과 리스트 출력 컴포넌트
+//input에 대한 결과로 책 이미지/제목/저자/내용을 출력하며, 선택 버튼을 통해 책 등록이 가능
+//등록된 책은 클럽의 메인 페이지(진행상황)에서 클럽 멤버 모두가 확인 가능
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';

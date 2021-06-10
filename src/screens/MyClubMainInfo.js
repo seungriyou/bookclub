@@ -1,10 +1,12 @@
-//클럽 내 각자의 진행상황을 표시하는 메인 화면
+//메인 페이지 - 클럽이 진행 중인 도서 및 각 멤버의 진행 상황을 조회하는 화면
+//클럽 정보, 책 둘러보기, 완료한 도서 목록으로의 화면 이동이 가능합니다.
+//클럽의 도서 목표 페이지 수정 및 멤버의 진행 페이지 수정 기능이 동작합니다.
 
-import React, {useLayoutEffect, useState, useEffect, useRef, useContext} from 'react';
+
+import React, {useState, useEffect, useContext} from 'react';
 import {StyleSheet, Dimensions, Text, Image, Button, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
 import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
 import { DB, getCurrentUser } from '../utils/firebase';
@@ -247,53 +249,6 @@ const MyClubMainInfo=({ navigation, route })=>{
       return unsubscribe;
     }, [navigation]);
 
-    // useLayoutEffect(()=>{
-    //     navigation.setOptions({
-    //         headerBackTitleVisible: false,
-    //         headerTintColor: '#000000',
-    //         headerLeft: ({onPress, tintColor})=>{
-    //             return(
-    //                 <Layout>
-    //                 <MaterialCommunityIcons
-    //                     name="keyboard-backspace"
-    //                     size={30}
-    //                     style={{marginLeft:13}}
-    //                     color={tintColor}
-    //                     onPress={onPress}   //뒤로가기
-    //                 />
-    //                 <MaterialCommunityIcons
-    //                     name="alert-circle"
-    //                     size={30}
-    //                     style={{marginLeft:10}}
-    //                     color={tintColor}
-    //                     onPress={()=>navigation.navigate("MyClubMainManage")}   //클럽 정보를 관리하는 MyClubMainManage로 이동
-    //                 />
-    //                 </Layout>
-    //             );
-    //         },
-    //         headerRight: ({onPress, tintColor})=>{
-    //             return(
-    //                 <Layout>
-    //                 <MaterialCommunityIcons
-    //                     name="format-list-bulleted"
-    //                     size={30}
-    //                     style={{marginRight:10}}
-    //                     color={tintColor}
-    //                     onPress={onPress}   //수정필요-진행완료된 책 화면으로 이동
-    //
-    //                 />
-    //                 <MaterialCommunityIcons
-    //                     name="magnify"
-    //                     size={30}
-    //                     style={{marginRight:10}}
-    //                     color={tintColor}
-    //                     onPress={onPress}   //수정필요-책 추천화면 이동
-    //                 />
-    //                 </Layout>
-    //             );
-    //         },
-    //     });
-    // }, []);
 
     return(
         <KeyboardAwareScrollView

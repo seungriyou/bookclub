@@ -1,15 +1,15 @@
-//클럽 모임장이 진행중인 책을 수정하는 화면 -> 클럽 모임장만 진입 가능
-//조작 부분 외 다른 부분의 클릭을 막는 방법 필요
+//모임장만이 진입 가능한 클럽의 독서 목표를 수정하는 화면
 
-import React, {useLayoutEffect, useState, useEffect, useRef} from 'react';
+
+import React, {useLayoutEffect, useState} from 'react';
 import {StyleSheet, Dimensions, Text, Image, Button, TextInput, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {MaterialCommunityIcons} from '@expo/vector-icons';
+
 import { theme } from '../theme';
 import UserProcessList from '../components/UserProcessList';
 import { DB, getCurrentUser } from '../utils/firebase';
-import { ProgressContext } from '../contexts';
+
 import moment from 'moment';
 
 const Container=styled.View`
@@ -17,12 +17,6 @@ const Container=styled.View`
     flex-direction: column;
     background-color: ${({theme})=>theme.background};
     align-items: center;
-`;
-
-const Layout=styled.View`
-    background-color: ${({theme})=>theme.background};
-    align-items: center;
-    flex-direction: row;
 `;
 
 const Header=styled.View`
@@ -110,13 +104,13 @@ const MainHeader= ({clubname, onPress1, onPress2})=>{
         <Header width={width}>
         <Button
             title="책 완료하기"
-            onPress={onPress1}      //수정필요-진행완료한 책 목록 화면으로 이동
+            onPress={onPress1}      
             color= '#fac8af'
         />
         <Text style={styles.clubname}>{clubname}</Text>
         <Button
             title="수정 완료"
-            onPress={onPress2}      //다시 maininfo로 복귀
+            onPress={onPress2}  
             color= '#fac8af'
         />
         </Header>
@@ -191,7 +185,7 @@ const MyClubMainInfo_1=({ navigation, route })=>{
           });
           setgoal();
           alert('수정을 완료했습니다.');
-          navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   //값 변경 이후에는 원래의 Info화면으로 돌아올 것
+          navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});  
         }
         catch(e) {
           Alert.alert("목표 페이지 수정 오류", e.message);
@@ -288,7 +282,6 @@ const MyClubMainInfo_1=({ navigation, route })=>{
         tempData.booktitle = clubData.book_now.title;
         tempData.goal = clubData.book_now.goal;
         tempData.bookcover = clubData.book_now.cover;
-        const tempuserlist = [];
         let index = 0;
         for (let member of clubData.members) {
           let user_rate = 0;

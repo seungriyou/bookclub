@@ -1,9 +1,10 @@
-//책 완료 화면 내부 -> 완료된 책 정보 리스트 내부 -> 버튼 내부 에 존재하는 해당 책을 완료한 사람들의 리스트입니다.
+//책 완료 화면 내부 -> 완료된 책 정보 리스트 내부 -> 버튼 내부 에 존재하는 해당 책을 완료한 사람들의 리스트 컴포넌트
+
 
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
-import { View, Dimensions, Text, StyleSheet, FlatList, Image } from 'react-native';
+import { Dimensions, Text, StyleSheet, FlatList, Image } from 'react-native';
 import { theme } from '../theme';
 
 

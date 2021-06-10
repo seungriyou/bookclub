@@ -1,3 +1,5 @@
+//앱 초반 및 메인페이지, 클럽 정보 조회 페이지 등에서 사용되는 styled를 입힌 input 컴포넌트
+
 import React, {forwardRef} from 'react';
 import styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
