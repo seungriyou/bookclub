@@ -47,7 +47,7 @@ export const theme = {
   infoText: colors.black,
   infoTextComment: colors.grey_1,
   
-  // MyClubBoardView 작성 중 추가 
+  // MyClubBoardView 관련 추가 
   line: colors.grey_0,
 
   // SearchForm 관련 추가

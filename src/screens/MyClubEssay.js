@@ -1,12 +1,15 @@
-import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
+// 에세이 탭에서 게시글을 작성하는 화면
+// - EssayTitleInput, EssayContentInput 컴포넌트가 사용됨
+
+import React, { useState, useLayoutEffect, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme } from '../theme';
 import { MaterialIcons } from '@expo/vector-icons';
 import EssayTitleInput from '../components/EssayTitleInput';
 import EssayContentInput from '../components/EssayContentInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
-import {Alert} from 'react-native';
+import { DB, getCurrentUser } from '../utils/firebase';
+import { Alert } from 'react-native';
 import { ProgressContext } from '../contexts';
 
 const Container = styled.View`
@@ -19,7 +22,6 @@ const Container = styled.View`
 
 const MyClubEssay = ({ navigation, route }) => {
   const { spinner } = useContext(ProgressContext);
-
   const id = route.params.id;
   const user = getCurrentUser();
   const [title, setTitle] = useState('');
@@ -43,9 +45,11 @@ const MyClubEssay = ({ navigation, route }) => {
   const _handleTitleChange = text => {
     setTitle(text);
   };
+
   const _handleOCRTextChange = text => {
     setOCRText(text);
   };
+
   const _handleContentChange = text => {
     setContent(text);
   };
@@ -64,13 +68,10 @@ const MyClubEssay = ({ navigation, route }) => {
       like_table: {},
       like_cnt: 0,
     }
-
     await essayRef.set(newEssay);
-
     return true;
   }
 
-  // DB와 연결할 부분. 현재는 console 출력으로 대체함
   const _handleCompleteButtonPress = async () => {
     if (title == '' || OCRText == '' || content == '') {
       alert(`제목 또는 텍스트가 없습니다.`);

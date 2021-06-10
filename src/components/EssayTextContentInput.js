@@ -1,3 +1,5 @@
+// 에세이 탭에서 게시글을 작성 시 본문 텍스트를 입력하는 데에 사용되는 컴포넌트 
+
 import React from 'react';
 import styled from 'styled-components/native';
 import { useWindowDimensions } from 'react-native';
@@ -12,7 +14,6 @@ const TextContainer = styled.View`
   border-top-width: 0.9px;
   border-color: ${({ theme }) => theme.separator};
 `;
-
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
   multiline: true,

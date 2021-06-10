@@ -1,3 +1,8 @@
+// 앨범 탭에서 게시글을 작성 시 이미지 첨부를 위해 로컬 앨범에서 이미지를 선택하는 화면
+// - 최대 10개의 이미지 선택 가능
+// - 선택 순서가 유지됨
+// - 선택 완료 시 게시글 작성 화면인 MyClubAlbum 화면으로 되돌아감
+
 import React, { useState } from 'react';
 import { theme } from '../theme';
 import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
@@ -26,6 +31,7 @@ const SelectPhoto = ({ navigation }) => {
       );
     }
   };
+
   const _getHeaderLoader = () => (
     <ActivityIndicator size={30} color={theme.buttonIcon} style={{ marginRight: 13 }} />
   );
@@ -47,7 +53,6 @@ const SelectPhoto = ({ navigation }) => {
       }
       setUploading(false);
       navigation.navigate('MyClubAlbum', { photos: cPhotos });
-      //console.log(cPhotos);
     })
       .catch((e) => console.log(e));
   };

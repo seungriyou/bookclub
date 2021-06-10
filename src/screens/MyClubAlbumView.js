@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
-import styled, { ThemeProvider } from 'styled-components/native';
+// 앨범 탭에서 게시글을 조회하는 화면
+// - 게시글을 보여주는 AlbumViewPost, 댓글 목록을 보여주는 CommentList, 댓글 입력창인 ReplyInput 컴포넌트를 포함함
+
+import React, { useState, useEffect, useContext } from 'react';
+import styled from 'styled-components/native';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { View, ScrollView, Alert } from 'react-native';
+import { View, Alert } from 'react-native';
 import AlbumViewPost from '../components/AlbumViewPost';
 import CommentList from '../components/CommentList';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ReplyInput from '../components/ReplyInput';
 import { ProgressContext } from '../contexts';
 import { DB, Storage, getCurrentUser} from '../utils/firebase';
-import moment from 'moment';
 import { theme } from '../theme';
 
 const Container = styled.View`
@@ -23,8 +25,7 @@ const CommentForm = styled.View`
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
-
-const Layout=styled.View`
+const Layout = styled.View`
     background-color: ${({theme})=>theme.background};
     align-items: center;
     flex-direction: row;
@@ -52,10 +53,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
   const _handleReplyChange = text => {
     setComment(text);
   };
-
-  const _handelEditButtonPress = () => {
-    Alert.alert("글을 수정합니다");
-  }
 
   const _handelDeleteButtonPress = async () => {
     Alert.alert("경고", "앨범을 삭제하시겠습니까?",
@@ -106,7 +103,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
                 list.push(com);
               }
             }
-
             const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
             await DB.runTransaction(async (t) => {
               t.update(albumRef, {comment: list, comment_cnt: (albumData.comment_cnt - 1)});
@@ -144,7 +140,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
                 }
                 list.push(com);
               }
-
               const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
               await DB.runTransaction(async (t) => {
                 t.update(albumRef, {comment: list});
@@ -160,7 +155,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
       }
     ]);
   }
-
 
   const getAlbum = async() => {
     try{
@@ -205,18 +199,13 @@ const MyClubAlbumView = ({ navigation, route }) => {
       Alert.alert("댓글을 입력해주세요.");
     }
     else {
-      //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용: ${comment}`);
       try{
         const albumRef = DB.collection('clubs').doc(clubId).collection('album').doc(albumId);
         await DB.runTransaction(async (t) => {
           const doc = await t.get(albumRef);
           const data = doc.data();
-
-
           const oldComment = data.comment;
           const oldCommentCnt = data.comment_cnt;
-
-
           let newCommentIdx = 0;
 
           if (oldCommentCnt == 0) {
@@ -260,7 +249,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
   useEffect(() => {
     getAlbum();
   }, [update]);
-
 
   useEffect(() => {
     navigation.setOptions({
@@ -311,7 +299,6 @@ const MyClubAlbumView = ({ navigation, route }) => {
         />
       </CommentForm>
     </View>
-
   );
 };
 

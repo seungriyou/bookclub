@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+// 에세이 탭에서 게시글을 조회할 때 사용되는 컴포넌트 
+
+import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { useWindowDimensions, Text, StyleSheet } from 'react-native';
@@ -40,7 +42,6 @@ const OCRText = styled.View`
 
 const EssayViewPost = ({ postInfo }) => {
   const width = useWindowDimensions().width;
-
   const date = moment(postInfo.upload_date).format('MM/DD');
 
   return (

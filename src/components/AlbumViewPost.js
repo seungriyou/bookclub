@@ -1,3 +1,5 @@
+// 앨범 탭에서 게시글을 조회할 때 사용되는 컴포넌트 
+
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -45,6 +47,7 @@ const AlbumViewPost = ({ postInfo }) => {
     setIsModalOpened(true);
     setCurrentImageIndex(index);
   };
+
   useEffect(() => {
     return () => setIsModalOpened(false);
   }, []);
@@ -55,7 +58,6 @@ const AlbumViewPost = ({ postInfo }) => {
       const { status } = await MediaLibrary.getPermissionsAsync();
       if (status === 'granted') {
         setHasPermission(true);
-        //console.log('hasPermission!');
       } else {
         setHasPermission(false);
         console.log('The user has not granted us permission.');
@@ -63,7 +65,7 @@ const AlbumViewPost = ({ postInfo }) => {
     })();    
   }, []);
 
-  /*console.log(postInfo.photos);*/
+  // 첨부된 이미지를 가로 ScrollView에 렌더링하는 함수
   const renderImage = (item, i) => {
     return (
       <TouchableWithoutFeedback onPress={() => openModal(i)}>
@@ -82,10 +84,8 @@ const AlbumViewPost = ({ postInfo }) => {
     if (hasPermission) {
       const dirInfo = await FileSystem.cacheDirectory + 'album/';
       if (!dirInfo.exists) {
-        //console.log("Cache directory doesn't exist, creating...");
         await FileSystem.makeDirectoryAsync(dirInfo, { intermediates: true });
       }
-      //console.log(`img: ${img}`);
       const url = await downloadAsync(img, dirInfo + 'bookclub'+ moment().format('YYMMDDHHmmss').toString() +'.jpg');
       console.log(`local uri: ${url.uri}`);
       await MediaLibrary.saveToLibraryAsync(url.uri);  
@@ -98,27 +98,23 @@ const AlbumViewPost = ({ postInfo }) => {
     return moment(ts).format('MM/DD');
   };
 
-
   return (
     <Container width={width}>
       <PostInfo width={width}>
         <Text style={styles.titleText}>{postInfo.title}</Text>
       </PostInfo>
-
       <PostInfo width={width}>
         <Text style={styles.infoText}>작성자: {postInfo.writer_name}</Text>
         <PostInfo2>
           <Text style={styles.infoText}>{getDate(postInfo.upload_date)}</Text>
           <Text style={styles.infoText}>   댓글 {postInfo.comment_cnt}</Text>
         </PostInfo2>
-
       </PostInfo>
       <View style={{ height: 170 }}>
         <ScrollView
           horizontal={true}
           style={{ flexDirection: 'row', marginTop: 15 }}
         >
-          {/*console.log(postInfo.photos)*/}
           {postInfo.photos.map((item, i) => renderImage(item, i))}
         </ScrollView>
       </View>

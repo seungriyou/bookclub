@@ -1,9 +1,10 @@
+// 에세이 탭에서 게시글 목록을 보여주는 화면
+// - 검색창인 SearchForm 컴포넌트를 포함함
+
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
-import { Alert, FlatList, Text, Modal } from 'react-native';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
-import { Button } from '../components';
-import { ProgressContext } from '../contexts';
+import { Alert, FlatList } from 'react-native';
+import { DB } from '../utils/firebase';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import SearchForm from '../components/SearchForm';
@@ -12,7 +13,6 @@ const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
 `;
-
 const ItemContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
@@ -28,12 +28,10 @@ const ItemTitle = styled.Text`
   font-size: 20px;
   font-weight: 600;
 `;
-
 const ItemTime = styled.Text`
   font-size: 12px;
   color: ${({ theme }) => theme.listTime};
 `;
-
 const ItemAuthor = styled.Text`
   font-size: 12px;
   margin-top: 5px;
@@ -68,13 +66,11 @@ const Item = React.memo(
   }
 );
 
-
 const MyClubEssayList = ({navigation, route}) => {
   const [essays, setEssays] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
   const [searchOption, setSearchOption] = useState('title');
-
   const id = route.params?.id;
 
   const getMyClubEssayList = async() => {
@@ -89,7 +85,6 @@ const MyClubEssayList = ({navigation, route}) => {
         list.push(data);
       })
       setEssays(list);
-
       setRefreshing(false);
     }
     catch(e){
@@ -123,16 +118,7 @@ const MyClubEssayList = ({navigation, route}) => {
           }
         })
       }
-      //
-      // essayDoc.forEach(doc => {
-      //   const data = doc.data();
-      //   if(data.title.includes(search)){
-      //     data['clubId'] = id;
-      //     list.push(data);
-      //   }
-      // })
       setEssays(list);
-
       setRefreshing(false);
     }
     catch(e){
@@ -156,7 +142,6 @@ const MyClubEssayList = ({navigation, route}) => {
     navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayView', params});
   };
 
-  /* 검색폼 부분. 검색하는 기능과 연동 필요 */
   const _handleSearchChange = text => {
     setSearch(text);
   };
@@ -166,16 +151,13 @@ const MyClubEssayList = ({navigation, route}) => {
       Alert.alert('오류', "검색어를 입력해주세요.");
     }
     else {
-      //Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getEssaySearchData();
-      //setSearch('');
     }
   };
 
   const _clearSearch = () => {
     setSearch('');
   };
-
 
   return (
     <Container>

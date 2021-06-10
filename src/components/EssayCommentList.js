@@ -1,3 +1,6 @@
+// 에세이 탭에서 게시글을 조회할 때 댓글 목록을 보여주는 컴포넌트 
+// - 자신이 작성한 댓글에는 수정/삭제 버튼이 보이도록 구현
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -80,17 +83,15 @@ const EditButton = ({ onPress }) => {
   );
 };
 
-
 const EssayCommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
   const userId = userInfo.uid;
-  /*console.log(comments)*/
 
-  // 댓글 수정, 삭제 함수 (수정 필요)
   const _editComment = async(id) => {
     onEdit(id)
   };
+  
   const _deleteComment = async(id) => {
     onDelete(id);
   };

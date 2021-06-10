@@ -1,3 +1,6 @@
+// 앨범 탭에서 게시글을 작성 시 이미지 첨부 및 본문을 입력하는 데에 사용되는 컴포넌트
+// - 본문 텍스트 입력 시에 사용하는 AlbumTextContentInput 컴포넌트를 포함함
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -17,7 +20,6 @@ const Container = styled.View`
   padding: 5px 5px;
   border-radius: 10px;
 `;
-
 const PhotoButtonContainer = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.inputBackground};
   width: 80px;
@@ -25,7 +27,6 @@ const PhotoButtonContainer = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 `;
-
 const PhotoButton = ({ onPress }) => {
   return (
     <PhotoButtonContainer onPress={onPress} >
@@ -33,7 +34,6 @@ const PhotoButton = ({ onPress }) => {
     </PhotoButtonContainer>
   );
 };
-
 const PhotoButtonIcon = () => {
   return (
     <MaterialIcons
@@ -46,6 +46,7 @@ const PhotoButtonIcon = () => {
 
 const AlbumContentInput = ({ onPress, photos, text, onChangeText }) => {
   const width = useWindowDimensions().width;
+  
   const renderImage = (item, i) => {
     return (
       <Image
@@ -79,7 +80,6 @@ const AlbumContentInput = ({ onPress, photos, text, onChangeText }) => {
       </Container>
     </KeyboardAwareScrollView>
   );
-
 };
 
 AlbumContentInput.propTypes = {

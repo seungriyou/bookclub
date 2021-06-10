@@ -1,3 +1,6 @@
+// 에세이 탭에서 게시글을 수정하는 화면
+// - EssayTitleInput, EssayContentInput 컴포넌트가 사용됨
+
 import React, { useState, useLayoutEffect, useContext, useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components/native';
 import { theme } from '../theme';
@@ -5,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import EssayTitleInput from '../components/EssayTitleInput';
 import EssayContentInput from '../components/EssayContentInput';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { DB, getCurrentUser } from '../utils/firebase';
+import { DB } from '../utils/firebase';
 import { Alert } from 'react-native';
 import { ProgressContext } from '../contexts';
 
@@ -19,7 +22,6 @@ const Container = styled.View`
 
 const MyClubEssay = ({ navigation, route }) => {
   const { spinner } = useContext(ProgressContext);
-
   const clubId = route.params.clubId;
   const essayId = route.params.essayId;
 
@@ -102,7 +104,6 @@ const MyClubEssay = ({ navigation, route }) => {
         />
       ),
     });
-
   }, [title, content, OCRText]);
 
   useEffect(() => {

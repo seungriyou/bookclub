@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
-import styled, { ThemeProvider } from 'styled-components/native';
+// 에세이 탭에서 게시글을 조회하는 화면
+// - 게시글을 보여주는 EssayViewPost, 댓글 목록을 보여주는 EssayCommentList, 댓글 입력창인 ReplyInput 컴포넌트를 포함함
+
+import React, { useState, useEffect, useContext } from 'react';
+import styled from 'styled-components/native';
 import { theme } from '../theme';
 import { View, Alert, Dimensions, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { MaterialIcons, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EssayViewPost from '../components/EssayViewPost';
 import EssayCommentList from '../components/EssayCommentList';
 import ReplyInput from '../components/ReplyInput';
 import { ProgressContext } from '../contexts';
 import { DB, getCurrentUser} from '../utils/firebase';
-import moment from 'moment';
 
 const Container = styled.View`
   flex: 1;
@@ -18,14 +20,12 @@ const Container = styled.View`
   justify-content: flex-start;
   padding-bottom: 140px;
 `;
-
 const CommentForm = styled.View`
   position: absolute;
   bottom: 0;
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
-
 const FixSource=styled.View`
   width: ${({ width }) => width}px;
   height: 40px;
@@ -60,7 +60,6 @@ const MyClubEssayView = ({ navigation, route }) => {
   const [isAuthor, setIsAuthor] = useState(false);
   const [comment, setComment] = useState('');
   const [isLiked, setIsLiked] = useState(false);
-
   const width = Dimensions.get('window').width;
 
   const _handleReplyChange = text => {
@@ -73,10 +72,8 @@ const MyClubEssayView = ({ navigation, route }) => {
       await DB.runTransaction(async (t) => {
         const doc = await t.get(essayRef);
         const data = doc.data();
-
         const oldLike = data.like_table;
         const oldLikeCnt = data.like_cnt;
-
         let newLike = data.like_table;
         let newLikeCnt = data.like_cnt;
 
@@ -98,13 +95,6 @@ const MyClubEssayView = ({ navigation, route }) => {
         console.log(newLike);
         t.update(essayRef, {like_table: newLike, like_cnt: newLikeCnt});
       });
-
-      if(isLiked === true) {
-        //Alert.alert("좋아요 취소");
-      }
-      else {
-        //Alert.alert("좋아요");
-      }
     }
     catch (e) {
       Alert.alert('에세이 좋아요 오류', e.message);
@@ -161,7 +151,6 @@ const MyClubEssayView = ({ navigation, route }) => {
                 list.push(com);
               }
             }
-
             const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
             await DB.runTransaction(async (t) => {
               t.update(essayRef, {comment: list, comment_cnt: (essayData.comment_cnt - 1)});
@@ -199,7 +188,6 @@ const MyClubEssayView = ({ navigation, route }) => {
                 }
                 list.push(com);
               }
-
               const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
               await DB.runTransaction(async (t) => {
                 t.update(essayRef, {comment: list});
@@ -215,7 +203,6 @@ const MyClubEssayView = ({ navigation, route }) => {
       }
     ]);
   }
-
 
   const getEssay = async() => {
     try{
@@ -269,18 +256,14 @@ const MyClubEssayView = ({ navigation, route }) => {
       Alert.alert("댓글을 입력해주세요.");
     }
     else {
-      //Alert.alert(`댓글을 입력하였습니다.`, `댓글 내용:${comment}`);
       console.log(`Comment: ${comment}`);
       try{
         const essayRef = DB.collection('clubs').doc(clubId).collection('essay').doc(essayId);
         await DB.runTransaction(async (t) => {
           const doc = await t.get(essayRef);
           const data = doc.data();
-
-
           const oldComment = data.comment;
           const oldCommentCnt = data.comment_cnt;
-
           let newCommentIdx = 0;
 
           if (oldCommentCnt == 0) {
@@ -297,17 +280,12 @@ const MyClubEssayView = ({ navigation, route }) => {
             upload_date: Date.now(),
           }
 
-
           const newCommentCnt = oldCommentCnt + 1;
-
           oldComment.push(tempComment)
-
           const newComment = oldComment;
-
           t.update(essayRef, {comment: newComment, comment_cnt: newCommentCnt});
         });
         setComment('');
-
       }
       catch (e) {
         Alert.alert('댓글 작성 오류', e.message);
@@ -334,7 +312,7 @@ const MyClubEssayView = ({ navigation, route }) => {
               size={25}
               style={{ marginRight: 10 }}
               color={theme.buttonIcon}
-              onPress={_handleLikeButtonPress} // 좋아요 버튼 함수(이벤트 추가 필요)
+              onPress={_handleLikeButtonPress} 
             />
             <MaterialCommunityIcons
                 name="pencil"
@@ -358,7 +336,7 @@ const MyClubEssayView = ({ navigation, route }) => {
               size={30}
               style={{ marginRight: 20 }}
               color={theme.buttonIcon}
-              onPress={_handleLikeButtonPress} // 좋아요 버튼 함수(이벤트 추가 필요)
+              onPress={_handleLikeButtonPress} 
             />
           </View>
         )

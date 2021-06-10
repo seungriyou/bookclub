@@ -1,3 +1,6 @@
+// 앨범 탭에서 게시글을 조회할 때 댓글 목록을 보여주는 컴포넌트 
+// - 자신이 작성한 댓글에는 수정/삭제 버튼이 보이도록 구현
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
@@ -5,7 +8,6 @@ import { View, useWindowDimensions, Text, StyleSheet, FlatList } from 'react-nat
 import { theme } from '../theme';
 import moment from 'moment';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -30,7 +32,7 @@ const CommentArea = styled.View`
   padding: 5px 5px;
 `;
 
-// 삭제, 수정 버튼
+// 댓글의 삭제, 수정 버튼
 const CommentButtonArea = styled.View`
   flex-direction: row;
 `;
@@ -79,7 +81,6 @@ const CommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
   const width = useWindowDimensions().width;
   const comments = postInfo.comment;
   const userId = userInfo.uid;
-  /*console.log(comments)*/
 
   const getDate = ts => {
     const now = moment().startOf('day');
@@ -90,6 +91,7 @@ const CommentList = ({ postInfo, userInfo, clubId, onDelete, onEdit }) => {
   const _editComment = async(id) => {
     onEdit(id)
   };
+  
   const _deleteComment = async(id) => {
     onDelete(id);
   };

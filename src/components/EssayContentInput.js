@@ -1,14 +1,17 @@
+// 에세이 탭에서 게시글을 작성 시 OCR 텍스트 변환 및 본문을 입력하는 데에 사용되는 컴포넌트
+// - 본문 텍스트 입력 시에 사용하는 EssayTextContentInput 컴포넌트를 포함함
+// - Google Cloud Vision API와 직접 구현한 OCR 후처리 API를 사용하여 OCR 텍스트 추출 기능을 구현함
+
 import React, { useState, useEffect } from 'react';
-import styled, { ThemeContext } from 'styled-components/native';
+import styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import { View, Image, useWindowDimensions, ActivityIndicator,	StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import EssayTextContentInput from './EssayTextContentInput';
 import { theme } from '../theme';
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import {GOOGLE_CLOUD_VISION_API_KEY} from "../../secret.js";
+import { GOOGLE_CLOUD_VISION_API_KEY } from "../../secret.js";
 
 const Container = styled.View`
   width: ${({ width }) => width - 40}px;
@@ -91,6 +94,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
     onChangeOCRText(googleResponse);
   }, [googleResponse]);
 
+  // 카메라를 열어 새로운 사진을 찍는 함수
   const _takePhoto = async () => {
 		let pickerResult = await ImagePicker.launchCameraAsync({
 			allowsEditing: true,
@@ -102,6 +106,8 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
       setIsImageSelected(true);
     }
 	};
+
+  // 로컬 앨범에 접근하여 사진을 가져오는 함수
   const _pickImage = async () => {
 		let pickerResult = await ImagePicker.launchImageLibraryAsync({
 			allowsEditing: true,
@@ -112,6 +118,8 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
       setIsImageSelected(true);
     }
 	};
+
+  // Google Cloud Vision API와 OCR 후처리 API를 사용하여 사진으로부터 텍스트를 추출하는 함수
   const submitToGoogle = () => {
 		try {
 			setUploading(true);
@@ -140,7 +148,6 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
 				}).then((response) => {
           return response.json()
         }).then((responseJson) => {
-          //console.log(responseJson.responses[0].fullTextAnnotation.text);
           setGoogleResponse(responseJson.responses[0].fullTextAnnotation.text);
           try {
             fetch (
@@ -176,6 +183,8 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
       alert('다시 시도해주세요.');
 		}
 	};
+
+  // OCR 변환 시 버튼 영역에 Activity Indicator를 출력하는 함수
   const _maybeRenderUploadingOverlay = () => {
     if (uploading) {
       return (

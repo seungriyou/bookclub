@@ -1,9 +1,9 @@
+// 에세이 탭에서 회원이 좋아요를 누른 게시글들을 모아 리스트로 보여주는 화면
+
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
-import { Alert, FlatList, Text, Modal } from 'react-native';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
-import { Button } from '../components';
-import { ProgressContext } from '../contexts';
+import { Alert, FlatList } from 'react-native';
+import { DB, getCurrentUser } from '../utils/firebase';
 import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
 
@@ -11,7 +11,6 @@ const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
 `;
-
 const ItemContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
@@ -27,12 +26,10 @@ const ItemTitle = styled.Text`
   font-size: 20px;
   font-weight: 600;
 `;
-
 const ItemTime = styled.Text`
   font-size: 12px;
   color: ${({ theme }) => theme.listTime};
 `;
-
 const ItemAuthor = styled.Text`
   font-size: 12px;
   margin-top: 5px;
@@ -67,13 +64,10 @@ const Item = React.memo(
   }
 );
 
-
 const MyClubEssayList = ({navigation, route}) => {
     const [essays, setEssays] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-
     const user = getCurrentUser();
-
     const id = route.params?.id;
 
     const getMyClubEssayList = async() => {
@@ -90,7 +84,6 @@ const MyClubEssayList = ({navigation, route}) => {
           }
         })
         setEssays(list);
-
         setRefreshing(false);
       }
       catch(e){
@@ -114,19 +107,18 @@ const MyClubEssayList = ({navigation, route}) => {
       navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayView', params});
     };
 
-
   return (
     <Container>
-    <FlatList
-      keyExtractor={item => item['id']}
-      data={essays}
-      renderItem={({ item }) => (
-        <Item item={item} onPress={_handleItemPress} />
-      )}
-      refreshing={refreshing}
-      onRefresh={getMyClubEssayList}
-      windowSize={3}
-    />
+      <FlatList
+        keyExtractor={item => item['id']}
+        data={essays}
+        renderItem={({ item }) => (
+          <Item item={item} onPress={_handleItemPress} />
+        )}
+        refreshing={refreshing}
+        onRefresh={getMyClubEssayList}
+        windowSize={3}
+      />
     </Container>
   );
 }

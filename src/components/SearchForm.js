@@ -1,10 +1,13 @@
+// 게시판, 앨범, 에세이 탭에서 게시글을 글 제목 및 작성자 이름으로 검색할 때 사용되는 검색창 컴포넌트
+// - 기본적으로 원형 검색 버튼이 우측 하단 탭 바 위에 고정적으로 위치함
+// - 해당 버튼을 누르면 검색창이 확장되고 검색이 가능함
+
 import React, { useState } from 'react';
 import styled from 'styled-components/native';
-import { Dimensions, TouchableOpacity, View } from 'react-native';
+import { Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { MaterialIcons } from '@expo/vector-icons';
-import {Picker} from '@react-native-picker/picker';
-
+import { Picker } from '@react-native-picker/picker';
 
 const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   placeholderTextColor: theme.inputPlaceholder,
@@ -17,7 +20,6 @@ const StyledInput = styled.TextInput.attrs(({ theme }) => ({
   font-size: 16px;
   color: ${({ theme }) => theme.text};
 `;
-
 const Container = styled.View`
   flex-direction: row;
   align-items: center;
@@ -27,7 +29,6 @@ const Container = styled.View`
   borderTop-color: ${({theme})=>theme.separator};
   borderTop-width: 0.8px;
 `;
-
 const Container2 = styled.View`
   flex-direction: column;
   align-items: flex-start;
@@ -36,7 +37,6 @@ const Container2 = styled.View`
   borderTop-color: ${({theme})=>theme.separator};
   borderTop-width: 0.8px;
 `;
-
 const ButtonContainer = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.background};
   padding: 8px 8px;

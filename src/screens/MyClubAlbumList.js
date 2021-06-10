@@ -1,21 +1,20 @@
+// 앨범 탭에서 게시글 목록을 보여주는 화면
+// - 각 게시글 별로 첨부된 이미지 중 첫 번째 이미지의 썸네일 뷰를 지원함
+// - 검색창인 SearchForm 컴포넌트를 포함함
+
 import React, { useContext, useState, useEffect, useLayoutEffect } from 'react';
-import { Alert, FlatList, Text, Modal, Image, StyleSheet, useWindowDimensions } from 'react-native';
-import { getClubInfo, DB, getCurrentUser } from '../utils/firebase';
-import { Button } from '../components';
-import { ProgressContext } from '../contexts';
+import { Alert, FlatList, Text, Image, StyleSheet, useWindowDimensions } from 'react-native';
+import { DB } from '../utils/firebase';
 import styled, { ThemeContext } from 'styled-components/native';
-import { MaterialIcons } from '@expo/vector-icons';
 import moment from 'moment';
 import { theme } from '../theme';
 import SearchForm from '../components/SearchForm';
-
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.background};
   align-items: center;
 `;
-
 const ItemContainer = styled.TouchableOpacity`
   flex-direction: column;
   width: ${({ width }) => (width - 40) / 2}px;
@@ -73,12 +72,10 @@ const Item = React.memo(
 
 const MyClubAlbumList = ({navigation, route}) => {
   const width = useWindowDimensions().width;
-
   const [albums, setAlbums] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState('');
   const [searchOption, setSearchOption] = useState('title');
-
   const id = route.params?.id;
   const title = route.params?.title;
 
@@ -94,7 +91,6 @@ const MyClubAlbumList = ({navigation, route}) => {
         list.push(data);
       })
       setAlbums(list);
-
       setRefreshing(false);
     }
     catch(e){
@@ -109,7 +105,6 @@ const MyClubAlbumList = ({navigation, route}) => {
       const albumRef = DB.collection('clubs').doc(id).collection('album');
       const albumDoc = await albumRef.orderBy('createAt', 'desc').get();
       const list = [];
-
       if(searchOption === 'title') {
         albumDoc.forEach(doc => {
           const data = doc.data();
@@ -128,13 +123,6 @@ const MyClubAlbumList = ({navigation, route}) => {
           }
         })
       }
-      // albumDoc.forEach(doc => {
-      //   const data = doc.data();
-      //   if(data.title.includes(search)) {
-      //     data['clubId'] = id;
-      //     list.push(data);
-      //   }
-      // })
       setAlbums(list);
       setRefreshing(false);
     }
@@ -159,7 +147,6 @@ const MyClubAlbumList = ({navigation, route}) => {
     navigation.navigate('MyClubAlbumNav', {screen: 'MyClubAlbumView', params});
   };
 
-  /* 검색폼 부분. 검색하는 기능과 연동 필요 */
   const _handleSearchChange = text => {
     setSearch(text);
   };
@@ -171,14 +158,12 @@ const MyClubAlbumList = ({navigation, route}) => {
     else {
       Alert.alert('알림', ((searchOption==='title') ? '제목으로 ' : '글쓴이로 ') + `검색합니다 : ${search}`);
       getAlbumSearchData();
-      //setSearch('');
     }
   };
 
   const _clearSearch = () => {
     setSearch('');
   };
-
 
   return (
     <Container>

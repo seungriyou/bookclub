@@ -1,3 +1,7 @@
+// 앨범 탭에서 게시글을 작성하는 화면
+// - AlbumTitleInput, AlbumContentInput 컴포넌트가 사용됨
+// - 첨부할 이미지 선택시 MyClubAlbumSelectPhoto 화면으로 이동함
+
 import React, { useState, useEffect, useLayoutEffect, useContext } from 'react';
 import { Alert } from 'react-native';
 import styled, { ThemeProvider } from 'styled-components/native';
@@ -7,7 +11,6 @@ import AlbumTitleInput from '../components/AlbumTitleInput';
 import AlbumContentInput from '../components/AlbumContentInput';
 import { DB, Storage, getCurrentUser } from '../utils/firebase';
 import { ProgressContext } from '../contexts';
-
 
 const Container = styled.View`
   flex: 1;
@@ -22,7 +25,6 @@ const MyClubAlbum = ({ navigation, route }) => {
   const [photos, setPhotos] = useState([]);
   const [content, setContent] = useState('');
   const [id, setId] = useState(0);
-  const [albumId, setAlbumId] = useState('');
 
   useEffect(() => {
     if (route.params.photos) {
@@ -51,7 +53,6 @@ const MyClubAlbum = ({ navigation, route }) => {
   useEffect(() => {
     console.log(id);
   }, [id]);
-
 
   const _handleTitleChange = text => {
     setTitle(text);
@@ -82,7 +83,8 @@ const MyClubAlbum = ({ navigation, route }) => {
     return await snapshot.ref.getDownloadURL();
   };
 
-  const uploadAlbumImage = async () => { //앨범 이미지를 파이어 베이스 스토리지에 업로드 하는 함수
+  //앨범 이미지를 파이어베이스 스토리지에 업로드 하는 함수
+  const uploadAlbumImage = async () => { 
     const user = getCurrentUser();
     const albumRef = DB.collection('clubs').doc(id).collection('album').doc();
     const albumId = albumRef.id;
@@ -112,8 +114,6 @@ const MyClubAlbum = ({ navigation, route }) => {
     return true;
   };
 
-
-  // DB와 연결할 부분. 현재는 console 출력으로 대체함
   const _handleCompleteButtonPress = async () => {
     if (photos == '' || title == '') {
       alert(`제목 또는 사진이 없습니다.`);
