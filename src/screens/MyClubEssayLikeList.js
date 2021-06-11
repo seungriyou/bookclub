@@ -78,7 +78,7 @@ const MyClubEssayList = ({navigation, route}) => {
         const list = [];
         essayDoc.forEach(doc => {
           const data = doc.data();
-          if(data.like_table[user.uid] === true) {
+          if(data.like_table[user.uid] === true) { //좋아요 테이블에서 필터링하는 부분 
             data['clubId'] = id;
             list.push(data);
           }

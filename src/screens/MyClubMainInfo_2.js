@@ -100,7 +100,7 @@ const MainHeader= ({clubname, onPress})=>{
 
     return (
         <Header width={width}>
-        <MaterialCommunityIcons        
+        <MaterialCommunityIcons
             name="keyboard-backspace"
             size={30}
             style={{marginLeft:13}}
@@ -162,7 +162,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
     const [errorMessage, setErrorMessage] = useState('');
 
     const _handlepageChange = text => {
-      const regex = /^[0-9]/;
+      const regex = /^[0-9]/; //페이지는 정수만 입력되도록 필터링
       if (regex.test(text)) {
         setUserPage(parseInt(text));
         setErrorMessage('');
@@ -200,7 +200,7 @@ const MyClubMainInfo_2=({ navigation, route })=>{
           spinner.stop();
         }
         alert('수정이 완료되었습니다.');
-        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});   
+        navigation.navigate('MyClubTab', {screen: 'MyClubMainInfo', params: {id: id}});
       }
       else {
         Alert.alert('페이지 값 오류', errorMessage);

@@ -36,7 +36,7 @@ const Profile = () => {
   const _handlePhotoChange = async url => {
     try {
       spinner.start();
-      const updateUser = await updateUserPhoto(url);
+      const updateUser = await updateUserPhoto(url); //util/firebase의 updateUserPhoto함수 호출 
       setPhotoUrl(updateUser.photoUrl);
     } catch (e) {
       Alert.alert('사진 수정 오류', e.message);

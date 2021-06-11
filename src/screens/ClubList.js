@@ -1,3 +1,5 @@
+//모든 클럽을 표시해주는 화면
+
 import React, { useContext, useState, useEffect } from 'react';
 import { DB } from '../utils/firebase';
 import { FlatList, Alert,  Dimensions} from 'react-native';

@@ -282,7 +282,7 @@ const MyClubMainM=({ navigation, route })=>{
     };
 
     const _handelEditButtonPress = async() => {
-      if(oldLeader.uid !== newLeader.uid) {
+      if(oldLeader.uid !== newLeader.uid) { //모임장의 변경 시
         Alert.alert("경고", `모임장을 ${newLeader.name}님으로 변경하시겠습니까?`,
         [
           {
@@ -352,7 +352,7 @@ const MyClubMainM=({ navigation, route })=>{
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}  
+                        onPress={onPress}
                     />
                 );
             },
@@ -442,7 +442,7 @@ const MyClubMainM=({ navigation, route })=>{
               <Button
                 color= '#fac8af'
                 title="정보 수정 완료"
-                onPress={_handelEditButtonPress}    
+                onPress={_handelEditButtonPress}
               />
             </ButtonFix2>
         </List>

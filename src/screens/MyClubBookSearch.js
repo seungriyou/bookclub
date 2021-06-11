@@ -141,7 +141,7 @@ const MyClubBookSearch = ({ navigate, route }) => {
   const [items, setItems] = useState([]);
   const [page, setPage] = useState(1);
 
-  const _handleSearchButtonPressed = async() => {
+  const _handleSearchButtonPressed = async() => { //검색 함수
     if (bookname !== "") {
       try {
         let list = [];
@@ -149,7 +149,7 @@ const MyClubBookSearch = ({ navigate, route }) => {
         await fetch(url)
         .then(response => response.text())
         .then(data => {
-          parseString(data, function(err, result) {
+          parseString(data, function(err, result) { //xml을 문자열로 파싱
             if (result.object.item === null) {
               throw "검색 결과가 없습니다.";
             }
@@ -185,7 +185,7 @@ const MyClubBookSearch = ({ navigate, route }) => {
     }
   }
 
-  const _handleNextSearchButtonPressed = async() => {
+  const _handleNextSearchButtonPressed = async() => { //검색 결과 다음 페이지 이동 
     setPage(page + 1);
   }
 

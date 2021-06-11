@@ -105,12 +105,12 @@ const MyClubEssayView = ({ navigation, route }) => {
     }
   }
 
-  const _handelEditButtonPress = () => {
+  const _handelEditButtonPress = () => { //에세이 수정 화면으로 이동
     navigation.navigate('MyClubEssayNav', {screen: 'MyClubEssayEdit', params: {clubId: clubId, essayId: essayId}});
     console.log(clubId, essayId);
   };
 
-  const _handelDeleteButtonPress = () => {
+  const _handelDeleteButtonPress = () => { //에세이 삭제 함수
     Alert.alert("경고", "에세이를 삭제하시겠습니까?",
     [
       {
@@ -133,7 +133,7 @@ const MyClubEssayView = ({ navigation, route }) => {
     ]);
   };
 
-  const _handleCommentDelete = async (id) => {
+  const _handleCommentDelete = async (id) => { //댓글 삭제 함수
     Alert.alert("경고", "댓글을 삭제하시겠습니까?",
     [
       {
@@ -165,7 +165,7 @@ const MyClubEssayView = ({ navigation, route }) => {
     ]);
   }
 
-  const _handleCommentEdit = (id) => {
+  const _handleCommentEdit = (id) => { //댓글 수정 함수
     Alert.alert("알림", "댓글창에 수정 내용이 입력되어 있어야 합니다. 댓글을 수정하시겠습니까?",
     [
       {
@@ -204,7 +204,7 @@ const MyClubEssayView = ({ navigation, route }) => {
     ]);
   }
 
-  const getEssay = async() => {
+  const getEssay = async() => { //에세이 수신 함수
     try{
       spinner.start();
       const essayRef = await DB.collection('clubs').doc(clubId).collection('essay').doc(essayId).get();
@@ -214,7 +214,7 @@ const MyClubEssayView = ({ navigation, route }) => {
         setIsAuthor(true);
       }
 
-      const isExist = data.like_table.hasOwnProperty(user.uid);
+      const isExist = data.like_table.hasOwnProperty(user.uid); //좋아요 테이블을 불러온다
       if(isExist) {
         if(data.like_table[user.uid] === true) {
           setIsLiked(true);
@@ -251,7 +251,7 @@ const MyClubEssayView = ({ navigation, route }) => {
     }
   }
 
-  const _addReply = async () => {
+  const _addReply = async () => { //댓글 입력 함수
     if (!comment) {
       Alert.alert("댓글을 입력해주세요.");
     }
@@ -304,7 +304,7 @@ const MyClubEssayView = ({ navigation, route }) => {
   useEffect(() => {
     getEssay();
     navigation.setOptions({
-      headerRight: () => (
+      headerRight: () => ( //에세이 좋아요 수정 삭제 버튼을 설정하는 헤더부분
         isAuthor ? (
           <View style={{ flexDirection: 'row' }}>
             <Ionicons
@@ -312,7 +312,7 @@ const MyClubEssayView = ({ navigation, route }) => {
               size={25}
               style={{ marginRight: 10 }}
               color={theme.buttonIcon}
-              onPress={_handleLikeButtonPress} 
+              onPress={_handleLikeButtonPress}
             />
             <MaterialCommunityIcons
                 name="pencil"
@@ -336,7 +336,7 @@ const MyClubEssayView = ({ navigation, route }) => {
               size={30}
               style={{ marginRight: 20 }}
               color={theme.buttonIcon}
-              onPress={_handleLikeButtonPress} 
+              onPress={_handleLikeButtonPress}
             />
           </View>
         )

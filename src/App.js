@@ -1,3 +1,5 @@
+//앱의 기초 뼈대
+
 import React, { useState } from 'react';
 import { StatusBar, Image, SafeAreaView } from 'react-native';
 import AppLoading from 'expo-app-loading';
@@ -22,7 +24,7 @@ const cashImages = images => {
   });
 };
 
-const cacheFonts = fonts => {
+const cacheFonts = fonts => { //폰트를 미리 로딩시켜주는 함수
   return fonts.map(font => Font.loadAsync(font));
 };
 
@@ -32,7 +34,7 @@ const App = () => {
     RIDIBatang: require('../assets/fonts/RIDIBatang.ttf'),
   });
 
-  const _loadAssets = async () => {
+  const _loadAssets = async () => { //앱의 로딩화면 
     const imageAssets = cacheImages([
       require('../assets/splash.png'),
       ...Object.values(images),

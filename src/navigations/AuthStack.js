@@ -1,3 +1,5 @@
+//로그인 스택
+
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';

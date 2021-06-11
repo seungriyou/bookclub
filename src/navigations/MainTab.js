@@ -1,3 +1,5 @@
+//클럽 목록과 가입클럭 목록, 프로필의 탭 네비게이션 설정 
+
 import React, { useContext, useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Profile, ClubList, MyClubList } from '../screens';

@@ -100,7 +100,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
         setClubData(clubData);
 
         let list = []
-        for (let member of clubData.members) {
+        for (let member of clubData.members) { //list에 들어갈 userData를 추출
           if(member.uid !== user.uid) {
             const temp = {
               id: member.uid,
@@ -135,7 +135,7 @@ const MyClubUserAdmin=({ navigation, route })=>{
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}   
+                        onPress={onPress}
                     />
                 );
             },

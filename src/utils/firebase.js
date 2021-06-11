@@ -70,17 +70,17 @@ export const signup = async ({ email, password, name, photoUrl }) => { //파이�
   return user;
 };
 
-export const logout = async () => {
+export const logout = async () => { //로그아웃 함수
   AsyncStorage.removeItem('userData');
   return await Auth.signOut();
 }
 
-export const getCurrentUser = () => {
+export const getCurrentUser = () => { //현재 로그인된 유저의 정보를 반환하는 함수
   const { uid, displayName, email, photoURL } = Auth.currentUser;
   return { uid, name: displayName, email, photoUrl: photoURL };
 };
 
-export const updateUserPhoto = async photoUrl => {
+export const updateUserPhoto = async photoUrl => { //사용자의 프로필 사진을 수정하는 함수
   const user = Auth.currentUser;
   const storageUrl = photoUrl.startsWith('https')
     ? photoUrl
@@ -122,7 +122,7 @@ export const updateUserPhoto = async photoUrl => {
   return { name: user.displayName, email: user.email, photoUrl: user.photoURL };
 };
 
-export const createClub = async ({ title, description, leader, region, maxNumber }) => {
+export const createClub = async ({ title, description, leader, region, maxNumber }) => { //클럽 생성 함수
   const user = Auth.currentUser;
   const newClubRef = DB.collection('clubs').doc();
   const id = newClubRef.id;

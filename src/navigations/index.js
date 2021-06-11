@@ -9,7 +9,7 @@ import CryptoJS from "react-native-crypto-js";
 
 key = "AIzaSyBnpWFz0fnASDFvasdvAGWdgvbasdnvbax5PFDLYmFrWMntujb9aazGdY";
 
-const Navigation = () => {
+const Navigation = () => { //유저의 로그인 정보에 따라 로그인 네비게이션과 메인 네비게이션화면 중에서 하나를 골라 진입시킴 
   const { inProgress } = useContext(ProgressContext);
   const { user } = useContext(UserContext);
   const { dispatch } = useContext(UserContext);

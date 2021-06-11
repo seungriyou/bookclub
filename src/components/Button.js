@@ -1,3 +1,5 @@
+//재사용 가능한 앱의 커스텀 버튼 정의 
+
 import React from 'react';
 import styled from 'styled-components/native';
 import PropTypes from 'prop-types';

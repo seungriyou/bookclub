@@ -1,3 +1,5 @@
+//내가 가입한 클럽의 목록 화면
+
 import React, { useContext, useState, useEffect } from 'react';
 import { DB, getCurrentUser } from '../utils/firebase';
 import { FlatList, Alert, Dimensions } from 'react-native';
@@ -76,11 +78,12 @@ const MyClubList = ({ navigation }) => {
   const [clubIds, setClubIds] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [doc, setDoc] = useState({});
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(false); //새로고침 상태를 확인하기 위한 상태
   const [region, setRegion] = useState('');
 
   const user = getCurrentUser();
-  const getMyClubId = async () => {
+
+  const getMyClubId = async () => { //먼저 유저 정보에서 가입된 클럽 id들을 불러온다
     try {
       setRefreshing(true);
       const userRef = DB.collection('users').doc(user.uid);
@@ -94,7 +97,7 @@ const MyClubList = ({ navigation }) => {
     }
   };
 
-  const getMyClubList = async () => {
+  const getMyClubList = async () => { //이후 불러온 클럽 정보를 바탕으로 리스트에 표시해준다. 지역 필터링도 이 함수에서 이루어진다.
     try {
       const clubRef = DB.collection('clubs');
       const list = [];
@@ -133,7 +136,7 @@ const MyClubList = ({ navigation }) => {
     getMyClubList();
   }, [clubIds, region]);
 
-  useEffect(() => {
+  useEffect(() => { //화면 밖으로 벗어날 시 새로고침 할 수 있도록 리스너 설정
     const unsubscribe = navigation.addListener('focus', () => {
       getMyClubId();
     });

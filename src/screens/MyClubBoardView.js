@@ -61,7 +61,7 @@ const MyClubBoardView=({ navigation, route })=>{
 
     const width= Dimensions.get('window').width;
 
-    const [update, setUpdate] = useState(0); 
+    const [update, setUpdate] = useState(0);
     const [comment, setComment] = useState('');
     const [commentCntTxt, setCommentCntTxt] = useState('');
     const [boardData, setBoardData] = useState({
@@ -84,11 +84,11 @@ const MyClubBoardView=({ navigation, route })=>{
       return moment(ts).format('MM/DD');
     };
 
-    const _handleEditButtonPress = () => {
+    const _handleEditButtonPress = () => { //글 수정 화면 이동 함수 
       navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardEdit', params: {clubId: clubId, boardId: boardId}});
     };
 
-    const _handleDeleteButtonPress = () => {
+    const _handleDeleteButtonPress = () => { //글 삭제 함수
       Alert.alert("경고", "글을 삭제하시겠습니까?",
       [
         {
@@ -312,10 +312,10 @@ const MyClubBoardView=({ navigation, route })=>{
     }, [boardData])
 
     return(
-        
+
         <Container width={width}>
             <List width={width}>
-              <BoardViewPost 
+              <BoardViewPost
                     title={boardData.title}
                     writer={boardData.writer_name}
                     writedate={getDate(boardData.upload_date)}
@@ -339,7 +339,7 @@ const MyClubBoardView=({ navigation, route })=>{
             </Listforreply>
         </Containerforreply>
         </Container>
-        
+
     );
 };
 

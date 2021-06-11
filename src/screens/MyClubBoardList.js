@@ -1,3 +1,5 @@
+//게시판 게시글 목록 화면
+
 import React, { useContext, useState, useEffect } from 'react';
 import styled, { ThemeContext } from 'styled-components/native';
 import { Alert, FlatList, Text, Modal } from 'react-native';
@@ -77,7 +79,7 @@ const MyClubBoardList = ({navigation, route}) => {
   const id = route.params?.id;
   const title = route.params?.title;
 
-  const getMyClubBoardList = async() => {
+  const getMyClubBoardList = async() => { //클럽의 게시물 데이터 수신 함수
     try{
       setRefreshing(true);
       const boardRef = DB.collection('clubs').doc(id).collection('board');
@@ -98,7 +100,7 @@ const MyClubBoardList = ({navigation, route}) => {
     }
   }
 
-  const getBoardSearchData = async() => {
+  const getBoardSearchData = async() => { //게시글 검색 함수
     try{
       setRefreshing(true);
       const boardRef = DB.collection('clubs').doc(id).collection('board');
@@ -148,7 +150,6 @@ const MyClubBoardList = ({navigation, route}) => {
     navigation.navigate('MyClubBoardNav', {screen: 'MyClubBoardView', params});
   };
 
-  /* 검색폼 부분. 검색하는 기능과 연동 필요 */
   const _handleSearchChange = text => {
     setSearch(text);
   };

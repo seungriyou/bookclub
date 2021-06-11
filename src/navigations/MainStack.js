@@ -1,3 +1,5 @@
+//클럽 내부의 스택 네비게이션들 정의
+
 import React, { useContext } from 'react';
 import { ThemeContext } from 'styled-components/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -15,7 +17,7 @@ const Stack = createStackNavigator();
 const MyClubMainInfoNav = () => {
   const theme = useContext(ThemeContext);
 
-  return (
+  return ( //클럽 메인화면 네비게이션
     <Stack.Navigator
       initialRouteName="MyClubMainInfoNav"
       screenOptions={{
@@ -36,7 +38,7 @@ const MyClubMainInfoNav = () => {
   );
 };
 
-const MyClubBoardNav = () => {
+const MyClubBoardNav = () => { //게시판 스택 네비게이션
   const theme = useContext(ThemeContext);
 
   return (
@@ -54,7 +56,7 @@ const MyClubBoardNav = () => {
   );
 };
 
-const MyClubAlbumNav = ({navigate, route}) => {
+const MyClubAlbumNav = ({navigate, route}) => { //앨범 스택 네비게이션
   const theme = useContext(ThemeContext);
 
   return (
@@ -73,7 +75,7 @@ const MyClubAlbumNav = ({navigate, route}) => {
   );
 };
 
-const MyClubEssayNav = ({navigate, route}) => {
+const MyClubEssayNav = ({navigate, route}) => { //에세이 스택 네비게이션
   const theme = useContext(ThemeContext);
 
   return (
@@ -93,7 +95,7 @@ const MyClubEssayNav = ({navigate, route}) => {
   );
 };
 
-const MyClubScheduleNav = ({navigate, route}) => {
+const MyClubScheduleNav = ({navigate, route}) => { //일정 스택 네비게이션
   const theme = useContext(ThemeContext);
 
   return (
@@ -110,7 +112,7 @@ const MyClubScheduleNav = ({navigate, route}) => {
   );
 };
 
-const MyClub = ({navigate, route}) => {
+const MyClub = ({navigate, route}) => { //클럽 내부 네비게이션, 탭 네비게이션 아래에 다른 네비게이션들을 통합
   const theme = useContext(ThemeContext);
   const id = route.params.id;
   const title = route.params.title;
@@ -140,7 +142,7 @@ const MyClub = ({navigate, route}) => {
   );
 };
 
-const MainStack = () => {
+const MainStack = () => { //앱의 최상단 네비게이션, 메인탭 화면 아래에 MainTab과 클럽 내부 네비게이션까지 포함
   const theme = useContext(ThemeContext);
 
   return (

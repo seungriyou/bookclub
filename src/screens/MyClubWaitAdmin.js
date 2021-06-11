@@ -91,7 +91,7 @@ const MyClubWaitAdmin=({ navigation, route })=>{
     const getClubInfo = async() => {
       try {
         const clubRef = DB.collection('clubs').doc(id);
-        const clubDoc = await clubRef.get();
+        const clubDoc = await clubRef.get(); //멤버 데이터 수신
         const clubData = clubDoc.data()
         setClubData(clubData);
 
@@ -127,7 +127,7 @@ const MyClubWaitAdmin=({ navigation, route })=>{
                         size={30}
                         style={{marginLeft:13}}
                         color={tintColor}
-                        onPress={onPress}   
+                        onPress={onPress}
                     />
                 );
             },

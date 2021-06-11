@@ -1,3 +1,5 @@
+//클럽 내부의 탭 네비게이션 정의
+
 import React, { useContext, useEffect } from 'react';
 import {View, StatusBar} from 'react-native';
 
@@ -32,12 +34,12 @@ const MainTab = ({ navigation, route }) => {
 
   useEffect(() => {
     //const titles = route.state?.routeNames || ['MainInfo'];
-    const titles = ['메인화면', '게시판', '앨범', '에세이', '일정'];
+    const titles = ['메인화면', '게시판', '앨범', '에세이', '일정']; //탭 이름
     const id = route.params?.id;
     const index = route.state?.index || 0;
     navigation.setOptions({
       headerTitle: titles[index],
-      headerLeft: () => {
+      headerLeft: () => { //각 탭별로 헤더의 버튼을 설정하는 부분 
         if (index === 0)
         return(
           <Layout>

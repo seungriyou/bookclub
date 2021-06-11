@@ -1,3 +1,5 @@
+//앱 내에서 이미지를 표현하는 컴포넌트 
+
 import React, { useEffect } from 'react';
 import { Platform, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
@@ -30,7 +32,7 @@ const ButtonContainer = styled.Pressable`
   align-items: center;
 `;
 
-const ButtonIcon = styled(MaterialIcons).attrs({ //회원가입 프로필 설정시 사진을 받아오도록 하는 아이콘 버튼 
+const ButtonIcon = styled(MaterialIcons).attrs({ //회원가입 프로필 설정시 사진을 받아오도록 하는 아이콘 버튼
   name: 'photo-camera',
   size: 22,
 })`
