@@ -89,7 +89,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
   const [uploading, setUploading] = useState(false);
   const [googleResponse, setGoogleResponse] = useState("");
   const [isImageSelected, setIsImageSelected] = useState(false);
-  
+
   useEffect(() => {
     onChangeOCRText(googleResponse);
   }, [googleResponse]);
@@ -207,9 +207,9 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
   return (
     <KeyboardAwareScrollView>
       <Container width={width}>
-        {!image || <Image 
+        {!image || <Image
           resizeMode="contain"
-          style={{ width: width-60, height: 280 }} 
+          style={{ width: width-60, height: 280 }}
           source={{ uri: 'data:image/jpg;base64,'+image }} />}
         <ImageContainer width={width}>
           <PhotoButton onPress={_takePhoto} />
@@ -223,7 +223,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
           onChangeText={onChangeOCRText}
         />
         <EssayTextContentInput
-          placeholder="내용 입력도 가능합니다."
+          placeholder="에세이 작성 시 책의 저자, 제목 등 출저를 명시해주세요"
           value={contentValue}
           onChangeText={onChangeContentText}
         />
