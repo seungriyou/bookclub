@@ -223,7 +223,7 @@ const EssayContentInput = ({ OCRValue, onChangeOCRText, contentValue, onChangeCo
           onChangeText={onChangeOCRText}
         />
         <EssayTextContentInput
-          placeholder="에세이 작성 시 책의 저자, 제목 등 출저를 명시해주세요"
+          placeholder="에세이 작성 시 저작권 상 책의 저자, 제목, 출판사, 해당 글귀가 위치한 페이지의 명시가 필요합니다."
           value={contentValue}
           onChangeText={onChangeContentText}
         />

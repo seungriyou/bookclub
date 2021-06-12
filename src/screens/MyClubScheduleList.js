@@ -10,7 +10,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import { theme } from '../theme';
 import {Picker} from '@react-native-picker/picker';
 import ScheduleList from '../components/ScheduleList';
-
+import {DB} from '../utils/firebase'; 
 import moment from 'moment';
 
 
