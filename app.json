@@ -23,7 +23,7 @@
     "android": {
       "package": "com.teamDrawer.bookclubInDrawer",
       "permissions" : ["CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
-      "versionCode" : 1,
+      "versionCode" : 2,
       "icon" : "./assets/icon.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon_foreground.png",
