@@ -141,6 +141,7 @@ const ClubList = ({ navigation }) => {
           <Picker.Item label="강동" value="강동" />
           <Picker.Item label="경기북부" value="경기북부" />
           <Picker.Item label="경기남부" value="경기남부" />
+          <Picker.Item label="강원" value="강원" />
           <Picker.Item label="충청" value="충청" />
           <Picker.Item label="전라" value="전라" />
           <Picker.Item label="경북" value="경북" />
