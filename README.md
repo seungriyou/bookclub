@@ -52,7 +52,8 @@
 <br>
 
 ## 어플리케이션 설치 방법
-- 추후 [Google Play Store](https://play.google.com/store/apps/details?id=com.teamDrawer.bookclubInDrawer)에서 다운로드 가능
+- ~추후 [Google Play Store](https://play.google.com/store/apps/details?id=com.teamDrawer.bookclubInDrawer)에서 다운로드 가능~
+- 서랍속책방은 현재 Google Play Store에서 게시 취소한 상태이다.
 
 <br>
 
