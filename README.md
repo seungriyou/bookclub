@@ -1,6 +1,6 @@
 # 독서 모임 모바일 어플리케이션 :: 서랍속책방
-> Mobile Application for Book Clubs) </br>
-서울시립대학교 2021-1학기 컴퓨터과학종합설계 - 서랍 팀 
+> 서울시립대학교 2021-1학기 컴퓨터과학종합설계 - 서랍 팀 </br>
+ 서랍속책방 (Mobile Application for Book Clubs)
 
 </br>
 
