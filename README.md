@@ -4,7 +4,7 @@
 
 </br>
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/55a9cd9a-7fff-4e14-9df7-6428b5f6be93/%EC%84%9C%EB%9E%8D%EC%86%8D%EC%B1%85%EB%B0%A9_%ED%8F%AC%EC%8A%A4%ED%84%B0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220317%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220317T055857Z&X-Amz-Expires=86400&X-Amz-Signature=87bb2a2f2dc5536263b08d7cadb9e6a99450e2ea99d9ae3ca0126fb964e7f2c1&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22%25EC%2584%259C%25EB%259E%258D%25EC%2586%258D%25EC%25B1%2585%25EB%25B0%25A9_%25ED%258F%25AC%25EC%258A%25A4%25ED%2584%25B0.png%22&x-id=GetObject)
+![](https://user-images.githubusercontent.com/43572543/158790980-a19d532f-2d89-4f35-8004-5a2f58a0eed4.png)
 
 <br>
 
@@ -18,7 +18,8 @@
 
 <br>
 
-![](https://s3.us-west-2.amazonaws.com/secure.notion-static.com/daad8c67-4648-4f57-adeb-a6b5ca07e81a/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20220317%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20220317T060227Z&X-Amz-Expires=86400&X-Amz-Signature=8f45eb0a4c04fc2dde99efd6787e374f476c84f3dd22a7bd42f54c66307d122c&X-Amz-SignedHeaders=host&response-content-disposition=filename%20%3D%22Untitled.png%22&x-id=GetObject)
+![](https://user-images.githubusercontent.com/43572543/158791093-04b9a29d-5e03-4db9-abdf-a1d0ad3d8330.png)
+
 
 <br>
 
@@ -46,8 +47,8 @@
 <br>
 
 ## 구현한 API의 소스코드
-- [OCR 후처리 API](https://github.com/seungri0826/bookclub-ocr-api) - Google Cloud Platform
-- [책 둘러보기 API](https://github.com/seungri0826/bookclub-recommendation-api) - Amazon EC2
+- [OCR 후처리 API](https://github.com/seungriyou/bookclub-ocr-api) - Google Cloud Platform
+- [책 둘러보기 API](https://github.com/seungriyou/bookclub-recommendation-api) - Amazon EC2
 
 <br>
 
